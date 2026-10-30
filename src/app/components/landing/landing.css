@@ -33,13 +33,35 @@ nav {
   gap: clamp(1.5rem, 3.8vw, 3.2rem);
 }
 nav a {
-  color: #a9c7ff;
-  font-size: 0.98rem;
+  position: relative;
+  padding: 0.35rem 0;
+  color: #d5e4ff;
+  font-size: 1.08rem;
+  font-weight: 600;
   text-decoration: none;
   transition: color 0.2s ease;
 }
-nav a:hover {
+nav a::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: #ffdf3d;
+  content: '';
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+nav a:hover,
+nav a:focus-visible {
   color: #fff;
+}
+nav a:hover::after,
+nav a:focus-visible::after,
+nav a:active::after,
+nav a.is-active::after {
+  transform: scaleX(1);
 }
 
 .landing-content {
@@ -95,42 +117,6 @@ h1 span {
 .journey-button span {
   font-size: 1.2rem;
 }
-.chat-bubble {
-  position: fixed;
-  right: 2rem;
-  bottom: 2rem;
-  z-index: 5;
-  display: grid;
-  width: 4.2rem;
-  height: 4.2rem;
-  place-items: center;
-  border: 2px solid #4da8ff;
-  border-radius: 50%;
-  background: #132d68;
-  color: #ffe24b;
-  cursor: pointer;
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.3),
-    0 0 22px rgba(53, 147, 255, 0.18);
-  transition: transform 0.2s ease;
-}
-.chat-bubble:hover {
-  transform: translateY(-4px) scale(1.03);
-}
-.chat-bubble__face {
-  font-size: 1.55rem;
-}
-.chat-bubble__status {
-  position: absolute;
-  top: -0.1rem;
-  right: 0.15rem;
-  width: 0.75rem;
-  height: 0.75rem;
-  border: 2px solid #07102e;
-  border-radius: 50%;
-  background: #ffdf3d;
-}
-
 @media (max-width: 700px) {
   .site-header {
     padding: 1.3rem 1.25rem;
@@ -157,11 +143,5 @@ h1 span {
   }
   .desktop-break {
     display: none;
-  }
-  .chat-bubble {
-    right: 1.1rem;
-    bottom: 1.1rem;
-    width: 3.7rem;
-    height: 3.7rem;
   }
 }

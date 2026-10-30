@@ -1,0 +1,30 @@
+<main class="storyline-page">
+	<header class="site-header">
+		<a class="brand" routerLink="/" aria-label="Ask the Machines home">ASK THE MACHINES</a>
+		<nav aria-label="Primary navigation">
+			<a class="is-active" routerLink="/storylines">Stories</a>
+			<a href="#machines">Machines</a>
+			<a href="#about">About</a>
+		</nav>
+	</header>
+
+	<section class="storyline-content" aria-labelledby="storyline-heading">
+		<p class="eyebrow">STEP 1 OF 2</p>
+		<h1 id="storyline-heading">Pick a <span>storyline</span></h1>
+		<p class="subtitle">Every machine has a story to tell. Choose one, then ask it anything.</p>
+
+		<div class="storyline-grid">
+			@for (storyline of storylines; track storyline.id) {
+				<article class="storyline-card">
+					<div class="image-placeholder" aria-label="Image placeholder">image</div>
+					<p class="year-pill">Year</p>
+					<h2>{{ storyline.name }}</h2>
+					<p class="hook">One-line hook goes here.</p>
+					<a class="open-story" [routerLink]="['/storylines', storyline.id]">Open story <span aria-hidden="true">→</span></a>
+				</article>
+			}
+		</div>
+	</section>
+
+	<a class="back-link" routerLink="/">← Back to home</a>
+</main>
