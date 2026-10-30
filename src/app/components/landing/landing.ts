@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -7,10 +7,4 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './landing.css',
   templateUrl: './landing.html',
 })
-export class Landing {
-  protected readonly activeLink = signal('story');
-
-  selectLink(link: string): void {
-    this.activeLink.set(link);
-  }
-}
+export class Landing {}
