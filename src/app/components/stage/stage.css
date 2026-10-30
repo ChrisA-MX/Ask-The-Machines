@@ -1,0 +1,185 @@
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  overflow: hidden;
+  background: #050a1d;
+}
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(circle at 74% 69%, #0c2557 0, #071435 29%, #050a1d 68%);
+}
+.stage::before,
+.stage::after {
+  position: absolute;
+  content: '';
+  pointer-events: none;
+}
+.stage::before {
+  inset: 0;
+  opacity: 0.8;
+  background-image:
+    radial-gradient(circle, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle, #adcfff 0 1px, transparent 1.5px);
+  background-position:
+    8% 12%,
+    42% 26%;
+  background-size:
+    265px 190px,
+    360px 270px;
+}
+.stage::after {
+  right: -8%;
+  bottom: -24%;
+  width: 52%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 48% 36%,
+    rgba(52, 141, 255, 0.8),
+    rgba(11, 51, 125, 0.94) 47%,
+    #020716 70%
+  );
+  box-shadow:
+    0 0 0 2px rgba(104, 183, 255, 0.58),
+    0 0 2rem rgba(83, 171, 255, 0.75),
+    0 0 5rem rgba(83, 171, 255, 0.3);
+}
+.stars {
+  position: absolute;
+  z-index: 1;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    140px 40px #dce8ff,
+    260px 95px #fff,
+    390px 15px #fff,
+    530px 120px #dce8ff,
+    650px 64px #fff,
+    790px 145px #dce8ff,
+    980px 20px #fff;
+}
+.stars--one {
+  top: 9%;
+  left: 8%;
+}
+.stars--two {
+  top: 15%;
+  left: 43%;
+  transform: scale(0.7);
+}
+.stars--three {
+  top: 54%;
+  left: 25%;
+  transform: scale(0.6);
+}
+.moon {
+  position: absolute;
+  z-index: 2;
+  top: 12%;
+  right: 16%;
+  width: 3.65rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #b7c0d5;
+  box-shadow:
+    inset -0.55rem -0.25rem #969fb6,
+    0 0 1.2rem rgba(195, 207, 237, 0.12);
+}
+.moon::after {
+  position: absolute;
+  right: 25%;
+  bottom: 22%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: #929cb3;
+  content: '';
+}
+.earth {
+  position: absolute;
+  z-index: 2;
+  right: -8%;
+  bottom: -24%;
+  width: 52%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2879d9, #1956a9 55%, #07183d);
+}
+.earth-shadow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 37%, rgba(0, 3, 17, 0.7) 74%);
+}
+.continent,
+.cloud {
+  position: absolute;
+  border-radius: 50%;
+}
+.continent {
+  background: #309255;
+  opacity: 0.88;
+}
+.continent--one {
+  top: 17%;
+  left: 21%;
+  width: 20%;
+  height: 20%;
+}
+.continent--two {
+  top: 40%;
+  left: 43%;
+  width: 16%;
+  height: 18%;
+}
+.continent--three {
+  top: 18%;
+  right: 16%;
+  width: 18%;
+  height: 18%;
+}
+.continent--four {
+  top: 52%;
+  right: 15%;
+  width: 10%;
+  height: 15%;
+}
+.cloud {
+  height: 2%;
+  background: rgba(215, 231, 245, 0.45);
+}
+.cloud--one {
+  top: 15%;
+  left: 25%;
+  width: 18%;
+}
+.cloud--two {
+  top: 33%;
+  left: 51%;
+  width: 20%;
+}
+.cloud--three {
+  top: 50%;
+  left: 38%;
+  width: 15%;
+}
+@media (max-width: 700px) {
+  .stage::after,
+  .earth {
+    right: -23%;
+    bottom: -13%;
+    width: 78%;
+  }
+  .moon {
+    top: 18%;
+    right: 13%;
+    width: 2.8rem;
+  }
+}

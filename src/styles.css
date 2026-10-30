@@ -1,1 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+	color-scheme: dark;
+	font-family: 'DM Sans', sans-serif;
+	background: #050a1d;
+	color: #f7f8ff;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; background: #050a1d; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, a { font: inherit; }
 /* You can add global styles to this file, and also import other style files */
