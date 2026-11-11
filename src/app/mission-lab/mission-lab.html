@@ -1,0 +1,25 @@
+<main class="mission-page">
+	<header class="site-header">
+		<a class="brand" routerLink="/" aria-label="Ask the Machines home">ASK THE MACHINES</a>
+		<nav aria-label="Primary navigation">
+			<a routerLink="/storylines">Stories</a>
+			<a routerLink="/missions" class="is-active" aria-current="page">Mission lab</a>
+		</nav>
+	</header>
+
+	<section class="mission-hero" aria-labelledby="mission-heading">
+		<p class="eyebrow">NASA SPACE APPS · EXPLORATION LOG</p>
+		<h1 id="mission-heading">Abandoned,<br /><span>but not forgotten.</span></h1>
+		<p>Every machine that traveled beyond Earth left a story behind. Explore the places and try a mission of your own.</p>
+	</section>
+
+	<section class="lab-section" aria-label="Planetary artifact map">
+		<app-artifact-map />
+	</section>
+
+	<section class="lab-section game-lab" aria-label="Apollo cargo mini-game">
+		<app-apollo-game />
+	</section>
+
+	<footer class="mission-footer"><a routerLink="/">← Back to Earth</a><span>BUILT FOR CURIOUS SPACE EXPLORERS</span></footer>
+</main>

@@ -1,0 +1,36 @@
+<aside class="chat-widget" aria-label="Ask the Machines chat">
+	@if (isOpen()) {
+		<section class="chat-panel" aria-labelledby="chat-title">
+			<header class="chat-header">
+				<div class="avatar" aria-hidden="true">✦</div>
+				<div><p class="chat-kicker">MISSION CONTROL</p><h2 id="chat-title">Ask the Machines</h2></div>
+				<button class="close-button" type="button" (click)="openChat()" aria-label="Close chat">×</button>
+			</header>
+			<div class="chat-body" aria-live="polite" aria-relevant="additions text">
+				@for (message of messages(); track $index) {
+					<div class="message-row" [class.message-row--user]="message.role === 'user'">
+						<p class="message" [class.message--user]="message.role === 'user'">{{ message.text }}</p>
+					</div>
+				}
+				@if (isThinking()) { <p class="thinking">Checking the mission notes…</p> }
+			</div>
+			@if (messages().length === 1) {
+				<div class="suggestions" aria-label="Suggested questions">
+					@for (suggestion of suggestions; track suggestion) {
+						<button type="button" (click)="send(suggestion)">{{ suggestion }}</button>
+					}
+				</div>
+			}
+			<form class="chat-form" (ngSubmit)="send()">
+				<label class="visually-hidden" for="chat-message">Your question</label>
+				<input #messageInput id="chat-message" name="message" [(ngModel)]="draft" placeholder="Ask a question…" autocomplete="off" />
+				<button type="submit" [disabled]="!draft.trim() || isThinking()" aria-label="Send message">↑</button>
+			</form>
+			<p class="chat-note">Answers are based on the project plan.</p>
+		</section>
+	}
+	<button class="chat-launcher" type="button" (click)="openChat()" [attr.aria-expanded]="isOpen()" aria-label="Open Ask the Machines chat">
+		<span class="launcher-icon" aria-hidden="true">{{ isOpen() ? '×' : '✦' }}</span>
+		<span>{{ isOpen() ? 'Close' : 'Ask Mission Control' }}</span>
+	</button>
+</aside>

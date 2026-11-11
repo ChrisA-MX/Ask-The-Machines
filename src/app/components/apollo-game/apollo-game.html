@@ -1,0 +1,51 @@
+<section class="game-section" aria-labelledby="game-title">
+	<div class="section-heading">
+		<div>
+			<p class="eyebrow">MISSION CONTROL · 02</p>
+			<h2 id="game-title">Make room for <span>Moon rocks</span></h2>
+			<p class="section-copy">The ascent stage has limited room. Move the practice gear from the Lunar Module to the surface.</p>
+		</div>
+		<div class="cargo-counter" aria-live="polite"><span class="cargo-symbol">⬡</span><span>MOON ROCK CARGO</span><strong>{{ discardPile().length }} / {{ requiredGearCount }}</strong></div>
+	</div>
+
+	<p class="game-instruction">Drag each item into the discard pile. On touch screens, press and hold an item to move it.</p>
+	<div class="zones">
+		<div class="drop-zone lunar-zone">
+			<div class="zone-heading"><div class="zone-icon" aria-hidden="true">⌂</div><div><h3>Lunar Module</h3><p>Gear checklist · {{ lunarModule().length }} remaining</p></div></div>
+			<div class="gear-list" cdkDropList #moduleList="cdkDropList" id="lunar-module-list" [cdkDropListData]="lunarModule()" [cdkDropListConnectedTo]="[surfaceList]" (cdkDropListDropped)="onDrop($event)" aria-label="Gear inside the Lunar Module">
+				@for (item of lunarModule(); track item.id) {
+					<div class="gear-card" cdkDrag [cdkDragData]="item" [cdkDragStartDelay]="{ touch: 180, mouse: 0 }" [attr.aria-label]="item.name + ', ' + item.description + '. Draggable.'">
+						<span class="gear-icon" aria-hidden="true">{{ item.icon }}</span>
+						<span class="gear-copy"><strong>{{ item.name }}</strong><small>{{ item.description }}</small></span>
+						<span class="drag-grip" aria-hidden="true">⠿</span>
+					</div>
+				} @empty {
+					<div class="empty-state"><span aria-hidden="true">✓</span><p>The module is ready for moon rocks.</p></div>
+				}
+			</div>
+		</div>
+
+		<div class="transfer-arrow" aria-hidden="true">→</div>
+
+		<div class="drop-zone surface-zone">
+			<div class="zone-heading"><div class="zone-icon" aria-hidden="true">◌</div><div><h3>Lunar Surface</h3><p>Discard pile · {{ discardPile().length }} moved</p></div></div>
+			<div class="gear-list surface-list" cdkDropList #surfaceList="cdkDropList" id="lunar-surface-list" [cdkDropListData]="discardPile()" [cdkDropListConnectedTo]="[moduleList]" (cdkDropListDropped)="onDrop($event)" aria-label="Discarded equipment on the lunar surface">
+				@for (item of discardPile(); track item.id) {
+					<div class="gear-card discarded-card" cdkDrag [cdkDragData]="item" [cdkDragStartDelay]="{ touch: 180, mouse: 0 }" [attr.aria-label]="item.name + ', ' + item.description + '. Draggable.'">
+						<span class="gear-icon" aria-hidden="true">{{ item.icon }}</span>
+						<span class="gear-copy"><strong>{{ item.name }}</strong><small>{{ item.description }}</small></span>
+						<span class="drag-grip" aria-hidden="true">⠿</span>
+					</div>
+				} @empty {
+					<div class="empty-state empty-state--dashed"><span aria-hidden="true">↓</span><p>Drop the gear here to make room for the samples.</p></div>
+				}
+			</div>
+		</div>
+	</div>
+
+	@if (announcement()) {
+		<p class="game-announcement" [class.game-announcement--success]="isComplete()" role="status" aria-live="polite">{{ announcement() }}</p>
+	}
+	<div class="game-footer"><span>✦ &nbsp;SAMPLE CAPACITY {{ isComplete() ? 'AVAILABLE' : 'LOCKED' }}</span><button type="button" class="reset-button" (click)="resetGame()">↺ Reset mission</button></div>
+	<p class="historical-note">Learning activity: this drag-and-drop cargo challenge is a simplified game, not a historical Apollo loading record.</p>
+</section>

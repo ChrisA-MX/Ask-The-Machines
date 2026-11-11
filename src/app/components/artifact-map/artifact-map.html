@@ -1,0 +1,39 @@
+<section class="artifact-explorer" aria-labelledby="artifact-title">
+	<div class="section-heading">
+		<div>
+			<p class="eyebrow">FIELD NOTES · 01</p>
+			<h2 id="artifact-title">A map of <span>left-behind worlds</span></h2>
+			<p class="section-copy">Travel to real mission sites and discover the machines that stayed behind.</p>
+		</div>
+		<div class="planet-switch" role="group" aria-label="Choose a planetary map">
+			<button type="button" [class.is-active]="planet() === 'Moon'" [attr.aria-pressed]="planet() === 'Moon'" (click)="setPlanet('Moon')">◐ <span>Moon</span></button>
+			<button type="button" [class.is-active]="planet() === 'Mars'" [attr.aria-pressed]="planet() === 'Mars'" (click)="setPlanet('Mars')">◉ <span>Mars</span></button>
+		</div>
+	</div>
+
+	<div class="map-frame">
+		<div #mapCanvas class="map-canvas" role="application" [attr.aria-label]="planet() + ' surface map with mission artifact markers'"></div>
+		<div class="map-label"><span class="signal-dot"></span> {{ planet() }} · SURFACE SURVEY</div>
+		@if (mapError()) { <p class="map-error" role="status">{{ mapError() }}</p> }
+	</div>
+	<p class="map-attribution">Surface imagery: NASA/JPL Solar System Treks · Select the glowing marker to open its field note.</p>
+
+	@if (selectedArtifact(); as artifact) {
+		<div class="story-backdrop" (click)="closeStory()" (keydown.escape)="closeStory()">
+			<article class="story-modal" role="dialog" aria-modal="true" [attr.aria-labelledby]="'story-' + artifact.id" (click)="$event.stopPropagation()" (keydown.escape)="closeStory()">
+				<button class="modal-close" type="button" aria-label="Close artifact story" (click)="closeStory()">×</button>
+				<p class="eyebrow">{{ artifact.planet }} · {{ artifact.year }}</p>
+				<h3 [id]="'story-' + artifact.id">{{ artifact.name }}</h3>
+				<p class="site-name">{{ artifact.site }}</p>
+				<div class="motion-placeholder" aria-label="Placeholder for an embedded motion graphic or video">
+					<span class="play-mark" aria-hidden="true">▶</span>
+					<span>MISSION FILM / MOTION GRAPHIC</span>
+					<small>Media placeholder</small>
+				</div>
+				<p class="artifact-story">{{ artifact.story }}</p>
+				<p class="artifact-fact"><span>FIELD FACT</span>{{ artifact.fact }}</p>
+				<a class="source-link" [href]="artifact.sourceUrl" target="_blank" rel="noopener noreferrer">Read the source: {{ artifact.source }} ↗</a>
+			</article>
+		</div>
+	}
+</section>
