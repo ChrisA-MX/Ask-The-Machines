@@ -1,0 +1,39 @@
+{
+  "frameWidth": 256,
+  "frameHeight": 256,
+  "columns": 9,
+  "rows": [
+    {
+      "name": "wave",
+      "frames": 9,
+      "fps": 8,
+      "loop": true
+    },
+    {
+      "name": "idle",
+      "frames": 3,
+      "fps": 5,
+      "loop": true,
+      "playback": "loop"
+    },
+    {
+      "name": "happy",
+      "frames": 6,
+      "fps": 10,
+      "loop": true
+    },
+    {
+      "name": "sad",
+      "frames": 6,
+      "fps": 6,
+      "loop": true
+    },
+    {
+      "name": "thumbsUp",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "holdLast": true
+    }
+  ]
+}

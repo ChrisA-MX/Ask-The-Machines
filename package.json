@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "apollo-sprites": "python scripts/build_apollo_sprites.py",
     "serve:ssr:ask-the-machine-app": "node dist/ask-the-machine-app/server/server.mjs"
   },
   "private": true,

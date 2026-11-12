@@ -5,8 +5,7 @@ import { MachineStory, WORLDS, WorldStory, WorldId } from './machines.data';
 import { SpaceDoodle } from './space-doodle/space-doodle';
 import { StoryModal } from './story-modal/story-modal';
 import { WorldCarousel } from './world-carousel/world-carousel';
-
-const PROGRESS_KEY = 'ask-the-machines-world-progress-v1';
+import { ProgressService, PROGRESS_STORAGE_KEY } from '../services/progress.service';
 
 export interface PathPoint { x: number; y: number }
 
@@ -63,6 +62,7 @@ export class Storyline {
   private readonly roadmapElement = viewChild<ElementRef<HTMLDivElement>>('sceneRoadmap');
   private readonly trailPath = viewChild<ElementRef<SVGPathElement>>('trailPath');
   private readonly destroyRef = inject(DestroyRef);
+  private readonly progress = inject(ProgressService);
   private raf = 0;
   private scrollHandler?: () => void;
   private visibilityHandler?: () => void;
@@ -128,6 +128,7 @@ export class Storyline {
     updated.add(machine.id);
     this.completedIds.set(updated);
     this.persistProgress(updated);
+    this.progress.setCompletedStoryIds(updated);
     const world = this.activeWorld();
     if (world) this.activeStopIndex.set(this.firstAvailableMachineIndex(world));
   }
@@ -189,14 +190,16 @@ export class Storyline {
     const completed = new Set(this.worlds.flatMap((world) => world.machines.map((entry) => entry.id)));
     this.completedIds.set(completed);
     this.persistProgress(completed);
+    this.progress.setCompletedStoryIds(completed);
   }
 
   protected resetProgress(): void {
     this.completedIds.set(new Set());
     this.activeStopIndex.set(0);
     if (isPlatformBrowser(this.platformId)) {
-      try { localStorage.removeItem(PROGRESS_KEY); } catch { /* Storage may be unavailable in private browsing. */ }
+      try { localStorage.removeItem(PROGRESS_STORAGE_KEY); } catch { /* Storage may be unavailable in private browsing. */ }
     }
+    this.progress.setCompletedStoryIds([]);
   }
 
   @HostListener('document:keydown.escape')
@@ -219,10 +222,12 @@ export class Storyline {
   private initializeBrowserState(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     try {
-      const saved: unknown = JSON.parse(localStorage.getItem(PROGRESS_KEY) ?? '[]');
+      const saved: unknown = JSON.parse(localStorage.getItem(PROGRESS_STORAGE_KEY) ?? '[]');
       if (Array.isArray(saved)) {
         const validIds = new Set(this.worlds.flatMap((world) => world.machines.map((entry) => entry.id)));
-        this.completedIds.set(new Set(saved.filter((id): id is string => typeof id === 'string' && validIds.has(id))));
+        const completed = new Set(saved.filter((id): id is string => typeof id === 'string' && validIds.has(id)));
+        this.completedIds.set(completed);
+        this.progress.setCompletedStoryIds(completed);
       }
     } catch { /* Invalid or unavailable browser storage starts a clean session. */ }
     this.hidden = document.hidden;
@@ -272,6 +277,6 @@ export class Storyline {
 
   private persistProgress(completed: Set<string>): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    try { localStorage.setItem(PROGRESS_KEY, JSON.stringify([...completed])); } catch { /* Progress remains available for this page session. */ }
+    try { localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify([...completed])); } catch { /* Progress remains available for this page session. */ }
   }
 }

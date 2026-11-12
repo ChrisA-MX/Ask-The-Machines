@@ -1,0 +1,62 @@
+{
+  "inputDirectory": "public/assests/game/astronauts/raw",
+  "outputSize": [
+    2304,
+    1280
+  ],
+  "medianFrameHeight": 279.0,
+  "uniformScale": 0.7526881720430108,
+  "fallbackStrips": [],
+  "rows": [
+    {
+      "name": "wave",
+      "detectedFrames": 9,
+      "renderedFrames": 9,
+      "fallback": false,
+      "airborneFrames": [],
+      "groundedFrames": 9,
+      "maxHorizontalFeetShiftPx": 1.301,
+      "maxVerticalFeetShiftPx": 0.753
+    },
+    {
+      "name": "idle",
+      "detectedFrames": 6,
+      "renderedFrames": 3,
+      "fallback": false,
+      "airborneFrames": [],
+      "groundedFrames": 6,
+      "maxHorizontalFeetShiftPx": 1.081,
+      "maxVerticalFeetShiftPx": 0.538
+    },
+    {
+      "name": "happy",
+      "detectedFrames": 6,
+      "renderedFrames": 6,
+      "fallback": false,
+      "airborneFrames": [],
+      "groundedFrames": 6,
+      "maxHorizontalFeetShiftPx": 0.731,
+      "maxVerticalFeetShiftPx": 0.753
+    },
+    {
+      "name": "sad",
+      "detectedFrames": 6,
+      "renderedFrames": 6,
+      "fallback": false,
+      "airborneFrames": [],
+      "groundedFrames": 6,
+      "maxHorizontalFeetShiftPx": 0.505,
+      "maxVerticalFeetShiftPx": 0.946
+    },
+    {
+      "name": "thumbsUp",
+      "detectedFrames": 6,
+      "renderedFrames": 6,
+      "fallback": false,
+      "airborneFrames": [],
+      "groundedFrames": 6,
+      "maxHorizontalFeetShiftPx": 0.753,
+      "maxVerticalFeetShiftPx": 0.978
+    }
+  ]
+}

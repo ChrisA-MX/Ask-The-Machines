@@ -1,10 +1,16 @@
-<aside class="chat-widget" aria-label="Ask the Machines chat">
+<aside class="chat-widget" aria-label="Apollo chat">
 	@if (isOpen()) {
-		<section class="chat-panel" aria-labelledby="chat-title">
+		<section #chatDialog class="chat-panel" role="dialog" aria-label="Apollo chat" aria-labelledby="chat-title">
 			<header class="chat-header">
-				<div class="avatar" aria-hidden="true">✦</div>
-				<div><p class="chat-kicker">MISSION CONTROL</p><h2 id="chat-title">Ask the Machines</h2></div>
-				<button class="close-button" type="button" (click)="openChat()" aria-label="Close chat">×</button>
+				<app-animated-sprite
+					class="avatar"
+					[animation]="'idle'"
+					[displaySize]="48"
+					altText="Apollo, your rescue astronaut"
+					aria-hidden="true"
+				/>
+				<div><p class="chat-kicker">ASK APOLLO</p><h2 id="chat-title">Apollo, your rescue astronaut</h2></div>
+				<button class="close-button" type="button" (click)="closeChat()" aria-label="Close chat">×</button>
 			</header>
 			<div class="chat-body" aria-live="polite" aria-relevant="additions text">
 				@for (message of messages(); track $index) {
@@ -12,7 +18,7 @@
 						<p class="message" [class.message--user]="message.role === 'user'">{{ message.text }}</p>
 					</div>
 				}
-				@if (isThinking()) { <p class="thinking">Checking the mission notes…</p> }
+				@if (isThinking()) { <p class="thinking">Checking your completed story files…</p> }
 			</div>
 			@if (messages().length === 1) {
 				<div class="suggestions" aria-label="Suggested questions">
@@ -26,11 +32,45 @@
 				<input #messageInput id="chat-message" name="message" [(ngModel)]="draft" placeholder="Ask a question…" autocomplete="off" />
 				<button type="submit" [disabled]="!draft.trim() || isThinking()" aria-label="Send message">↑</button>
 			</form>
-			<p class="chat-note">Answers are based on the project plan.</p>
+			<p class="chat-note">Apollo can answer from stories you have completed.</p>
 		</section>
 	}
-	<button class="chat-launcher" type="button" (click)="openChat()" [attr.aria-expanded]="isOpen()" aria-label="Open Ask the Machines chat">
-		<span class="launcher-icon" aria-hidden="true">{{ isOpen() ? '×' : '✦' }}</span>
-		<span>{{ isOpen() ? 'Close' : 'Ask Mission Control' }}</span>
-	</button>
+	<div class="launcher-row">
+		<span class="speech-bubble" [class.is-visible]="bubbleVisible() && !isOpen()" [attr.aria-hidden]="bubbleVisible() && !isOpen() ? null : 'true'">
+			{{ greeting() }}
+		</span>
+		<button
+			#apolloButton
+			class="apollo-button"
+			[class.apollo-button--fallback]="spriteFailed()"
+			[class.apollo-button--busy]="isBusy()"
+			type="button"
+			(click)="openChat()"
+			(mouseenter)="onHover()"
+			(mouseleave)="onMouseLeave()"
+			(focus)="onFocus()"
+			(blur)="onBlur()"
+			[disabled]="isBusy()"
+			[attr.aria-disabled]="isBusy()"
+			[attr.aria-expanded]="isOpen()"
+			[attr.title]="isBusy() ? 'Apollo is busy rescuing!' : null"
+			aria-label="Chat with Apollo"
+		>
+			@if (spriteFailed()) {
+				<span class="launcher-icon" aria-hidden="true">✦</span>
+				<span aria-hidden="true">Ask Apollo</span>
+			} @else {
+				<app-animated-sprite
+					class="launcher-sprite"
+					[animation]="apolloAnimation()"
+					[responsive]="true"
+					[staticFrame]="4"
+					altText=""
+					aria-hidden="true"
+					(animationCycle)="onAnimationCycle()"
+					(assetsError)="onSpriteError()"
+				/>
+			}
+		</button>
+	</div>
 </aside>
