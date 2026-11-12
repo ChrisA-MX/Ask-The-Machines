@@ -40,44 +40,49 @@
   border-radius: 50%;
   background: radial-gradient(
     circle at 48% 36%,
-    rgba(52, 141, 255, 0.8),
+    rgba(52, 141, 255, 0.55),
     rgba(11, 51, 125, 0.94) 47%,
     #020716 70%
   );
   box-shadow:
-    0 0 0 2px rgba(104, 183, 255, 0.58),
-    0 0 2rem rgba(83, 171, 255, 0.75),
-    0 0 5rem rgba(83, 171, 255, 0.3);
+    0 0 0 2px rgba(104, 183, 255, 0.3),
+    0 0 2rem rgba(83, 171, 255, 0.38),
+    0 0 5rem rgba(83, 171, 255, 0.12);
 }
 .stars {
   position: absolute;
   z-index: 1;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow:
-    140px 40px #dce8ff,
-    260px 95px #fff,
-    390px 15px #fff,
-    530px 120px #dce8ff,
-    650px 64px #fff,
-    790px 145px #dce8ff,
-    980px 20px #fff;
+  inset: -50%;
+  background-image:
+    radial-gradient(circle, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle, #dce8ff 0 1px, transparent 1.5px),
+    radial-gradient(circle, #adcfff 0 1px, transparent 1.5px);
+  background-position:
+    0 0,
+    67px 112px,
+    149px 37px;
+  background-size:
+    173px 157px,
+    241px 213px,
+    317px 269px;
+  animation: starfield-orbit 180s linear infinite;
 }
 .stars--one {
-  top: 9%;
-  left: 8%;
+  opacity: 0.8;
 }
 .stars--two {
-  top: 15%;
-  left: 43%;
-  transform: scale(0.7);
+  opacity: 0.55;
+  animation-duration: 240s;
+  animation-direction: reverse;
 }
 .stars--three {
-  top: 54%;
-  left: 25%;
-  transform: scale(0.6);
+  opacity: 0.4;
+  animation-duration: 310s;
+}
+@keyframes starfield-orbit {
+  to {
+    transform: rotate(360deg);
+  }
 }
 .moon {
   position: absolute;
@@ -87,10 +92,22 @@
   width: 3.65rem;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #b7c0d5;
+  background: radial-gradient(circle at 32% 28%, #e0e5f1 0, #b7c0d5 42%, #7f899f 78%, #505a71 100%);
   box-shadow:
-    inset -0.55rem -0.25rem #969fb6,
-    0 0 1.2rem rgba(195, 207, 237, 0.12);
+    inset 0.2rem 0.15rem 0.35rem rgba(255, 255, 255, 0.55),
+    inset -0.65rem -0.4rem 0.65rem rgba(34, 41, 61, 0.72),
+    0 0 1.2rem rgba(195, 207, 237, 0.2);
+}
+.moon::before {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 25% 35%, rgba(89, 99, 121, 0.5) 0 7%, rgba(238, 241, 249, 0.26) 8%, transparent 10%),
+    radial-gradient(circle at 70% 61%, rgba(89, 99, 121, 0.42) 0 5%, rgba(238, 241, 249, 0.22) 6%, transparent 8%),
+    radial-gradient(circle at 45% 78%, rgba(89, 99, 121, 0.36) 0 4%, rgba(238, 241, 249, 0.18) 5%, transparent 7%);
+  content: '';
+  animation: moon-rotation 36s linear infinite;
 }
 .moon::after {
   position: absolute;
@@ -99,8 +116,14 @@
   width: 0.55rem;
   height: 0.55rem;
   border-radius: 50%;
-  background: #929cb3;
+  background: radial-gradient(circle at 32% 28%, #737e96 0 30%, #aeb8ce 33% 48%, #68738a 52% 100%);
+  box-shadow: inset -0.08rem -0.07rem 0.12rem rgba(35, 42, 60, 0.6);
   content: '';
+}
+@keyframes moon-rotation {
+  to {
+    transform: rotate(360deg);
+  }
 }
 .earth {
   position: absolute;
@@ -111,7 +134,25 @@
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2879d9, #1956a9 55%, #07183d);
+  background:
+    radial-gradient(ellipse at 29% 26%, rgba(105, 190, 255, 0.55), transparent 38%),
+    radial-gradient(ellipse at 40% 42%, #2879d9 0, #1956a9 58%, #07183d 100%);
+  box-shadow:
+    inset 0.25rem 0.2rem 0.7rem rgba(164, 221, 255, 0.2),
+    inset -1.2rem -0.9rem 2rem rgba(0, 5, 28, 0.7);
+}
+.earth::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  border: 1px solid rgba(164, 220, 255, 0.24);
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 27% 24%, rgba(255, 255, 255, 0.09), transparent 37%),
+    radial-gradient(ellipse at 47% 47%, transparent 48%, rgba(1, 8, 32, 0.12) 68%, rgba(0, 3, 17, 0.58) 100%);
+  box-shadow: inset 0 0 1.2rem rgba(133, 204, 255, 0.14);
+  content: '';
+  pointer-events: none;
 }
 .earth-shadow {
   position: absolute;
@@ -123,9 +164,31 @@
   position: absolute;
   border-radius: 50%;
 }
+.earth-map {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 0;
+  display: flex;
+  width: 400%;
+  animation: earth-rotation 80s linear infinite;
+}
+.earth-map__side {
+  position: relative;
+  flex: 0 0 25%;
+  height: 100%;
+}
+@keyframes earth-rotation {
+  to {
+    transform: translateX(-50%);
+  }
+}
 .continent {
-  background: #309255;
+  background: radial-gradient(ellipse at 32% 25%, #86ce79 0, #399a58 42%, #1d624b 100%);
   opacity: 0.88;
+  border-radius: 45% 55% 62% 38% / 35% 52% 48% 65%;
+  box-shadow:
+    inset 0.12rem 0.08rem 0.22rem rgba(228, 255, 153, 0.42),
+    inset -0.28rem -0.22rem 0.35rem rgba(9, 48, 47, 0.55);
 }
 .continent--one {
   top: 17%;
@@ -150,10 +213,57 @@
   right: 15%;
   width: 10%;
   height: 15%;
+  border-radius: 58% 42% 34% 66% / 45% 35% 65% 55%;
+}
+.earth-map__side--alternate .continent--one {
+  top: 24%;
+  left: 12%;
+  width: 24%;
+  height: 17%;
+}
+.earth-map__side--alternate .continent--two {
+  top: 48%;
+  left: 36%;
+  width: 13%;
+  height: 22%;
+}
+.earth-map__side--alternate .continent--three {
+  top: 15%;
+  right: 9%;
+  width: 22%;
+  height: 21%;
+}
+.earth-map__side--alternate .continent--four {
+  top: 58%;
+  right: 25%;
+  width: 12%;
+  height: 14%;
 }
 .cloud {
-  height: 2%;
-  background: rgba(215, 231, 245, 0.45);
+  height: 2.4%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(246, 252, 255, 0.86), rgba(169, 207, 232, 0.56));
+  box-shadow: 0 0.12rem 0.35rem rgba(4, 25, 68, 0.3);
+  filter: drop-shadow(0 0 0.3rem rgba(215, 231, 245, 0.2));
+  animation: cloud-drift 12s ease-in-out infinite alternate;
+}
+.cloud::before,
+.cloud::after {
+  position: absolute;
+  bottom: 0;
+  height: 170%;
+  border-radius: 50%;
+  background: inherit;
+  content: '';
+}
+.cloud::before {
+  left: 20%;
+  width: 38%;
+}
+.cloud::after {
+  right: 15%;
+  width: 28%;
+  height: 135%;
 }
 .cloud--one {
   top: 15%;
@@ -164,11 +274,51 @@
   top: 33%;
   left: 51%;
   width: 20%;
+  animation-delay: -3s;
+  animation-duration: 14s;
 }
 .cloud--three {
   top: 50%;
   left: 38%;
   width: 15%;
+  animation-delay: -8s;
+  animation-duration: 10s;
+}
+.cloud--four {
+  top: 25%;
+  left: 8%;
+  width: 13%;
+  animation-delay: -2s;
+  animation-duration: 13s;
+}
+.cloud--five {
+  top: 44%;
+  left: 70%;
+  width: 17%;
+  animation-delay: -10s;
+  animation-duration: 16s;
+}
+.cloud--six {
+  top: 63%;
+  left: 24%;
+  width: 21%;
+  animation-delay: -6s;
+  animation-duration: 12s;
+}
+.cloud--seven {
+  top: 8%;
+  left: 57%;
+  width: 12%;
+  animation-delay: -5s;
+  animation-duration: 11s;
+}
+@keyframes cloud-drift {
+  from {
+    transform: translate3d(-35%, -8%, 0);
+  }
+  to {
+    transform: translate3d(45%, 12%, 0);
+  }
 }
 @media (max-width: 700px) {
   .stage::after,
