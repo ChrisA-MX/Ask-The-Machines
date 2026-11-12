@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Procedural Worlds Demo</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: #050510; color: white; font-family: sans-serif; }
+    canvas { display: block; width: 100vw; height: 100vh; }
+    #ui { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 8px; z-index: 10; }
+    button { background: #333; color: #fff; border: 1px solid #555; padding: 8px 12px; cursor: pointer; border-radius: 4px; margin-right: 5px; }
+    button:hover { background: #555; }
+    #status { margin-top: 10px; font-size: 14px; color: #aaa; }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="ui">
+    <div style="margin-bottom: 10px;">
+      <button id="btn-moon">Moon</button>
+      <button id="btn-mars">Mars</button>
+      <button id="btn-outer">Outer System</button>
+    </div>
+    <label><input type="checkbox" id="chk-apollo"> Show Apollo 11</label>
+    <div id="status">Loading...</div>
+    <div id="fps">FPS: 0</div>
+  </div>
+  <script type="module" src="/main.ts"></script>
+</body>
+</html>

@@ -1,27 +1,68 @@
-<main class="storyline-page">
+<main class="storyline-page" [class.page-hidden]="pageHidden()">
 	<header class="site-header">
 		<a class="brand" routerLink="/" aria-label="Ask the Machines home">ASK THE MACHINES</a>
 		<nav aria-label="Primary navigation">
-			<a class="is-active" routerLink="/storylines">Stories</a>
+			<a class="is-active" routerLink="/storylines" aria-current="page">Stories</a>
 			<a routerLink="/missions">Mission lab</a>
 			<a href="#about">About</a>
 		</nav>
 	</header>
 
 	<section class="storyline-content" aria-labelledby="storyline-heading">
-		<h1 id="storyline-heading">Pick a <span>storyline</span></h1>
-		<p class="subtitle">Every machine has a story to tell. Choose one, then ask it anything.</p>
-
-		<div class="storyline-grid">
-			@for (storyline of storylines; track storyline.id) {
-				<article class="storyline-card">
-					<div class="image-placeholder" aria-label="Image placeholder">image</div>
-					<p class="year-pill">Year</p>
-					<h2>{{ storyline.name }}</h2>
-					<p class="hook">One-line hook goes here.</p>
-					<a class="open-story" [routerLink]="['/storylines', storyline.id]">Open story <span aria-hidden="true">→</span></a>
-				</article>
-			}
+		<div class="intro">
+			<p class="eyebrow">A trail through space history</p>
+			<h1 id="storyline-heading">Follow the <span>cosmic trail</span></h1>
+			<p class="subtitle">Explore the worlds where machines left lasting stories. Choose a world to begin.</p>
 		</div>
+
+		@if (!activeWorld()) {
+			<section class="world-map-layer" [class.is-zooming]="zoomingWorld() !== null" aria-label="World carousel">
+				<app-world-carousel [worlds]="worlds" [unlocked]="worldUnlocks()" [progress]="worldProgress()" (enterWorld)="openWorld(worlds[$event], $event)" />
+				<div class="progress-actions">
+					<button type="button" (click)="unlockAllDemo()">Unlock all (demo)</button>
+					<button type="button" (click)="resetProgress()">Reset progress</button>
+				</div>
+			</section>
+		} @else {
+			<section class="scene-layer" aria-labelledby="scene-heading">
+				<header class="scene-header">
+					<button class="back-button" type="button" (click)="backToWorldMap()"><span aria-hidden="true">←</span> Worlds</button>
+					<div class="scene-title"><p class="eyebrow">{{ activeWorld()!.name }}</p><h2 id="scene-heading">{{ activeWorld()!.name }} trail</h2></div>
+					<div class="scene-progress">
+						<p class="scene-stop">Stop {{ stopNumber(activeWorld()!) }} of {{ activeWorld()!.machines.length }}</p>
+						<p>{{ completedCount(activeWorld()!) }} / {{ activeWorld()!.machines.length }} complete</p>
+						<div class="progress-track" role="progressbar" [attr.aria-label]="activeWorld()!.name + ' progress'" [attr.aria-valuenow]="completedCount(activeWorld()!)" [attr.aria-valuemin]="0" [attr.aria-valuemax]="activeWorld()!.machines.length"><span [style.width.%]="completedCount(activeWorld()!) / activeWorld()!.machines.length * 100"></span></div>
+					</div>
+				</header>
+				<p class="scene-hint">Explore the next unlocked machine. Finish its story to open the next stop.</p>
+				<div #sceneRoadmap class="scene-roadmap" [style.aspect-ratio]="'1000 / ' + activeWorld()!.viewBoxHeight" aria-label="Machine trail">
+					<svg class="trail" [attr.viewBox]="'0 0 ' + viewBoxWidth + ' ' + activeWorld()!.viewBoxHeight" aria-hidden="true">
+						<path #trailPath class="trail-line" [attr.d]="trailPathFor(activeWorld()!)" />
+					</svg>
+					<div class="node-layer" aria-label="Machine stops on the path">
+						@for (doodle of doodles; track $index) {
+							<app-space-doodle class="roadmap-doodle" [style.left.%]="doodle.x" [style.top.%]="doodle.y" [style.--parallax]="'0px'" [kind]="doodle.kind" [message]="doodle.message" />
+						}
+						@for (machine of activeWorld()!.machines; track machine.id; let i = $index) {
+							@if (nodePositions()[i]; as point) {
+								<article class="story-stop" [style.--node-x]="point.x / viewBoxWidth * 100 + '%'" [style.--node-y]="point.y / activeWorld()!.viewBoxHeight * 100 + '%'">
+									<button class="roadmap-node" type="button" [class.is-active]="activePeek() === machine.id" [class.is-dismissed]="dismissedPeek() === machine.id" [class.is-completed]="isMachineCompleted(machine.id)" [disabled]="!machineUnlocked(activeWorld()!, i)" [attr.aria-label]="machine.name + (isMachineCompleted(machine.id) ? ', completed' : machineUnlocked(activeWorld()!, i) ? ', unlocked' : ', locked')" [attr.aria-describedby]="'peek-' + machine.id" (click)="activatePeek(machine.id, i, $event)" (pointerenter)="peek(machine.id, i)" (pointerleave)="clearPeek(machine.id, $event)" (focus)="peek(machine.id, i)" (blur)="clearPeek(machine.id, $event)">
+										<span>{{ i + 1 }}</span>
+										@if (isMachineCompleted(machine.id)) { <span class="completed-mark" aria-hidden="true">✓</span> }
+									</button>
+									<div class="stop-card" [class.is-active]="activePeek() === machine.id" [id]="'peek-' + machine.id" (pointerenter)="peek(machine.id, i)" (pointerleave)="clearPeek(machine.id, $event)" (focusout)="clearPeek(machine.id, $event)">
+										<p class="stop-meta">{{ activeWorld()!.shortName }} <span>·</span> {{ i + 1 }} / {{ activeWorld()!.machines.length }}</p>
+										<h3>{{ machine.name }}</h3>
+										<p>{{ machine.hook }}</p>
+										<button class="peek-button" type="button" [disabled]="!machineUnlocked(activeWorld()!, i)" (click)="openStory(machine, $event)">Open story <span aria-hidden="true">↗</span></button>
+									</div>
+								</article>
+							}
+						}
+					</div>
+				</div>
+			</section>
+		}
 	</section>
 </main>
+@if (selectedStory(); as story) { <app-story-modal [machine]="story" [completed]="isMachineCompleted(story.id)" (finished)="finishStory(story)" (closed)="closeStory()" /> }

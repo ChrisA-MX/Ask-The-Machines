@@ -1,0 +1,39 @@
+<div class="modal-backdrop" (click)="close()" (keydown.escape)="close()">
+  <section class="story-dialog" role="dialog" aria-modal="true" [attr.aria-labelledby]="'story-title-' + machine().id" cdkTrapFocus [cdkTrapFocusAutoCapture]="true" (click)="$event.stopPropagation()">
+    <button class="close-button" type="button" aria-label="Close story" cdkFocusInitial (click)="close()">×</button>
+    <img class="machine-art" [src]="machine().image" [alt]="machine().imageAlt" />
+    <p class="eyebrow">{{ machine().year }} · {{ machine().worldId }}</p>
+    <h2 [id]="'story-title-' + machine().id">{{ machine().name }}</h2>
+    <p class="location">{{ machine().location }}</p>
+    <div class="mode-tabs" role="tablist" aria-label="Story format">
+      <button type="button" role="tab" [attr.aria-selected]="mode() === 'read'" [class.active]="mode() === 'read'" (click)="selectRead()">Read</button>
+      @if (supported()) { <button type="button" role="tab" [attr.aria-selected]="mode() === 'listen'" [class.active]="mode() === 'listen'" (click)="selectListen()">Listen</button> }
+      <button type="button" role="tab" [attr.aria-selected]="mode() === 'finished'" [class.active]="mode() === 'finished'" (click)="selectFinished()">Finished</button>
+    </div>
+
+    @if (mode() === 'finished') {
+      <div class="finished-view" aria-live="polite">
+        <p class="finish-mark" aria-hidden="true">✓</p>
+        <h3>{{ completed() ? 'Story complete!' : 'Mission complete!' }}</h3>
+        <p>This stop is marked finished. Your progress is saved on this device.</p>
+        <button class="finish-return" type="button" (click)="close()">Return to the trail</button>
+      </div>
+    } @else {
+      @if (mode() === 'listen') {
+        <div class="player" aria-label="Story audio controls">
+          <button type="button" (click)="togglePlayback()">{{ playing() ? 'Pause' : 'Play' }}</button>
+          <button type="button" (click)="stopPlayback()">Stop</button>
+          <label>Speed <select [value]="rate()" (change)="setRate($any($event.target).value)"><option value="0.75">0.75×</option><option value="1">1×</option><option value="1.25">1.25×</option></select></label>
+        </div>
+        <p class="sr-only" aria-live="polite">{{ playing() ? 'Reading paragraph ' + (paragraphIndex() + 1) : 'Audio stopped' }}</p>
+      }
+      <div class="story-copy">
+        @for (paragraph of machine().paragraphs; track $index) { <p [class.reading]="mode() === 'listen' && paragraphIndex() === $index">{{ paragraph }}</p> }
+      </div>
+      <aside class="fact"><strong>Mission fact</strong><p>{{ machine().fact }}</p></aside>
+      @if (machine().sourceUrl) { <a class="source-link" [href]="machine().sourceUrl" target="_blank" rel="noopener noreferrer">Source: {{ machine().sourceLabel }} <span aria-hidden="true">↗</span></a> }
+      @else { <p class="source-needed">{{ machine().sourceLabel }}</p> }
+      <button class="mark-finished" type="button" [disabled]="completed()" (click)="selectFinished()">{{ completed() ? 'Already finished' : 'Mark finished' }}</button>
+    }
+  </section>
+</div>
