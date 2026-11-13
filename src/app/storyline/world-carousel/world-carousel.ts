@@ -3,6 +3,7 @@ import { afterNextRender, Component, DestroyRef, ElementRef, EventEmitter, HostL
 import type * as ThreeTypes from 'three';
 import { WorldStory } from '../machines.data';
 import { ProceduralWorld, qualityForDevice, WorldQuality, WorldsService } from '../../worlds/worlds.service';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-world-carousel',
@@ -36,6 +37,8 @@ export class WorldCarousel {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly worldsService = inject(WorldsService);
+  private readonly loading = inject(LoadingService);
+  private readonly finishLoadingTasks = new Set<() => void>();
   private THREE?: typeof import('three');
   private renderer?: ThreeTypes.WebGLRenderer;
   private scene?: ThreeTypes.Scene;
@@ -203,6 +206,8 @@ export class WorldCarousel {
   private async loadGeneratedWorlds(quality: WorldQuality, retry = false): Promise<void> {
     if (!this.THREE || this.destroyed) return;
     const sequence = ++this.loadSequence;
+    const finishLoading = this.loading.begin();
+    this.finishLoadingTasks.add(finishLoading);
     this.isLoading = true;
     this.loadError = '';
     try {
@@ -220,6 +225,9 @@ export class WorldCarousel {
       if (this.destroyed || sequence !== this.loadSequence) return;
       this.loadError = 'The worlds could not be prepared. Please try again.';
       this.isLoading = false;
+    } finally {
+      finishLoading();
+      this.finishLoadingTasks.delete(finishLoading);
     }
   }
 
@@ -504,6 +512,8 @@ export class WorldCarousel {
   private dispose(): void {
     this.destroyed = true;
     this.loadSequence++;
+    this.finishLoadingTasks.forEach((finish) => finish());
+    this.finishLoadingTasks.clear();
     if (isPlatformBrowser(this.platformId)) {
       document.removeEventListener('visibilitychange', this.onVisibility);
       if (this.frame) cancelAnimationFrame(this.frame);

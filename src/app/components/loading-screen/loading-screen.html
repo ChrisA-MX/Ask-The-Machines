@@ -1,0 +1,6 @@
+<div class="loading-overlay" [class.is-visible]="loading" [attr.aria-hidden]="!loading">
+  <div class="loading-panel" role="status" aria-live="polite">
+    <canvas #animationCanvas class="loading-animation" width="360" height="360" aria-hidden="true"></canvas>
+    <p>Loading your experience...</p>
+  </div>
+</div>

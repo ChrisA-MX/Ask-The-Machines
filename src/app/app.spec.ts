@@ -21,4 +21,13 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-stage')).toBeTruthy();
   });
+
+  it('shows the startup overlay on the initial render', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector('.loading-overlay.is-visible'),
+    ).toBeTruthy();
+  });
 });

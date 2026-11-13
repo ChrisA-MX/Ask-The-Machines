@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, ElementRef, EventEmitter, HostListener, inject, Input, Output, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import type { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type * as ThreeTypes from 'three';
+import { LoadingService } from '../../services/loading.service';
 
 const EARTH_MODEL_URL = '/assets/models/Earth_1_12756.glb';
 
@@ -17,6 +18,7 @@ export class Stage {
 
   protected readonly earthLoadError = signal(false);
 
+  private readonly loading = inject(LoadingService);
   private focused = false;
   private readonly platformId = inject(PLATFORM_ID);
   private THREE?: typeof import('three');
@@ -29,6 +31,7 @@ export class Stage {
   private animationFrame = 0;
   private modelRequest = 0;
   private earthCanvasElement?: HTMLCanvasElement;
+  private finishEarthLoading?: () => void;
 
   @Input()
   set focusMode(value: boolean) {
@@ -55,6 +58,8 @@ export class Stage {
 
   private async loadEarth(canvas: HTMLCanvasElement): Promise<void> {
     this.disposeRenderer();
+    const finishLoading = this.loading.begin();
+    this.finishEarthLoading = finishLoading;
     const request = ++this.modelRequest;
     this.earthLoadError.set(false);
 
@@ -123,6 +128,9 @@ export class Stage {
       if (request !== this.modelRequest) return;
       this.earthLoadError.set(true);
       this.disposeRenderer();
+    } finally {
+      finishLoading();
+      if (this.finishEarthLoading === finishLoading) this.finishEarthLoading = undefined;
     }
   }
 
@@ -197,6 +205,8 @@ export class Stage {
 
   private disposeRenderer(): void {
     this.modelRequest++;
+    this.finishEarthLoading?.();
+    this.finishEarthLoading = undefined;
     if (this.animationFrame && isPlatformBrowser(this.platformId)) {
       cancelAnimationFrame(this.animationFrame);
     }

@@ -6,5 +6,6 @@
   [class.earth-focused]="earthFocused"
   (focusChange)="onEarthFocusChange($event)"
 />
+<app-loading-screen [loading]="isLoading()" />
 <router-outlet (activate)="onRouteActivate($event)" />
 <app-chat-widget />
