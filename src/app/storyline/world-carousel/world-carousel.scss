@@ -1,5 +1,5 @@
 :host { display:block; width:100%; max-width:100%; overflow:hidden; transition:transform .36s ease,opacity .36s ease,filter .36s ease; }
-.carousel { position:relative; isolation:isolate; width:100%; max-width:100%; min-height:35rem; overflow:hidden; }
+.carousel { position:relative; isolation:isolate; width:100%; max-width:100%; min-height:35rem; padding-bottom:.75rem; overflow:hidden; }
 .world-copy { position:relative; z-index:3; width:min(42rem,100%); min-height:9.2rem; margin:0 auto; text-align:center; opacity:1; transition:opacity .2s ease; }
 .world-copy.is-fading { opacity:0; }
 .eyebrow { margin:0 0 .5rem; color:#7fd2ff; font-size:.78rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
@@ -19,7 +19,7 @@ canvas:focus-visible { outline:2px solid #ffd06e; outline-offset:-4px; border-ra
 .arrow { position:absolute; z-index:4; top:50%; display:grid; width:3.8rem; aspect-ratio:1; place-items:center; padding:0 0 .22rem; border:1px solid #7bcfff9c; border-radius:50%; background:#06152bd9; color:#eaf8ff; font:300 3.2rem/1 'Space Grotesk',sans-serif; box-shadow:0 0 1.6rem #52beff3b; cursor:pointer; transform:translateY(-50%); transition:background .2s ease,box-shadow .2s ease,transform .2s ease; }
 .arrow:disabled { opacity:.45; cursor:wait; }
 .arrow:hover,.arrow:focus-visible { background:#17436b; box-shadow:0 0 2rem #52beff91; transform:translateY(-50%) scale(1.06); outline:2px solid #ffd06e; outline-offset:3px; }
-.previous { left:.25rem; }.next { right:.25rem; }
+.previous { left:.75rem; }.next { right:.75rem; }
 .carousel-footer { position:relative; z-index:4; display:flex; flex-direction:column; align-items:center; gap:1rem; margin-top:-.15rem; }
 .world-dots { display:flex; align-items:center; gap:.8rem; }
 .dot { width:.7rem; height:.7rem; padding:0; border:1px solid #80cfff; border-radius:50%; background:#24415f; cursor:pointer; transition:background .2s ease,transform .2s ease,box-shadow .2s ease; }
@@ -52,7 +52,7 @@ canvas:focus-visible { outline:2px solid #ffd06e; outline-offset:-4px; border-ra
 @keyframes locked-shake { 0%,100% { transform:translateX(0); } 25% { transform:translateX(-7px); } 75% { transform:translateX(7px); } }
 @media (max-width:760px) {
  .carousel { min-height:31rem; }.world-copy { min-height:10rem; }.scene { height:clamp(19rem,80vw,27rem); margin-top:.2rem; }
- .arrow { width:3rem; font-size:2.6rem; }.previous { left:.1rem; }.next { right:.1rem; }
+ .arrow { width:3rem; font-size:2.6rem; }.previous { left:.65rem; }.next { right:.65rem; }
  .fallback-sphere { width:clamp(8rem,46vw,12rem); }.fallback-sphere:not(.is-current) { opacity:.58; }
 }
 @media (max-width:420px) {

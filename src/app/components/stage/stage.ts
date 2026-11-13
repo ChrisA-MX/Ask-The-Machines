@@ -5,6 +5,7 @@ import type * as ThreeTypes from 'three';
 import { LoadingService } from '../../services/loading.service';
 
 const EARTH_MODEL_URL = '/assets/models/Earth_1_12756.glb';
+const EARTH_DEFAULT_CAMERA_DISTANCE = 3.7;
 
 @Component({
   imports: [],
@@ -35,8 +36,10 @@ export class Stage {
 
   @Input()
   set focusMode(value: boolean) {
+    const wasFocused = this.focused;
     this.focused = value;
     if (this.controls) this.controls.enabled = value;
+    if (wasFocused && !value) this.resetCameraZoom();
   }
   get focusMode(): boolean {
     return this.focused;
@@ -87,7 +90,7 @@ export class Stage {
       this.scene = scene;
 
       const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
-      camera.position.z = 3.7;
+      camera.position.z = EARTH_DEFAULT_CAMERA_DISTANCE;
       this.camera = camera;
 
       const gltf = await new GLTFLoader().loadAsync(EARTH_MODEL_URL);
@@ -141,6 +144,16 @@ export class Stage {
     this.renderer.setSize(bounds.width, bounds.height, false);
     this.camera.aspect = bounds.width / bounds.height;
     this.camera.updateProjectionMatrix();
+  }
+
+  private resetCameraZoom(): void {
+    if (!this.camera || !this.controls) return;
+    this.camera.position
+      .sub(this.controls.target)
+      .setLength(EARTH_DEFAULT_CAMERA_DISTANCE)
+      .add(this.controls.target);
+    this.camera.lookAt(this.controls.target);
+    this.controls.update();
   }
 
   protected onEarthKeydown(event: KeyboardEvent): void {

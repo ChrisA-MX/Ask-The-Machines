@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
+import { Vector3 } from 'three';
 import { Stage } from './stage';
 
 describe('Stage', () => {
@@ -43,5 +44,26 @@ describe('Stage', () => {
     canvas?.click();
 
     expect(focusChange).toHaveBeenCalledWith(true);
+  });
+
+  it('resets the Earth zoom to its landing-page size when focus ends', () => {
+    const camera = {
+      position: new Vector3(0, 0, 2.8),
+      lookAt: vi.fn(),
+    };
+    const controls = {
+      enabled: true,
+      target: new Vector3(),
+      update: vi.fn(),
+    };
+    Reflect.set(component, 'camera', camera);
+    Reflect.set(component, 'controls', controls);
+
+    component.focusMode = true;
+    component.focusMode = false;
+
+    expect(camera.position.length()).toBeCloseTo(3.7);
+    expect(controls.enabled).toBe(false);
+    expect(controls.update).toHaveBeenCalled();
   });
 });
