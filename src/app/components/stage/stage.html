@@ -1,32 +1,16 @@
-<section class="stage" aria-label="Illustration of Earth and the Moon">
+<section class="stage" [class.is-focused]="focusMode" aria-label="Interactive NASA Earth model and starfield" (click)="onStageClick($event)">
 	<div class="stars stars--one" aria-hidden="true"></div>
 	<div class="stars stars--two" aria-hidden="true"></div>
 	<div class="stars stars--three" aria-hidden="true"></div>
 	@if (showPlanets) {
-		<div class="moon" aria-hidden="true"></div>
-		<div class="earth" aria-hidden="true">
-			<div class="earth-map">
-				<div class="earth-map__side">
-					<div class="continent continent--one"></div><div class="continent continent--two"></div>
-					<div class="continent continent--three"></div><div class="continent continent--four"></div>
-				</div>
-				<div class="earth-map__side earth-map__side--alternate">
-					<div class="continent continent--one"></div><div class="continent continent--two"></div>
-					<div class="continent continent--three"></div><div class="continent continent--four"></div>
-				</div>
-				<div class="earth-map__side">
-					<div class="continent continent--one"></div><div class="continent continent--two"></div>
-					<div class="continent continent--three"></div><div class="continent continent--four"></div>
-				</div>
-				<div class="earth-map__side earth-map__side--alternate">
-					<div class="continent continent--one"></div><div class="continent continent--two"></div>
-					<div class="continent continent--three"></div><div class="continent continent--four"></div>
-				</div>
-			</div>
-			<div class="cloud cloud--one"></div><div class="cloud cloud--two"></div><div class="cloud cloud--three"></div>
-			<div class="cloud cloud--four"></div><div class="cloud cloud--five"></div><div class="cloud cloud--six"></div>
-			<div class="cloud cloud--seven"></div>
-			<div class="earth-shadow"></div>
+		<div class="earth">
+			<canvas #earthCanvas class="earth-canvas" role="application" tabindex="0" aria-label="NASA Earth model. Click or press Enter to focus; then drag to rotate, use the scroll wheel or pinch to zoom, and use arrow keys to tilt." (click)="focusEarth()" (keydown)="onEarthKeydown($event)"></canvas>
+			@if (earthLoadError()) {
+				<p class="earth-load-error" role="status">NASA's Earth model could not be loaded.</p>
+			}
 		</div>
+	}
+	@if (focusMode) {
+		<button class="earth-exit-focus" type="button" (click)="exitEarthFocus(); $event.stopPropagation()">Exit Earth focus <span aria-hidden="true">×</span></button>
 	}
 </section>

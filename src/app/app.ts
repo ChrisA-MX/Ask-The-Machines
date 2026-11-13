@@ -12,8 +12,14 @@ import { Landing } from './components/landing/landing';
 })
 export class App {
   protected showLandingPlanets = false;
+  protected earthFocused = false;
 
   protected onRouteActivate(component: unknown): void {
     this.showLandingPlanets = component instanceof Landing;
+    if (!this.showLandingPlanets) this.earthFocused = false;
+  }
+
+  protected onEarthFocusChange(focused: boolean): void {
+    this.earthFocused = focused && this.showLandingPlanets;
   }
 }

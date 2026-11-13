@@ -1,1 +1,12 @@
 :host { display: block; min-height: 100dvh; }
+.earth-focus-backdrop {
+  position: fixed;
+  z-index: 500;
+  inset: 0;
+  background: rgba(2, 6, 17, 0.42);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+.earth-focus-backdrop.is-active { opacity: 1; }

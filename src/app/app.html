@@ -1,3 +1,10 @@
-<app-stage [showPlanets]="showLandingPlanets" />
+<div class="earth-focus-backdrop" [class.is-active]="earthFocused" aria-hidden="true"></div>
+<app-stage
+  ngSkipHydration
+  [showPlanets]="showLandingPlanets"
+  [focusMode]="earthFocused"
+  [class.earth-focused]="earthFocused"
+  (focusChange)="onEarthFocusChange($event)"
+/>
 <router-outlet (activate)="onRouteActivate($event)" />
 <app-chat-widget />

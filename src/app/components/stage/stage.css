@@ -6,6 +6,10 @@
   overflow: hidden;
   background: #050a1d;
 }
+:host(.earth-focused) {
+  z-index: 501;
+  background: transparent;
+}
 .stage {
   position: relative;
   width: 100%;
@@ -13,13 +17,18 @@
   overflow: hidden;
   background: radial-gradient(circle at 74% 69%, #0c2557 0, #071435 29%, #050a1d 68%);
 }
-.stage::before,
-.stage::after {
+.stage.is-focused {
+  background: transparent;
+}
+.stage.is-focused::before,
+.stage.is-focused .stars {
+  visibility: hidden;
+  opacity: 0;
+}
+.stage::before {
   position: absolute;
   content: '';
   pointer-events: none;
-}
-.stage::before {
   inset: 0;
   opacity: 0.8;
   background-image:
@@ -31,23 +40,6 @@
   background-size:
     265px 190px,
     360px 270px;
-}
-.stage::after {
-  right: -8%;
-  bottom: -24%;
-  width: 52%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 48% 36%,
-    rgba(52, 141, 255, 0.55),
-    rgba(11, 51, 125, 0.94) 47%,
-    #020716 70%
-  );
-  box-shadow:
-    0 0 0 2px rgba(104, 183, 255, 0.3),
-    0 0 2rem rgba(83, 171, 255, 0.38),
-    0 0 5rem rgba(83, 171, 255, 0.12);
 }
 .stars {
   position: absolute;
@@ -84,252 +76,95 @@
     transform: rotate(360deg);
   }
 }
-.moon {
-  position: absolute;
-  z-index: 2;
-  top: 12%;
-  right: 16%;
-  width: 3.65rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle at 32% 28%, #e0e5f1 0, #b7c0d5 42%, #7f899f 78%, #505a71 100%);
-  box-shadow:
-    inset 0.2rem 0.15rem 0.35rem rgba(255, 255, 255, 0.55),
-    inset -0.65rem -0.4rem 0.65rem rgba(34, 41, 61, 0.72),
-    0 0 1.2rem rgba(195, 207, 237, 0.2);
-}
-.moon::before {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 25% 35%, rgba(89, 99, 121, 0.5) 0 7%, rgba(238, 241, 249, 0.26) 8%, transparent 10%),
-    radial-gradient(circle at 70% 61%, rgba(89, 99, 121, 0.42) 0 5%, rgba(238, 241, 249, 0.22) 6%, transparent 8%),
-    radial-gradient(circle at 45% 78%, rgba(89, 99, 121, 0.36) 0 4%, rgba(238, 241, 249, 0.18) 5%, transparent 7%);
-  content: '';
-  animation: moon-rotation 36s linear infinite;
-}
-.moon::after {
-  position: absolute;
-  right: 25%;
-  bottom: 22%;
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 50%;
-  background: radial-gradient(circle at 32% 28%, #737e96 0 30%, #aeb8ce 33% 48%, #68738a 52% 100%);
-  box-shadow: inset -0.08rem -0.07rem 0.12rem rgba(35, 42, 60, 0.6);
-  content: '';
-}
-@keyframes moon-rotation {
-  to {
-    transform: rotate(360deg);
-  }
-}
 .earth {
+  --earth-size: 68rem;
   position: absolute;
   z-index: 2;
-  right: -8%;
-  bottom: -24%;
-  width: 52%;
+  top: calc(100% + 43vh - var(--earth-size));
+  left: calc(100% + 12vw - var(--earth-size));
+  width: var(--earth-size);
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 50%;
-  background:
-    radial-gradient(ellipse at 29% 26%, rgba(105, 190, 255, 0.55), transparent 38%),
-    radial-gradient(ellipse at 40% 42%, #2879d9 0, #1956a9 58%, #07183d 100%);
-  box-shadow:
-    inset 0.25rem 0.2rem 0.7rem rgba(164, 221, 255, 0.2),
-    inset -1.2rem -0.9rem 2rem rgba(0, 5, 28, 0.7);
+  transform: translate(0, 0);
+  transition:
+    top 0.75s cubic-bezier(0.2, 0.75, 0.25, 1),
+    left 0.75s cubic-bezier(0.2, 0.75, 0.25, 1),
+    width 0.75s cubic-bezier(0.2, 0.75, 0.25, 1),
+    transform 0.75s cubic-bezier(0.2, 0.75, 0.25, 1),
+    filter 0.5s ease;
 }
-.earth::after {
+.stage.is-focused .earth {
+  --earth-size: min(72rem, 130vmin);
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 2rem rgba(91, 177, 255, 0.6))
+    drop-shadow(0 0 4rem rgba(68, 139, 255, 0.35));
+}
+.earth-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter:
+    drop-shadow(0 0 1.2rem rgba(91, 177, 255, 0.48))
+    drop-shadow(0 0 3rem rgba(68, 139, 255, 0.26));
+  cursor: pointer;
+  touch-action: auto;
+}
+.stage.is-focused .earth-canvas {
+  cursor: grab;
+  touch-action: none;
+}
+.stage.is-focused .earth-canvas:active {
+  cursor: grabbing;
+}
+.earth-canvas:focus-visible {
+  outline: 2px solid #8bd5ff;
+  outline-offset: -0.5rem;
+}
+.earth-load-error {
   position: absolute;
   z-index: 2;
-  inset: 0;
-  border: 1px solid rgba(164, 220, 255, 0.24);
-  border-radius: 50%;
-  background:
-    radial-gradient(ellipse at 27% 24%, rgba(255, 255, 255, 0.09), transparent 37%),
-    radial-gradient(ellipse at 47% 47%, transparent 48%, rgba(1, 8, 32, 0.12) 68%, rgba(0, 3, 17, 0.58) 100%);
-  box-shadow: inset 0 0 1.2rem rgba(133, 204, 255, 0.14);
-  content: '';
-  pointer-events: none;
+  inset: 50% auto auto 50%;
+  width: max-content;
+  max-width: 80%;
+  margin: 0;
+  color: #d7e8ff;
+  font-size: 0.9rem;
+  text-align: center;
+  transform: translate(-50%, -50%);
 }
-.earth-shadow {
+.earth-exit-focus {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 37%, rgba(0, 3, 17, 0.7) 74%);
+  z-index: 3;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(147, 205, 255, 0.6);
+  border-radius: 999px;
+  background: rgba(6, 18, 42, 0.9);
+  color: #e8f4ff;
+  font: 600 0.9rem 'DM Sans', sans-serif;
+  cursor: pointer;
 }
-.continent,
-.cloud {
-  position: absolute;
-  border-radius: 50%;
+.earth-exit-focus span {
+  font-size: 1.2rem;
 }
-.earth-map {
-  position: absolute;
-  inset: 0 auto 0 0;
-  z-index: 0;
-  display: flex;
-  width: 400%;
-  animation: earth-rotation 80s linear infinite;
-}
-.earth-map__side {
-  position: relative;
-  flex: 0 0 25%;
-  height: 100%;
-}
-@keyframes earth-rotation {
-  to {
-    transform: translateX(-50%);
-  }
-}
-.continent {
-  background: radial-gradient(ellipse at 32% 25%, #86ce79 0, #399a58 42%, #1d624b 100%);
-  opacity: 0.88;
-  border-radius: 45% 55% 62% 38% / 35% 52% 48% 65%;
-  box-shadow:
-    inset 0.12rem 0.08rem 0.22rem rgba(228, 255, 153, 0.42),
-    inset -0.28rem -0.22rem 0.35rem rgba(9, 48, 47, 0.55);
-}
-.continent--one {
-  top: 17%;
-  left: 21%;
-  width: 20%;
-  height: 20%;
-}
-.continent--two {
-  top: 40%;
-  left: 43%;
-  width: 16%;
-  height: 18%;
-}
-.continent--three {
-  top: 18%;
-  right: 16%;
-  width: 18%;
-  height: 18%;
-}
-.continent--four {
-  top: 52%;
-  right: 15%;
-  width: 10%;
-  height: 15%;
-  border-radius: 58% 42% 34% 66% / 45% 35% 65% 55%;
-}
-.earth-map__side--alternate .continent--one {
-  top: 24%;
-  left: 12%;
-  width: 24%;
-  height: 17%;
-}
-.earth-map__side--alternate .continent--two {
-  top: 48%;
-  left: 36%;
-  width: 13%;
-  height: 22%;
-}
-.earth-map__side--alternate .continent--three {
-  top: 15%;
-  right: 9%;
-  width: 22%;
-  height: 21%;
-}
-.earth-map__side--alternate .continent--four {
-  top: 58%;
-  right: 25%;
-  width: 12%;
-  height: 14%;
-}
-.cloud {
-  height: 2.4%;
-  border-radius: 50%;
-  background: linear-gradient(180deg, rgba(246, 252, 255, 0.86), rgba(169, 207, 232, 0.56));
-  box-shadow: 0 0.12rem 0.35rem rgba(4, 25, 68, 0.3);
-  filter: drop-shadow(0 0 0.3rem rgba(215, 231, 245, 0.2));
-  animation: cloud-drift 12s ease-in-out infinite alternate;
-}
-.cloud::before,
-.cloud::after {
-  position: absolute;
-  bottom: 0;
-  height: 170%;
-  border-radius: 50%;
-  background: inherit;
-  content: '';
-}
-.cloud::before {
-  left: 20%;
-  width: 38%;
-}
-.cloud::after {
-  right: 15%;
-  width: 28%;
-  height: 135%;
-}
-.cloud--one {
-  top: 15%;
-  left: 25%;
-  width: 18%;
-}
-.cloud--two {
-  top: 33%;
-  left: 51%;
-  width: 20%;
-  animation-delay: -3s;
-  animation-duration: 14s;
-}
-.cloud--three {
-  top: 50%;
-  left: 38%;
-  width: 15%;
-  animation-delay: -8s;
-  animation-duration: 10s;
-}
-.cloud--four {
-  top: 25%;
-  left: 8%;
-  width: 13%;
-  animation-delay: -2s;
-  animation-duration: 13s;
-}
-.cloud--five {
-  top: 44%;
-  left: 70%;
-  width: 17%;
-  animation-delay: -10s;
-  animation-duration: 16s;
-}
-.cloud--six {
-  top: 63%;
-  left: 24%;
-  width: 21%;
-  animation-delay: -6s;
-  animation-duration: 12s;
-}
-.cloud--seven {
-  top: 8%;
-  left: 57%;
-  width: 12%;
-  animation-delay: -5s;
-  animation-duration: 11s;
-}
-@keyframes cloud-drift {
-  from {
-    transform: translate3d(-35%, -8%, 0);
-  }
-  to {
-    transform: translate3d(45%, 12%, 0);
-  }
+.earth-exit-focus:focus-visible {
+  outline: 2px solid #8bd5ff;
+  outline-offset: 3px;
 }
 @media (max-width: 700px) {
-  .stage::after,
   .earth {
-    right: -23%;
-    bottom: -13%;
-    width: 78%;
-  }
-  .moon {
-    top: 18%;
-    right: 13%;
-    width: 2.8rem;
+    --earth-size: 26rem;
+    top: calc(100% + 13vh - var(--earth-size));
+    left: calc(100% + 25vw - var(--earth-size));
   }
 }
