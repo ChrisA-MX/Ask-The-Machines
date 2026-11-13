@@ -142,6 +142,9 @@ h1 span {
   nav a {
     display: none;
   }
+  nav a:last-child {
+    display: inline;
+  }
   .landing-content {
     top: 18%;
     left: 1.25rem;

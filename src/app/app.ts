@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Stage } from './components/stage/stage';
 import { ChatWidget } from './components/chat-widget/chat-widget';
+import { Landing } from './components/landing/landing';
 
 @Component({
   imports: [RouterOutlet, Stage, ChatWidget],
@@ -9,4 +10,10 @@ import { ChatWidget } from './components/chat-widget/chat-widget';
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App {}
+export class App {
+  protected showLandingPlanets = false;
+
+  protected onRouteActivate(component: unknown): void {
+    this.showLandingPlanets = component instanceof Landing;
+  }
+}

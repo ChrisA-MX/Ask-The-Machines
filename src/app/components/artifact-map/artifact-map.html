@@ -11,12 +11,13 @@
 		</div>
 	</div>
 
-	<div class="map-frame">
-		<div #mapCanvas class="map-canvas" role="application" [attr.aria-label]="planet() + ' surface map with mission artifact markers'"></div>
+	<div class="map-focus-backdrop" [class.is-active]="mapFocused()" aria-hidden="true"></div>
+	<div class="map-frame" [class.is-focused]="mapFocused()" (focusin)="onMapFocusIn()" (focusout)="onMapFocusOut($event)">
+		<div #mapCanvas class="map-canvas" role="application" tabindex="0" aria-describedby="map-interaction-hint" [attr.aria-label]="planet() + ' surface map with mission artifact markers'" (pointerdown)="focusMap()"></div>
 		<div class="map-label"><span class="signal-dot"></span> {{ planet() }} · SURFACE SURVEY</div>
 		@if (mapError()) { <p class="map-error" role="status">{{ mapError() }}</p> }
 	</div>
-	<p class="map-attribution">Surface imagery: NASA/JPL Solar System Treks · Select the glowing marker to open its field note.</p>
+	<p id="map-interaction-hint" class="map-attribution">Surface imagery: NASA/JPL Solar System Treks · Focus the map (click or Tab) to enable scroll-wheel zoom. Select the glowing marker to open its field note.</p>
 
 	@if (selectedArtifact(); as artifact) {
 		<div class="story-backdrop" (click)="closeStory()" (keydown.escape)="closeStory()">

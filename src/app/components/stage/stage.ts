@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   imports: [],
@@ -6,4 +6,6 @@ import { Component } from '@angular/core';
   styleUrl: './stage.css',
   templateUrl: './stage.html',
 })
-export class Stage {}
+export class Stage {
+  @Input() showPlanets = false;
+}

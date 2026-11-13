@@ -6,14 +6,10 @@ nav { display: flex; align-items: center; gap: clamp(1.3rem, 3vw, 2.5rem); }
 nav a { position: relative; padding: .35rem 0; color: #d5e4ff; font-size: 1rem; font-weight: 600; text-decoration: none; }
 nav a::after { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: #ffdf3d; content: ''; transform: scaleX(0); transform-origin: left; transition: transform .2s ease; }
 nav a:hover::after, nav a:focus-visible::after, nav a.is-active::after { transform: scaleX(1); }
-.mission-hero { max-width: 65rem; margin: 8vh auto 4rem; }
 .eyebrow { margin: 0 0 1.2rem; color: #4ea8ff; font-size: .82rem; font-weight: 700; letter-spacing: .22em; }
-h1 { margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: clamp(3.2rem, 7vw, 6.3rem); font-weight: 700; letter-spacing: -.075em; line-height: .97; }
-h1 span { color: #ffdf3d; }
-.mission-hero > p:last-child { max-width: 40rem; margin: 1.3rem 0 0; color: #c9d7f3; font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.55; }
 .lab-section { max-width: 76rem; margin: 0 auto 6rem; }
 .game-lab { padding-top: 1rem; }
 .mission-footer { display: flex; max-width: 76rem; align-items: center; justify-content: space-between; gap: 1rem; margin: 0 auto; padding: 1.2rem 0; border-top: 1px solid #233b67; color: #8fa4c8; font-size: .68rem; letter-spacing: .12em; }
 .mission-footer a { color: #bddcff; font-size: .82rem; letter-spacing: normal; text-decoration: none; }
 .mission-footer a:hover { color: #ffdf3d; }
-@media (max-width: 700px) { .mission-page { padding: 1px 1.25rem 2rem; } .site-header { padding: 1.3rem 0; } .brand { font-size: .9rem; } nav { gap: 1rem; } nav a { font-size: .85rem; } .mission-hero { margin: 7vh auto 3rem; } .lab-section { margin-bottom: 4rem; } .mission-footer { align-items: start; flex-direction: column; } }
+@media (max-width: 700px) { .mission-page { padding: 1px 1.25rem 2rem; } .site-header { padding: 1.3rem 0; } .brand { font-size: .9rem; } nav { gap: 1rem; } nav a { font-size: .85rem; } nav a:not(:last-child) { display: none; } .lab-section { margin-bottom: 4rem; } .mission-footer { align-items: start; flex-direction: column; } }

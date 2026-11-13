@@ -23,6 +23,7 @@ export class ArtifactMap {
   protected readonly planet = signal<Planet>('Moon');
   protected readonly selectedArtifact = signal<Artifact | null>(null);
   protected readonly mapError = signal('');
+  protected readonly mapFocused = signal(false);
 
   /** Mock story copy; replace with the final researched machine story when ready. */
   protected readonly artifacts: Artifact[] = [
@@ -79,6 +80,24 @@ export class ArtifactMap {
     this.selectedArtifact.set(null);
   }
 
+  protected focusMap(): void {
+    this.mapCanvas?.nativeElement.focus({ preventScroll: true });
+  }
+
+  protected onMapFocusIn(): void {
+    this.mapFocused.set(true);
+    this.map?.scrollWheelZoom.enable();
+  }
+
+  protected onMapFocusOut(event: FocusEvent): void {
+    const frame = event.currentTarget;
+    const nextTarget = event.relatedTarget;
+    if (frame instanceof HTMLElement && nextTarget instanceof Node && frame.contains(nextTarget)) return;
+
+    this.mapFocused.set(false);
+    this.map?.scrollWheelZoom.disable();
+  }
+
   private async initializeMap(): Promise<void> {
     try {
       const leaflet = await import('leaflet');
@@ -91,6 +110,7 @@ export class ArtifactMap {
         minZoom: 0,
         maxZoom: 9,
         worldCopyJump: false,
+        scrollWheelZoom: false,
         zoomControl: false,
         attributionControl: true,
       });

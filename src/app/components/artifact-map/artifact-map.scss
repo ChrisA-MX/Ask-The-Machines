@@ -10,8 +10,12 @@ h2 span { color: #ffdf3d; }
 .planet-switch button { display: flex; align-items: center; gap: .5rem; padding: .7rem 1rem; border: 0; border-radius: 999px; background: transparent; color: #adc0e2; cursor: pointer; font: inherit; font-weight: 700; transition: background .2s ease, color .2s ease; }
 .planet-switch button:hover { color: #fff; }
 .planet-switch button.is-active { background: #ffdf3d; color: #09142e; }
-.map-frame { position: relative; height: clamp(24rem, 53vw, 39rem); overflow: hidden; border: 1px solid #33507f; border-radius: 1.2rem; background: #070d1c; box-shadow: 0 1rem 3.5rem #0005; }
+.map-focus-backdrop { position: fixed; z-index: 500; inset: 0; background: rgba(2, 6, 17, 0); backdrop-filter: blur(0); opacity: 0; pointer-events: none; transition: background .25s ease, backdrop-filter .25s ease, opacity .25s ease; }
+.map-focus-backdrop.is-active { background: rgba(2, 6, 17, .42); backdrop-filter: blur(3px); opacity: 1; }
+.map-frame { position: relative; z-index: 1; height: clamp(24rem, 53vw, 39rem); overflow: hidden; border: 1px solid #33507f; border-radius: 1.2rem; background: #070d1c; box-shadow: 0 1rem 3.5rem #0005; transition: border-color .25s ease, box-shadow .25s ease; }
+.map-frame.is-focused { z-index: 501; border-color: #75caff; box-shadow: 0 0 0 2px rgba(89, 190, 255, .72), 0 0 2.4rem rgba(70, 174, 255, .52), 0 1rem 3.5rem #0008; }
 .map-canvas { width: 100%; height: 100%; background: radial-gradient(ellipse, #433b35, #171922 70%, #0a1020); }
+.map-canvas:focus-visible { outline: 2px solid #ffdf3d; outline-offset: -4px; }
 .map-label { position: absolute; z-index: 500; top: 1rem; left: 1rem; display: flex; align-items: center; gap: .55rem; padding: .65rem .85rem; border: 1px solid #9db3d143; border-radius: 999px; background: #061127e8; color: #e5edff; font-size: .68rem; font-weight: 700; letter-spacing: .1em; pointer-events: none; }
 .signal-dot { width: .55rem; height: .55rem; border-radius: 50%; background: #ff8a45; box-shadow: 0 0 .8rem #ff8a45; }
 .map-error { position: absolute; right: 1rem; bottom: 1rem; left: 1rem; margin: 0; padding: .8rem 1rem; border: 1px solid #ff8a4560; border-radius: .75rem; background: #1b1320e8; color: #ffd5b8; }

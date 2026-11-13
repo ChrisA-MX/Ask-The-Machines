@@ -14,7 +14,7 @@ h1 { max-width:100%; margin:0; font-family:'Space Grotesk',sans-serif; font-size
 h1 span { color:#ffe14d; }
 .subtitle { width:100%; max-width:39rem; margin:1.2rem 0 0; color:#c9ddff; font-size:1.15rem; line-height:1.55; overflow-wrap:anywhere; }
 
-.world-map-layer,.scene-layer { width:100%; min-width:0; max-width:100%; margin:3.5rem auto 0; }
+.world-map-layer,.scene-layer { width:100%; min-width:0; max-width:100%; margin:1.5rem auto 0; }
 .world-map-layer { transition:transform .36s ease,opacity .36s ease,filter .36s ease; transform-origin:center 45%; }
 .world-map-layer.is-zooming app-world-carousel { display:block; opacity:0; filter:brightness(1.35); transform:scale(1.14); }
 .world-map-heading { display:flex; align-items:end; justify-content:space-between; gap:1rem; max-width:100%; }
@@ -78,7 +78,7 @@ h1 span { color:#ffe14d; }
 @keyframes scene-arrive { from { opacity:.2; transform:scale(.96); } to { opacity:1; transform:scale(1); } }
 
 @media (max-width:760px) {
- .site-header { padding:1.25rem 0; } nav { gap:.8rem; } nav a { font-size:.9rem; } nav a:not(:first-child) { display:none; }
+ .site-header { padding:1.25rem 0; } nav { gap:.8rem; } nav a { font-size:.9rem; } nav a:not(:last-child) { display:none; }
  .storyline-content { margin-top:5vh; }.subtitle { font-size:1rem; }
  .world-map-layer,.scene-layer { margin-top:2.6rem; }.world-map-heading { align-items:start; flex-direction:column; }.map-instruction { text-align:left; }
  .world-map { height:40rem; }.world-node { width:min(21rem,46%); min-height:8rem; gap:.7rem; padding:.7rem; }

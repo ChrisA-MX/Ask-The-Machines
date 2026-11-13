@@ -8,13 +8,7 @@
 		</nav>
 	</header>
 
-	<section class="storyline-content" aria-labelledby="storyline-heading">
-		<div class="intro">
-			<p class="eyebrow">A trail through space history</p>
-			<h1 id="storyline-heading">Follow the <span>cosmic trail</span></h1>
-			<p class="subtitle">Explore the worlds where machines left lasting stories. Choose a world to begin.</p>
-		</div>
-
+	<section class="storyline-content" aria-label="Story worlds and machine trails">
 		@if (!activeWorld()) {
 			<section class="world-map-layer" [class.is-zooming]="zoomingWorld() !== null" aria-label="World carousel">
 				<app-world-carousel [worlds]="worlds" [unlocked]="worldUnlocks()" [progress]="worldProgress()" (enterWorld)="openWorld(worlds[$event], $event)" />
