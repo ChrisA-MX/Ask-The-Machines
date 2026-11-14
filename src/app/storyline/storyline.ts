@@ -41,6 +41,7 @@ export class Storyline {
   protected readonly viewBoxWidth = 1000;
   protected readonly nodePositions = signal<PathPoint[]>([]);
   protected readonly activeWorld = signal<WorldStory | null>(null);
+  protected readonly selectedWorldIndex = signal(0);
   protected readonly zoomingWorld = signal<WorldId | null>(null);
   protected readonly selectedStory = signal<MachineStory | null>(null);
   protected readonly activePeek = signal<string | null>(null);
@@ -93,6 +94,7 @@ export class Storyline {
   protected openWorld(world: WorldStory, worldIndex: number): void {
     if (!isWorldUnlocked(this.worlds, this.completedIds(), worldIndex)) return;
     if (!isPlatformBrowser(this.platformId)) return;
+    this.selectedWorldIndex.set(worldIndex);
     if (this.reducedMotion) {
       this.activeWorld.set(world);
       this.activeStopIndex.set(this.firstAvailableMachineIndex(world));

@@ -16,9 +16,12 @@ canvas { position:absolute; z-index:2; inset:0; display:block; width:100%; heigh
 .scene.is-crossfading canvas { opacity:.12; }
 .scene.is-hovered canvas { cursor:pointer; }
 canvas:focus-visible { outline:2px solid #ffd06e; outline-offset:-4px; border-radius:1rem; }
-.arrow { position:absolute; z-index:4; top:50%; display:grid; width:3.8rem; aspect-ratio:1; place-items:center; padding:0 0 .22rem; border:1px solid #7bcfff9c; border-radius:50%; background:#06152bd9; color:#eaf8ff; font:300 3.2rem/1 'Space Grotesk',sans-serif; box-shadow:0 0 1.6rem #52beff3b; cursor:pointer; transform:translateY(-50%); transition:background .2s ease,box-shadow .2s ease,transform .2s ease; }
+.arrow { position:absolute; z-index:4; top:50%; display:grid; width:3.8rem; aspect-ratio:1; place-items:center; padding:0; border:1px solid #7bcfff9c; border-radius:50%; background:#06152bd9; color:#eaf8ff; font:300 3.2rem/1 'Space Grotesk',sans-serif; box-shadow:0 0 1.6rem #52beff3b; cursor:pointer; transform:translateY(-50%); transition:background .2s ease,box-shadow .2s ease,transform .2s ease; }
+.arrow span { position:relative; top:-.1rem; display:block; width:.95rem; height:.95rem; border-top:.22rem solid currentColor; border-right:.22rem solid currentColor; font-size:0; }
+.previous span { transform:rotate(-135deg); }
+.next span { transform:rotate(45deg); }
 .arrow:disabled { opacity:.45; cursor:wait; }
-.arrow:hover,.arrow:focus-visible { background:#17436b; box-shadow:0 0 2rem #52beff91; transform:translateY(-50%) scale(1.06); outline:2px solid #ffd06e; outline-offset:3px; }
+.arrow:not(:disabled):hover,.arrow:focus-visible { border-color:#f5c548; background:#f5c54838; color:#ffe16a; box-shadow:0 0 2rem #f5c54866; transform:translateY(-50%) scale(1.06); outline:2px solid #f5c548; outline-offset:3px; }
 .previous { left:.75rem; }.next { right:.75rem; }
 .carousel-footer { position:relative; z-index:4; display:flex; flex-direction:column; align-items:center; gap:1rem; margin-top:-.15rem; }
 .world-dots { display:flex; align-items:center; gap:.8rem; }

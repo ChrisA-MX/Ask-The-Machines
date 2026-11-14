@@ -11,7 +11,7 @@
 	<section class="storyline-content" aria-label="Story worlds and machine trails">
 		@if (!activeWorld()) {
 			<section class="world-map-layer" [class.is-zooming]="zoomingWorld() !== null" aria-label="World carousel">
-				<app-world-carousel [worlds]="worlds" [unlocked]="worldUnlocks()" [progress]="worldProgress()" (enterWorld)="openWorld(worlds[$event], $event)" />
+				<app-world-carousel [worlds]="worlds" [unlocked]="worldUnlocks()" [progress]="worldProgress()" [initialIndex]="selectedWorldIndex()" (enterWorld)="openWorld(worlds[$event], $event)" />
 				<div class="progress-actions">
 					<button type="button" (click)="unlockAllDemo()">Unlock all (demo)</button>
 					<button type="button" (click)="resetProgress()">Reset progress</button>

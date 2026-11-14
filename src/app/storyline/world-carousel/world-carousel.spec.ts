@@ -46,6 +46,25 @@ describe('world carousel', () => {
     fixture.destroy();
   });
 
+  it('restores the selected world when the carousel is recreated', () => {
+    TestBed.configureTestingModule({
+      imports: [WorldCarousel],
+      providers: [
+        { provide: PLATFORM_ID, useValue: 'server' },
+        { provide: WorldsService, useValue: {} },
+      ],
+    });
+    const fixture = TestBed.createComponent(WorldCarousel);
+    fixture.componentRef.setInput('worlds', WORLDS);
+    fixture.componentRef.setInput('unlocked', [true, true, true]);
+    fixture.componentRef.setInput('progress', [0, 0, 0]);
+    fixture.componentRef.setInput('initialIndex', 1);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.world-copy h2')?.textContent?.trim()).toBe('Mars');
+    fixture.destroy();
+  });
+
   it('does not emit entry for a locked world', () => {
     TestBed.configureTestingModule({
       imports: [WorldCarousel],

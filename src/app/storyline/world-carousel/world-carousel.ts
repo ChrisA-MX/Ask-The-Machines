@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { afterNextRender, Component, DestroyRef, ElementRef, EventEmitter, HostListener, inject, Input, Output, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import { afterNextRender, Component, DestroyRef, ElementRef, EventEmitter, HostListener, inject, Input, OnInit, Output, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import type * as ThreeTypes from 'three';
 import { WorldId, WorldStory } from '../machines.data';
 import { ProceduralWorld, qualityForDevice, WorldQuality, WorldsService } from '../../worlds/worlds.service';
@@ -23,10 +23,11 @@ interface CarouselWorld {
   templateUrl: './world-carousel.html',
   styleUrl: './world-carousel.scss',
 })
-export class WorldCarousel {
+export class WorldCarousel implements OnInit {
   @Input({ required: true }) worlds: WorldStory[] = [];
   @Input() unlocked: boolean[] = [];
   @Input() progress: number[] = [];
+  @Input() initialIndex = 0;
   @Output() enterWorld = new EventEmitter<number>();
   @ViewChild('host') private host?: ElementRef<HTMLElement>;
   @ViewChild('canvas') private canvas?: ElementRef<HTMLCanvasElement>;
@@ -100,6 +101,10 @@ export class WorldCarousel {
   private quality: WorldQuality = 'low';
   private markerFocused = false;
   private destroyed = false;
+
+  ngOnInit(): void {
+    this.activeIndex = Math.max(0, Math.min(this.initialIndex, Math.max(this.worlds.length - 1, 0)));
+  }
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) afterNextRender(() => void this.initialize());
