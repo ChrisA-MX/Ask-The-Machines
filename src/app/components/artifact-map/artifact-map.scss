@@ -6,9 +6,8 @@ h2, h3 { margin: 0; font-family: 'Space Grotesk', sans-serif; letter-spacing: -.
 h2 { max-width: 42rem; font-size: clamp(2rem, 4.6vw, 3.8rem); line-height: 1.03; }
 h2 span { color: #ffdf3d; }
 .section-copy { margin: .8rem 0 0; color: #bdcce9; font-size: 1rem; line-height: 1.6; }
-.planet-switch { position: relative; display: flex; flex: 0 0 auto; gap: 0; padding: .25rem; border: 1px solid #49628a; border-radius: 999px; background: linear-gradient(145deg, rgba(17, 35, 67, .82), rgba(5, 15, 34, .94)); box-shadow: 0 .55rem 1.5rem #0005, inset 0 1px rgba(255, 255, 255, .16); backdrop-filter: blur(16px); }
-.switch-indicator { position: absolute; top: .25rem; bottom: .25rem; left: .25rem; width: calc((100% - .5rem) / 2); border: 1px solid rgba(255, 249, 203, .8); border-radius: 999px; background: linear-gradient(145deg, #fff1a0, #ffdf3d 58%, #efbd30); box-shadow: 0 .25rem .9rem rgba(255, 217, 54, .22), inset 0 1px rgba(255, 255, 255, .78), inset 0 -1px rgba(147, 104, 0, .18); transition: transform .42s cubic-bezier(.2, .8, .2, 1); }
-.switch-indicator::after { position: absolute; top: 2px; right: 18%; left: 18%; height: 45%; border-radius: 999px; background: linear-gradient(180deg, rgba(255, 255, 255, .62), transparent); content: ''; }
+.planet-switch { position: relative; display: flex; flex: 0 0 auto; gap: 0; padding: .25rem; border: 1px solid #49628a; border-radius: 999px; background: #0b1930; }
+.switch-indicator { position: absolute; top: .25rem; bottom: .25rem; left: .25rem; width: calc((100% - .5rem) / 2); border-radius: 999px; background: #f5c548; transition: transform .32s ease; }
 .switch-indicator.is-mars { transform: translateX(100%); }
 .planet-switch button { position: relative; z-index: 1; display: flex; min-width: 6.2rem; align-items: center; justify-content: center; gap: .5rem; padding: .7rem 1rem; border: 0; border-radius: 999px; background: transparent; color: #adc0e2; cursor: pointer; font: inherit; font-weight: 700; transition: color .28s ease; }
 .planet-switch button:hover { color: #fff; }

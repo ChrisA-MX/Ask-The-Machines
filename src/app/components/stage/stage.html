@@ -1,4 +1,4 @@
-<section class="stage" [class.is-focused]="focusMode" [class.is-intro]="introAnimating" aria-label="Interactive NASA Earth model and starfield" (click)="onStageClick($event)">
+<section class="stage" [class.is-focused]="focusMode" [class.is-intro]="introAnimating" [class.is-intro-pending]="showPlanets && !introMode" [class.is-intro-ready]="introMode" aria-label="Interactive NASA Earth model and starfield" (click)="onStageClick($event)">
 	<div class="stars stars--one" aria-hidden="true"></div>
 	<div class="stars stars--two" aria-hidden="true"></div>
 	<div class="stars stars--three" aria-hidden="true"></div>

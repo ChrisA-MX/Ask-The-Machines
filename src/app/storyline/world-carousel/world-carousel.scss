@@ -25,14 +25,16 @@ canvas:focus-visible { outline:2px solid #ffd06e; outline-offset:-4px; border-ra
 .dot { width:.7rem; height:.7rem; padding:0; border:1px solid #80cfff; border-radius:50%; background:#24415f; cursor:pointer; transition:background .2s ease,transform .2s ease,box-shadow .2s ease; }
 .dot.is-active { background:#ffe16a; box-shadow:0 0 .9rem #ffe16aaa; transform:scale(1.22); }
 .dot:focus-visible { outline:2px solid #fff; outline-offset:4px; }
-.explore-button { padding:.8rem 1.2rem; border:1px solid #f5d460; border-radius:999px; background:linear-gradient(100deg,#f5c548,#ff934f); color:#111a2a; font:800 .95rem 'DM Sans',sans-serif; box-shadow:0 .5rem 1.5rem #f3a43833; cursor:pointer; }
+.explore-button { padding:.8rem 1.2rem; border:1px solid #f5c548; border-radius:999px; background:#f5c548; color:#111a2a; font:800 .95rem 'DM Sans',sans-serif; cursor:pointer; transition:background .2s ease,transform .2s ease; }
 .explore-button span { margin-left:.35rem; font-size:1.1rem; }
-.explore-button:hover,.explore-button:focus-visible { box-shadow:0 0 1.8rem #ffc35f9c; outline:2px solid white; outline-offset:3px; }
+.explore-button:hover:not(:disabled) { background:#ffd769; transform:translateY(-1px); }
+.explore-button:focus-visible { outline:2px solid white; outline-offset:3px; }
+.explore-button:disabled { cursor:wait; opacity:.72; }
 .explore-button.is-locked { border-color:#74839b; background:#26374c; color:#e5edf8; }
 .world-loading,.world-error { position:absolute; z-index:3; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; background:radial-gradient(ellipse at center,#08172a44,transparent 72%); color:#d7eafa; font-weight:700; text-align:center; pointer-events:none; }
 .loading-orbit { width:3rem; aspect-ratio:1; border:2px solid #65c9ff38; border-top-color:#8bdcff; border-right-color:#ffce68; border-radius:50%; box-shadow:0 0 1.2rem #61caff44; animation:loading-spin 1.3s linear infinite,pulse 1.8s ease-in-out infinite alternate; }
 .world-error { padding:2rem; pointer-events:auto; }.world-error p { max-width:25rem; margin:0; line-height:1.5; }
-.world-error button { padding:.65rem 1rem; border:1px solid #f3d365; border-radius:999px; background:#f2b74d; color:#122137; font-weight:800; cursor:pointer; }
+.world-error button { padding:.65rem 1rem; border:1px solid #f5c548; border-radius:999px; background:#f5c548; color:#122137; font-weight:800; cursor:pointer; }
 .fallback-worlds { position:absolute; z-index:3; inset:0; display:flex; align-items:center; justify-content:center; }
 .fallback-worlds { transition:opacity .12s ease; }
 .scene.is-crossfading .fallback-worlds { opacity:.12; }

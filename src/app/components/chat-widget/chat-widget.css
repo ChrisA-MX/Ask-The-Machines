@@ -8,6 +8,12 @@
 }
 .chat-widget { position: relative; display: flex; max-width: 100%; align-items: flex-end; justify-content: flex-end; }
 .launcher-row { display: flex; max-width: 100%; align-items: flex-end; justify-content: flex-end; gap: .65rem; }
+:host-context(app-root.landing-intro-pending) .launcher-row { visibility: hidden; opacity: 0; pointer-events: none; }
+:host-context(app-root.landing-intro-ready) .launcher-row { animation: launcher-arrival .7s ease-out 1.2s both; }
+@keyframes launcher-arrival {
+	from { opacity: 0; transform: translateY(1rem) scale(.8); }
+	to { opacity: 1; transform: translateY(0) scale(1); }
+}
 .speech-bubble {
 	position: relative;
 	max-width: min(220px, calc(100vw - 156px));

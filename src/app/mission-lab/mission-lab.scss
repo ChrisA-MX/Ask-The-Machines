@@ -1,6 +1,6 @@
 :host { position: relative; z-index: 2; display: block; min-height: 100dvh; color: #f7f8ff; }
 .mission-page { min-height: 100dvh; padding: 1px 5.9% 3rem; }
-.site-header { display: flex; align-items: center; justify-content: space-between; padding: 1.8rem 0; }
+.site-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1rem; padding: 1.8rem 0; }
 .brand { color: #ffe13f; font-family: 'Space Grotesk', sans-serif; font-size: 1.12rem; font-weight: 700; letter-spacing: -.03em; text-decoration: none; }
 .eyebrow { margin: 0 0 1.2rem; color: #4ea8ff; font-size: .82rem; font-weight: 700; letter-spacing: .22em; }
 .lab-section { max-width: 76rem; margin: 0 auto 6rem; }
@@ -8,4 +8,4 @@
 .mission-footer { display: flex; max-width: 76rem; align-items: center; justify-content: space-between; gap: 1rem; margin: 0 auto; padding: 1.2rem 0; border-top: 1px solid #233b67; color: #8fa4c8; font-size: .68rem; letter-spacing: .12em; }
 .mission-footer a { color: #bddcff; font-size: .82rem; letter-spacing: normal; text-decoration: none; }
 .mission-footer a:hover { color: #ffdf3d; }
-@media (max-width: 700px) { .mission-page { padding: 1px 1.25rem 2rem; } .site-header { align-items: flex-start; flex-direction: column; gap: .7rem; padding: 1.3rem 0; } .brand { font-size: .9rem; } .lab-section { margin-bottom: 4rem; } .mission-footer { align-items: start; flex-direction: column; } }
+@media (max-width: 760px) { .mission-page { padding: 1px 1.25rem 2rem; } .site-header { grid-template-columns: 1fr; align-items: start; gap: .7rem; padding: 1.3rem 0; } .site-header nav { justify-self: start; } .brand { font-size: .92rem; } .lab-section { margin-bottom: 4rem; } .mission-footer { align-items: start; flex-direction: column; } }

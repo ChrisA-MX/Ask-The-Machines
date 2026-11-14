@@ -20,6 +20,10 @@ export class App {
   protected readonly isLoading = this.loading.isLoading;
   protected showLandingPlanets = false;
   protected earthFocused = false;
+  @HostBinding('class.landing-intro-pending')
+  protected get landingIntroPending(): boolean {
+    return this.showLandingPlanets && this.isLoading();
+  }
   @HostBinding('class.landing-intro-ready')
   protected get landingIntroReady(): boolean {
     return this.showLandingPlanets && !this.isLoading();

@@ -28,12 +28,21 @@
   visibility: hidden;
   opacity: 0;
 }
+.stage.is-intro-pending::before,
+.stage.is-intro-pending .stars {
+  opacity: 0;
+  scale: 0.7;
+}
 .stage::before {
   position: absolute;
   content: '';
   pointer-events: none;
   inset: 0;
   opacity: 0.8;
+  scale: 1;
+  transition:
+    opacity 0.9s ease-out,
+    scale 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
   background-image:
     radial-gradient(circle, #fff 0 1px, transparent 1.5px),
     radial-gradient(circle, #adcfff 0 1px, transparent 1.5px);
@@ -61,6 +70,10 @@
     241px 213px,
     317px 269px;
   animation: starfield-orbit 180s linear infinite;
+  scale: 1;
+  transition:
+    opacity 0.9s ease-out,
+    scale 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .stars--one {
   opacity: 0.8;
@@ -197,6 +210,10 @@
 @media (prefers-reduced-motion: reduce) {
   .stars {
     animation: none;
+    transition: none;
+  }
+  .stage::before {
+    transition: none;
   }
   .stage.is-intro .earth {
     animation: none;

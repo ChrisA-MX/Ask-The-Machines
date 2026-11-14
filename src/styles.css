@@ -24,8 +24,30 @@ app-mission-lab .site-header nav {
 	border: 1px solid rgba(161, 193, 239, .16);
 	border-radius: 999px;
 	background: rgba(5, 12, 30, .48);
-	box-shadow: 0 .5rem 2rem rgba(0, 0, 0, .18);
 	backdrop-filter: blur(14px);
+}
+app-landing .site-header .brand,
+app-storyline .site-header .brand,
+app-mission-lab .site-header .brand {
+	display: inline-flex;
+	align-items: center;
+	gap: .6rem;
+}
+app-landing .site-header .brand::before,
+app-storyline .site-header .brand::before,
+app-mission-lab .site-header .brand::before {
+	width: .5rem;
+	height: .5rem;
+	flex: 0 0 .5rem;
+	border-radius: 50%;
+	background: #ffe13f;
+	box-shadow: 0 0 .5rem #ffe13f80;
+	content: '';
+	animation: brand-signal 1.4s ease-in-out infinite;
+}
+@keyframes brand-signal {
+	0%, 100% { opacity: 1; }
+	50% { opacity: .35; }
 }
 app-landing .site-header nav a,
 app-storyline .site-header nav a,
@@ -53,36 +75,42 @@ app-mission-lab .site-header nav a:focus-visible {
 app-landing .site-header nav a.is-active,
 app-storyline .site-header nav a.is-active,
 app-mission-lab .site-header nav a.is-active {
-	background: linear-gradient(145deg, #fff1a0, #ffdf3d 58%, #efbd30);
+	background: #f5c548;
 	color: #09142e;
-	box-shadow: 0 .25rem .9rem rgba(255, 217, 54, .2), inset 0 1px rgba(255, 255, 255, .75), inset 0 -1px rgba(147, 104, 0, .18);
-	animation: nav-pill-arrival .45s cubic-bezier(.2, .8, .2, 1) both;
+	font-weight: 700;
 }
-app-landing .site-header nav a.is-active::after,
-app-storyline .site-header nav a.is-active::after,
-app-mission-lab .site-header nav a.is-active::after {
-	position: absolute;
-	top: 2px;
-	right: 18%;
-	left: 18%;
-	height: 45%;
-	border-radius: 999px;
-	background: linear-gradient(180deg, rgba(255, 255, 255, .58), transparent);
-	content: '';
-	pointer-events: none;
+app-landing .site-header,
+app-storyline .site-header,
+app-mission-lab .site-header {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 1rem;
 }
-@keyframes nav-pill-arrival {
-	from { opacity: .6; transform: scale(.88); }
-	70% { transform: scale(1.04); }
-	to { opacity: 1; transform: scale(1); }
+app-landing .site-header nav,
+app-storyline .site-header nav,
+app-mission-lab .site-header nav {
+	justify-self: end;
 }
-@media (max-width: 700px) {
+@media (max-width: 760px) {
+	app-landing .site-header,
+	app-storyline .site-header,
+	app-mission-lab .site-header {
+		grid-template-columns: 1fr;
+		align-items: start;
+		gap: .7rem;
+		padding: 1.3rem 1.25rem;
+	}
 	app-landing .site-header nav,
 	app-storyline .site-header nav,
-	app-mission-lab .site-header nav { gap: 0; padding: .25rem; }
-	app-landing .site-header nav { align-self: flex-end; }
-	app-storyline .site-header nav { justify-self: end; }
-	app-mission-lab .site-header nav { align-self: flex-end; }
+	app-mission-lab .site-header nav {
+		justify-self: start;
+		gap: 0;
+		padding: .25rem;
+	}
+	app-landing .site-header .brand,
+	app-storyline .site-header .brand,
+	app-mission-lab .site-header .brand { font-size: .92rem; }
 	app-landing .site-header nav a,
 	app-storyline .site-header nav a,
 	app-mission-lab .site-header nav a { padding: .5rem .62rem; font-size: .76rem; }
@@ -91,9 +119,9 @@ app-mission-lab .site-header nav a.is-active::after {
 	app-landing .site-header nav a,
 	app-storyline .site-header nav a,
 	app-mission-lab .site-header nav a { transition: none; }
-	app-landing .site-header nav a.is-active,
-	app-storyline .site-header nav a.is-active,
-	app-mission-lab .site-header nav a.is-active { animation: none; }
+	app-landing .site-header .brand::before,
+	app-storyline .site-header .brand::before,
+	app-mission-lab .site-header .brand::before { animation: none; }
 }
 
 /* Keep the shared stage planets out of the world-map controls and story trail. */

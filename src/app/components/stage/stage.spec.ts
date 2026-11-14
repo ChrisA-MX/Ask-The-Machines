@@ -69,10 +69,16 @@ describe('Stage', () => {
 
   it('plays the landing intro independently from Earth focus', () => {
     fixture.componentRef.setInput('showPlanets', true);
-    fixture.componentRef.setInput('introMode', true);
     fixture.detectChanges();
 
     const stage = (fixture.nativeElement as HTMLElement).querySelector('.stage');
+    expect(stage?.classList.contains('is-intro-pending')).toBe(true);
+
+    fixture.componentRef.setInput('introMode', true);
+    fixture.detectChanges();
+
+    expect(stage?.classList.contains('is-intro-pending')).toBe(false);
+    expect(stage?.classList.contains('is-intro-ready')).toBe(true);
     expect(stage?.classList.contains('is-intro')).toBe(true);
     expect(component.focusMode).toBe(false);
 

@@ -67,14 +67,16 @@ h1 span { color:#ffe14d; }
 .stop-meta span { padding:0 .25rem; color:#ffbd61; }
 .stop-card h3 { margin:.25rem 0 .55rem; color:#fff; font:700 clamp(1.2rem,2vw,1.55rem)/1.12 'Space Grotesk',sans-serif; }
 .stop-card>p:not(.stop-meta) { margin:.55rem 0 .8rem; color:#cbdcf3; font-size:.92rem; line-height:1.45; }
-.peek-button { padding:.5rem .8rem; border:1px solid #f3cf59; border-radius:999px; background:transparent; color:#ffe26c; font:700 .8rem 'DM Sans',sans-serif; cursor:pointer; }
-.peek-button:disabled { opacity:.55; cursor:not-allowed; }.peek-button:hover:not(:disabled),.peek-button:focus-visible { background:#ffe26c; color:#07152b; outline:2px solid #fff; outline-offset:2px; }
+.peek-button { padding:.5rem .8rem; border:1px solid #f5c548; border-radius:999px; background:#f5c548; color:#07152b; font:700 .8rem 'DM Sans',sans-serif; cursor:pointer; transition:background .2s ease; }
+.peek-button:disabled { opacity:.55; cursor:not-allowed; }.peek-button:hover:not(:disabled) { background:#ffd769; }.peek-button:focus-visible { outline:2px solid #fff; outline-offset:2px; }
 .page-hidden .roadmap-doodle { animation-play-state:paused; }
 :focus-visible { outline-color:#ffd06e; outline-offset:3px; }
 @keyframes scene-arrive { from { opacity:.2; transform:scale(.96); } to { opacity:1; transform:scale(1); } }
 
 @media (max-width:760px) {
- .site-header { grid-template-columns:1fr; padding:1.25rem 0; }
+ .storyline-page { padding-right:1.25rem;padding-left:1.25rem; }
+ .site-header { grid-template-columns:1fr; align-items:start; padding:1.3rem 0; }
+ .site-header nav { justify-self:start; }
  .storyline-content { margin-top:5vh; }.subtitle { font-size:1rem; }
  .world-map-layer,.scene-layer { margin-top:2.6rem; }.world-map-heading { align-items:start; flex-direction:column; }.map-instruction { text-align:left; }
  .world-map { height:40rem; }.world-node { width:min(21rem,46%); min-height:8rem; gap:.7rem; padding:.7rem; }
@@ -85,7 +87,7 @@ h1 span { color:#ffe14d; }
  .stop-card h3 { font-size:1.15rem; }.stop-card>p:not(.stop-meta) { font-size:.82rem; }
 }
 @media (max-width:520px) {
- .storyline-page { padding-right:.8rem;padding-left:.8rem; }.site-header { gap:.5rem; }.brand { font-size:.92rem; } nav { gap:.7rem; } nav a { font-size:.78rem; }
+ .storyline-page { padding-right:1.25rem;padding-left:1.25rem; }.site-header { gap:.7rem; }.brand { font-size:.92rem; }
  .storyline-content { max-width:calc(100vw - 2.5rem); }
  .intro { padding-inline:0; } h1 { font-size:clamp(2.3rem,10vw,2.8rem); letter-spacing:-.065em; } h1 span { display:block; }
  .world-map { width:100%;height:39rem;margin-top:1rem;overflow-x:clip; }.world-node { left:.5rem;right:.5rem;width:min(calc(100% - 1rem),calc(100vw - 3.5rem));max-width:100%;min-height:7rem;overflow:hidden; }.world-moon { top:3%; }.world-mars { top:37%; }.world-outer { top:70%; }
