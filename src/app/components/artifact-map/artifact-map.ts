@@ -24,6 +24,7 @@ export class ArtifactMap {
   protected readonly selectedArtifact = signal<Artifact | null>(null);
   protected readonly mapError = signal('');
   protected readonly mapFocused = signal(false);
+  protected readonly mapTransitioning = signal(false);
 
   /** Mock story copy; replace with the final researched machine story when ready. */
   protected readonly artifacts: Artifact[] = [
@@ -59,12 +60,14 @@ export class ArtifactMap {
   private tileLayer?: TileLayer;
   private markers: LeafletMarker[] = [];
   private destroyed = false;
+  private mapTransitionTimer?: ReturnType<typeof setTimeout>;
 
   constructor() {
     // Leaflet touches browser APIs, so load it only after Angular renders in the browser.
     afterNextRender(() => void this.initializeMap());
     this.destroyRef.onDestroy(() => {
       this.destroyed = true;
+      if (this.mapTransitionTimer !== undefined) clearTimeout(this.mapTransitionTimer);
       this.map?.remove();
     });
   }
@@ -73,7 +76,15 @@ export class ArtifactMap {
     if (this.planet() === planet) return;
     this.planet.set(planet);
     this.selectedArtifact.set(null);
-    this.renderPlanet();
+    this.mapTransitioning.set(true);
+    if (this.mapTransitionTimer !== undefined) clearTimeout(this.mapTransitionTimer);
+    this.mapTransitionTimer = setTimeout(() => {
+      this.renderPlanet();
+      this.mapTransitionTimer = setTimeout(() => {
+        this.mapTransitioning.set(false);
+        this.mapTransitionTimer = undefined;
+      }, 180);
+    }, 180);
   }
 
   protected closeStory(): void {

@@ -21,6 +21,8 @@ export class Stage {
 
   private readonly loading = inject(LoadingService);
   private focused = false;
+  private intro = false;
+  private introFinished = false;
   private readonly platformId = inject(PLATFORM_ID);
   private THREE?: typeof import('three');
   private renderer?: ThreeTypes.WebGLRenderer;
@@ -35,9 +37,22 @@ export class Stage {
   private finishEarthLoading?: () => void;
 
   @Input()
+  set introMode(value: boolean) {
+    if (value && !this.intro) this.introFinished = false;
+    this.intro = value;
+  }
+  get introMode(): boolean {
+    return this.intro;
+  }
+  protected get introAnimating(): boolean {
+    return this.intro && !this.introFinished;
+  }
+
+  @Input()
   set focusMode(value: boolean) {
     const wasFocused = this.focused;
     this.focused = value;
+    if (value) this.introFinished = true;
     if (this.controls) this.controls.enabled = value;
     if (wasFocused && !value) this.resetCameraZoom();
   }
@@ -154,6 +169,10 @@ export class Stage {
       .add(this.controls.target);
     this.camera.lookAt(this.controls.target);
     this.controls.update();
+  }
+
+  protected onEarthAnimationEnd(event: AnimationEvent): void {
+    if (event.animationName.endsWith('earth-arrival')) this.introFinished = true;
   }
 
   protected onEarthKeydown(event: KeyboardEvent): void {

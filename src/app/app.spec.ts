@@ -22,12 +22,10 @@ describe('App', () => {
     expect(compiled.querySelector('app-stage')).toBeTruthy();
   });
 
-  it('shows the startup overlay on the initial render', () => {
+  it('temporarily keeps the startup overlay disabled', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
-    expect(
-      (fixture.nativeElement as HTMLElement).querySelector('.loading-overlay.is-visible'),
-    ).toBeTruthy();
+    expect((fixture.nativeElement as HTMLElement).querySelector('app-loading-screen')).toBeNull();
   });
 });

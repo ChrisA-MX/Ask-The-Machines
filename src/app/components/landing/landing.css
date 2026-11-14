@@ -13,13 +13,19 @@ button {
 
 .site-header {
   position: absolute;
+  z-index: 3;
   inset: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1.8rem 4%;
+  animation: header-arrival 0.65s ease-out 1.8s both;
+  animation-play-state: paused;
 }
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
   color: #ffe13f;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 1.12rem;
@@ -27,48 +33,30 @@ button {
   text-decoration: none;
   letter-spacing: -0.03em;
 }
-nav {
-  display: flex;
-  align-items: center;
-  gap: clamp(1.5rem, 3.8vw, 3.2rem);
-}
-nav a {
-  position: relative;
-  padding: 0.35rem 0;
-  color: #d5e4ff;
-  font-size: 1.08rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-nav a::after {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 2px;
-  background: #ffdf3d;
+.brand::before {
+  width: 0.55rem;
+  aspect-ratio: 1;
+  border: 1px solid #ffe986;
+  border-radius: 50%;
+  background: #ffe13f;
+  box-shadow: 0 0 1rem #ffe13f99;
   content: '';
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.2s ease;
 }
-nav a:hover,
-nav a:focus-visible {
-  color: #fff;
-}
-nav a:hover::after,
-nav a:focus-visible::after,
-nav a:active::after,
-nav a.is-active::after {
-  transform: scaleX(1);
-}
-
 .landing-content {
   position: absolute;
   top: 23%;
   left: 5.9%;
   max-width: 40rem;
+  isolation: isolate;
+}
+.landing-content::before {
+  position: absolute;
+  z-index: -1;
+  inset: -2rem -5rem -2rem -2rem;
+  background: radial-gradient(ellipse at left center, rgba(5, 10, 29, 0.86), rgba(5, 10, 29, 0.48) 48%, transparent 78%);
+  content: '';
+  filter: blur(12px);
+  pointer-events: none;
 }
 .eyebrow {
   margin: 0 0 1.4rem;
@@ -76,6 +64,8 @@ nav a.is-active::after {
   font-size: 0.93rem;
   font-weight: 600;
   letter-spacing: 0.24em;
+  animation: title-arrival 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 1.05s both;
+  animation-play-state: paused;
 }
 h1 {
   margin: 0;
@@ -85,6 +75,8 @@ h1 {
   font-weight: 700;
   letter-spacing: -0.075em;
   line-height: 0.96;
+  animation: title-arrival 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 1.2s both;
+  animation-play-state: paused;
 }
 h1 span {
   color: #ffdf3d;
@@ -94,56 +86,101 @@ h1 span {
   color: #c9d7f3;
   font-size: clamp(1rem, 1.45vw, 1.25rem);
   line-height: 1.45;
+  animation: title-arrival 0.7s ease-out 1.65s both;
+  animation-play-state: paused;
 }
 .journey-button {
   display: inline-flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.85rem;
   padding: 1rem 2rem;
+  border: 1px solid rgba(255, 244, 179, 0.82);
   border-radius: 999px;
-  background: #ffdb39;
+  background: linear-gradient(115deg, #ffe986, #f8c747 72%, #f2ad3f);
   color: #07102e;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 0 2rem rgba(255, 219, 57, 0.16);
+  box-shadow: 0 0.6rem 2rem rgba(241, 187, 59, 0.2), inset 0 1px rgba(255, 255, 255, 0.48);
   transition:
     transform 0.2s ease,
-    background 0.2s ease;
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+  animation: title-arrival 0.7s ease-out 1.85s both;
+  animation-play-state: paused;
 }
 .journey-button:hover {
-  background: #ffe66c;
+  filter: brightness(1.06);
   transform: translateY(-2px);
+  box-shadow: 0 0.8rem 2.4rem rgba(241, 187, 59, 0.3), inset 0 1px rgba(255, 255, 255, 0.6);
 }
-.journey-button span {
-  font-size: 1.2rem;
+.journey-button:focus-visible,
+.mission-link:focus-visible,
+.brand:focus-visible {
+  outline: 2px solid #a9ddff;
+  outline-offset: 4px;
 }
 .mission-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  margin-left: 1rem;
-  color: #c9ddff;
+  gap: 0.55rem;
+  margin-left: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(171, 201, 239, 0.28);
+  border-radius: 999px;
+  background: rgba(11, 24, 50, 0.54);
+  color: #d7e5fb;
   font-size: 0.92rem;
   font-weight: 600;
   text-decoration: none;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  animation: title-arrival 0.7s ease-out 2s both;
+  animation-play-state: paused;
 }
 .mission-link:hover,
-.mission-link:focus-visible { color: #ffdf3d; }
+.mission-link:focus-visible {
+  border-color: rgba(255, 225, 63, 0.7);
+  background: rgba(255, 225, 63, 0.1);
+  color: #ffe986;
+  transform: translateY(-2px);
+}
+.mission-link span {
+  transition: transform 0.2s ease;
+}
+.mission-link:hover span {
+  transform: translate(2px, -2px);
+}
+:host-context(app-root.landing-intro-ready) .site-header,
+:host-context(app-root.landing-intro-ready) .eyebrow,
+:host-context(app-root.landing-intro-ready) h1,
+:host-context(app-root.landing-intro-ready) .intro,
+:host-context(app-root.landing-intro-ready) .journey-button,
+:host-context(app-root.landing-intro-ready) .mission-link {
+  animation-play-state: running;
+}
+@keyframes title-arrival {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes header-arrival {
+  from { opacity: 0; transform: translateY(-0.5rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
 @media (max-width: 700px) {
   .site-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.7rem;
     padding: 1.3rem 1.25rem;
   }
   .brand {
     font-size: 0.92rem;
-  }
-  nav {
-    gap: 0.75rem;
-  }
-  nav a {
-    display: none;
-  }
-  nav a:last-child {
-    display: inline;
   }
   .landing-content {
     top: 18%;
@@ -156,8 +193,25 @@ h1 span {
   .intro {
     max-width: 20rem;
   }
-  .mission-link { margin: 1rem 0 0; }
+  .journey-button,
+  .mission-link {
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    justify-content: center;
+  }
+  .mission-link { margin: 0.85rem 0 0; }
   .desktop-break {
     display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .eyebrow,
+  h1,
+  .intro,
+  .journey-button,
+  .mission-link {
+    animation: none;
   }
 }

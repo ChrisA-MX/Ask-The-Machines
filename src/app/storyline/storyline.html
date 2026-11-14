@@ -2,8 +2,8 @@
 	<header class="site-header">
 		<a class="brand" routerLink="/" aria-label="Ask the Machines home">ASK THE MACHINES</a>
 		<nav aria-label="Primary navigation">
-			<a class="is-active" routerLink="/storylines" aria-current="page">Stories</a>
-			<a routerLink="/missions">Mission lab</a>
+			<a routerLink="/storylines" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Stories</a>
+			<a routerLink="/missions" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Mission lab</a>
 			<a href="#about">About</a>
 		</nav>
 	</header>

@@ -1,14 +1,13 @@
-import { afterNextRender, Component, DestroyRef, inject, Injector } from '@angular/core';
+import { afterNextRender, Component, DestroyRef, HostBinding, inject, Injector } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Stage } from './components/stage/stage';
 import { ChatWidget } from './components/chat-widget/chat-widget';
-import { LoadingScreen } from './components/loading-screen/loading-screen';
 import { Landing } from './components/landing/landing';
 import { LoadingService } from './services/loading.service';
 
 @Component({
-  imports: [RouterOutlet, Stage, ChatWidget, LoadingScreen],
+  imports: [RouterOutlet, Stage, ChatWidget],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
@@ -21,6 +20,11 @@ export class App {
   protected readonly isLoading = this.loading.isLoading;
   protected showLandingPlanets = false;
   protected earthFocused = false;
+  @HostBinding('class.landing-intro-ready')
+  protected get landingIntroReady(): boolean {
+    return this.showLandingPlanets && !this.isLoading();
+  }
+
   private finishNavigationLoading?: () => void;
   private initialRouteReady = false;
   private documentLoaded = false;

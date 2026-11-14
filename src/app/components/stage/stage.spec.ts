@@ -66,4 +66,22 @@ describe('Stage', () => {
     expect(controls.enabled).toBe(false);
     expect(controls.update).toHaveBeenCalled();
   });
+
+  it('plays the landing intro independently from Earth focus', () => {
+    fixture.componentRef.setInput('showPlanets', true);
+    fixture.componentRef.setInput('introMode', true);
+    fixture.detectChanges();
+
+    const stage = (fixture.nativeElement as HTMLElement).querySelector('.stage');
+    expect(stage?.classList.contains('is-intro')).toBe(true);
+    expect(component.focusMode).toBe(false);
+
+    const animationEnd = new Event('animationend', { bubbles: true });
+    Object.defineProperty(animationEnd, 'animationName', { value: 'earth-arrival' });
+    (fixture.nativeElement as HTMLElement).querySelector('.earth')?.dispatchEvent(animationEnd);
+    fixture.detectChanges();
+
+    expect(stage?.classList.contains('is-intro')).toBe(false);
+    expect(component.focusMode).toBe(false);
+  });
 });

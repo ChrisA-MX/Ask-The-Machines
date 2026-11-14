@@ -6,13 +6,14 @@
 			<p class="section-copy">Travel to real mission sites and discover the machines that stayed behind.</p>
 		</div>
 		<div class="planet-switch" role="group" aria-label="Choose a planetary map">
+			<span class="switch-indicator" [class.is-mars]="planet() === 'Mars'" aria-hidden="true"></span>
 			<button type="button" [class.is-active]="planet() === 'Moon'" [attr.aria-pressed]="planet() === 'Moon'" (click)="setPlanet('Moon')">◐ <span>Moon</span></button>
 			<button type="button" [class.is-active]="planet() === 'Mars'" [attr.aria-pressed]="planet() === 'Mars'" (click)="setPlanet('Mars')">◉ <span>Mars</span></button>
 		</div>
 	</div>
 
 	<div class="map-focus-backdrop" [class.is-active]="mapFocused()" aria-hidden="true"></div>
-	<div class="map-frame" [class.is-focused]="mapFocused()" (focusin)="onMapFocusIn()" (focusout)="onMapFocusOut($event)">
+	<div class="map-frame" [class.is-focused]="mapFocused()" [class.is-transitioning]="mapTransitioning()" (focusin)="onMapFocusIn()" (focusout)="onMapFocusOut($event)">
 		<div #mapCanvas class="map-canvas" role="application" tabindex="0" aria-describedby="map-interaction-hint" [attr.aria-label]="planet() + ' surface map with mission artifact markers'" (pointerdown)="focusMap()"></div>
 		<div class="map-label"><span class="signal-dot"></span> {{ planet() }} · SURFACE SURVEY</div>
 		@if (mapError()) { <p class="map-error" role="status">{{ mapError() }}</p> }

@@ -14,6 +14,88 @@ html { min-width: 320px; background: #050a1d; }
 body { margin: 0; min-width: 320px; min-height: 100vh; }
 button, a { font: inherit; }
 
+app-landing .site-header nav,
+app-storyline .site-header nav,
+app-mission-lab .site-header nav {
+	display: flex;
+	align-items: center;
+	gap: clamp(.15rem, 1vw, .75rem);
+	padding: .35rem;
+	border: 1px solid rgba(161, 193, 239, .16);
+	border-radius: 999px;
+	background: rgba(5, 12, 30, .48);
+	box-shadow: 0 .5rem 2rem rgba(0, 0, 0, .18);
+	backdrop-filter: blur(14px);
+}
+app-landing .site-header nav a,
+app-storyline .site-header nav a,
+app-mission-lab .site-header nav a {
+	position: relative;
+	padding: .6rem .9rem;
+	overflow: hidden;
+	border-radius: 999px;
+	color: #d5e4ff;
+	font-size: .9rem;
+	font-weight: 600;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: color .28s ease, background .28s ease, box-shadow .28s ease, transform .35s cubic-bezier(.2, .8, .2, 1);
+}
+app-landing .site-header nav a:hover,
+app-landing .site-header nav a:focus-visible,
+app-storyline .site-header nav a:hover,
+app-storyline .site-header nav a:focus-visible,
+app-mission-lab .site-header nav a:hover,
+app-mission-lab .site-header nav a:focus-visible {
+	color: #fff;
+	background: rgba(124, 177, 241, .13);
+}
+app-landing .site-header nav a.is-active,
+app-storyline .site-header nav a.is-active,
+app-mission-lab .site-header nav a.is-active {
+	background: linear-gradient(145deg, #fff1a0, #ffdf3d 58%, #efbd30);
+	color: #09142e;
+	box-shadow: 0 .25rem .9rem rgba(255, 217, 54, .2), inset 0 1px rgba(255, 255, 255, .75), inset 0 -1px rgba(147, 104, 0, .18);
+	animation: nav-pill-arrival .45s cubic-bezier(.2, .8, .2, 1) both;
+}
+app-landing .site-header nav a.is-active::after,
+app-storyline .site-header nav a.is-active::after,
+app-mission-lab .site-header nav a.is-active::after {
+	position: absolute;
+	top: 2px;
+	right: 18%;
+	left: 18%;
+	height: 45%;
+	border-radius: 999px;
+	background: linear-gradient(180deg, rgba(255, 255, 255, .58), transparent);
+	content: '';
+	pointer-events: none;
+}
+@keyframes nav-pill-arrival {
+	from { opacity: .6; transform: scale(.88); }
+	70% { transform: scale(1.04); }
+	to { opacity: 1; transform: scale(1); }
+}
+@media (max-width: 700px) {
+	app-landing .site-header nav,
+	app-storyline .site-header nav,
+	app-mission-lab .site-header nav { gap: 0; padding: .25rem; }
+	app-landing .site-header nav { align-self: flex-end; }
+	app-storyline .site-header nav { justify-self: end; }
+	app-mission-lab .site-header nav { align-self: flex-end; }
+	app-landing .site-header nav a,
+	app-storyline .site-header nav a,
+	app-mission-lab .site-header nav a { padding: .5rem .62rem; font-size: .76rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+	app-landing .site-header nav a,
+	app-storyline .site-header nav a,
+	app-mission-lab .site-header nav a { transition: none; }
+	app-landing .site-header nav a.is-active,
+	app-storyline .site-header nav a.is-active,
+	app-mission-lab .site-header nav a.is-active { animation: none; }
+}
+
 /* Keep the shared stage planets out of the world-map controls and story trail. */
 body:has(app-storyline) app-stage .earth,
 body:has(app-storyline) app-stage .moon,

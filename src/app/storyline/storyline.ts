@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { afterEveryRender, afterNextRender, Component, DestroyRef, ElementRef, HostBinding, HostListener, inject, PLATFORM_ID, signal, viewChild } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MachineStory, WORLDS, WorldStory, WorldId } from './machines.data';
 import { SpaceDoodle } from './space-doodle/space-doodle';
 import { StoryModal } from './story-modal/story-modal';
@@ -31,7 +31,7 @@ export function isMachineUnlocked(worlds: WorldStory[], completed: ReadonlySet<s
 }
 
 @Component({
-  imports: [RouterLink, SpaceDoodle, StoryModal, WorldCarousel], selector: 'app-storyline',
+  imports: [RouterLink, RouterLinkActive, SpaceDoodle, StoryModal, WorldCarousel], selector: 'app-storyline',
   styleUrl: './storyline.css', templateUrl: './storyline.html'
 })
 export class Storyline {

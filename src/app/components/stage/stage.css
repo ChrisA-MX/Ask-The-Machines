@@ -15,7 +15,10 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: radial-gradient(circle at 74% 69%, #0c2557 0, #071435 29%, #050a1d 68%);
+  background:
+    radial-gradient(ellipse at 74% 69%, rgba(30, 86, 162, 0.42), transparent 43%),
+    radial-gradient(ellipse at 18% 14%, rgba(22, 38, 84, 0.32), transparent 38%),
+    #050a1d;
 }
 .stage.is-focused {
   background: transparent;
@@ -77,6 +80,7 @@
   }
 }
 .earth {
+  --earth-rest-transform: translate(0, 0);
   --earth-size: 68rem;
   position: absolute;
   z-index: 2;
@@ -86,7 +90,7 @@
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 50%;
-  transform: translate(0, 0);
+  transform: var(--earth-rest-transform);
   transition:
     top 0.75s cubic-bezier(0.2, 0.75, 0.25, 1),
     left 0.75s cubic-bezier(0.2, 0.75, 0.25, 1),
@@ -102,6 +106,27 @@
   transform: translate(-50%, -50%);
   filter: drop-shadow(0 0 2rem rgba(91, 177, 255, 0.6))
     drop-shadow(0 0 4rem rgba(68, 139, 255, 0.35));
+}
+.stage.is-intro .earth {
+  animation: earth-arrival 2.1s cubic-bezier(0.18, 0.75, 0.22, 1) both;
+  transform-origin: center;
+}
+@keyframes earth-arrival {
+  0% {
+    opacity: 0;
+    filter: blur(8px) brightness(1.45);
+    transform: translate(26vw, 42vh) scale(0.62);
+  }
+  68% {
+    opacity: 1;
+    filter: blur(0) brightness(1.08);
+    transform: var(--earth-rest-transform) scale(1.035);
+  }
+  100% {
+    opacity: 1;
+    filter: none;
+    transform: var(--earth-rest-transform) scale(1);
+  }
 }
 .earth-canvas {
   position: absolute;
@@ -163,8 +188,20 @@
 }
 @media (max-width: 700px) {
   .earth {
-    --earth-size: 26rem;
+    --earth-rest-transform: translateX(-50%);
+    --earth-size: min(26rem, 88vw);
     top: calc(100% + 13vh - var(--earth-size));
-    left: calc(100% + 25vw - var(--earth-size));
+    left: 50%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stars {
+    animation: none;
+  }
+  .stage.is-intro .earth {
+    animation: none;
+  }
+  .earth {
+    transition: none;
   }
 }

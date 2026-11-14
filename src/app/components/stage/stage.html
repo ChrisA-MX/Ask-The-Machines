@@ -1,9 +1,9 @@
-<section class="stage" [class.is-focused]="focusMode" aria-label="Interactive NASA Earth model and starfield" (click)="onStageClick($event)">
+<section class="stage" [class.is-focused]="focusMode" [class.is-intro]="introAnimating" aria-label="Interactive NASA Earth model and starfield" (click)="onStageClick($event)">
 	<div class="stars stars--one" aria-hidden="true"></div>
 	<div class="stars stars--two" aria-hidden="true"></div>
 	<div class="stars stars--three" aria-hidden="true"></div>
 	@if (showPlanets) {
-		<div class="earth">
+		<div class="earth" (animationend)="onEarthAnimationEnd($event)">
 			<canvas #earthCanvas class="earth-canvas" role="application" tabindex="0" aria-label="NASA Earth model. Click or press Enter to focus; then drag to rotate, use the scroll wheel or pinch to zoom, and use arrow keys to tilt." (click)="focusEarth()" (keydown)="onEarthKeydown($event)"></canvas>
 			@if (earthLoadError()) {
 				<p class="earth-load-error" role="status">NASA's Earth model could not be loaded.</p>
