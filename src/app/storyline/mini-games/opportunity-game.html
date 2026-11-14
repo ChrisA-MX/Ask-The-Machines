@@ -1,0 +1,26 @@
+<section class="opportunity-game" aria-label="Opportunity solar power challenge">
+  <div class="battery-reading" role="progressbar" aria-label="Rover battery" [attr.aria-valuenow]="battery()" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuetext]="battery() + ' percent battery'">
+    <span>BATTERY</span><strong>{{ battery() }}%</strong><div class="battery-track"><i [style.width.%]="battery()"></i></div>
+  </div>
+  <div class="solar-scene" [class.is-storm]="stormActive()" aria-label="A solar panel rover follows the moving Sun">
+    <span class="sun-orbit" [style.transform]="'rotate(' + sunAngle() + 'deg)'"><i class="sun"></i></span>
+    <div class="rover-drawing">
+      <svg viewBox="0 0 220 110" role="img" aria-label="Opportunity rover with an adjustable solar panel">
+        <g class="rover-wheels"><circle cx="58" cy="84" r="13"/><circle cx="112" cy="84" r="13"/><circle cx="166" cy="84" r="13"/></g>
+        <path class="rover-frame" d="M45 68h132l-12-29H72z"/><path class="rover-top" d="m83 35 22-18 22 18v13H83z"/>
+        <path class="rover-mast" d="M111 19V5m-13 0h26"/>
+        <g class="panel" [style.transform]="'rotate(' + (panelAngle() - 25) + 'deg)'"><path d="M30 37h48v24H30z"/><path d="M46 37v24M62 37v24M30 49h48"/></g>
+        <path class="panel-arm" d="M78 49h10"/>
+      </svg>
+    </div>
+    @if (stormActive()) { <p class="dust-storm" role="status">Dust storm — sunlight reduced</p> }
+  </div>
+  <p class="timer-readout" aria-live="off">{{ secondsLeft() }} seconds left in the Martian day</p>
+  <label class="panel-control">Aim the solar panel <span>{{ panelAngle() }}°</span>
+    <input type="range" min="0" max="360" step="1" [value]="panelAngle()" (input)="setPanelAngle($event)" [attr.aria-valuetext]="panelAngle() + ' degrees, use the arrow keys to aim'" [disabled]="state() !== 'running'" />
+  </label>
+  <p class="game-feedback" role="status" aria-live="polite">{{ announcement() || 'Aim the panel toward the Sun to keep the battery charged.' }}</p>
+  @if (state() === 'ready' || state() === 'retry') { <button type="button" class="game-action" (click)="start()">{{ state() === 'retry' ? 'Retry the day' : 'Start the day' }}</button> }
+  @if (state() === 'running') { <button type="button" class="game-action game-action--quiet" (click)="replay()">Restart</button> }
+  <aside class="game-fact"><strong>Mission facts</strong>@for (fact of facts; track $index) { <p>{{ fact }}</p> }</aside>
+</section>

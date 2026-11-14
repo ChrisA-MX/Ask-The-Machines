@@ -1,6 +1,6 @@
-<aside class="chat-widget" aria-label="Apollo chat">
+<aside class="chat-widget" [class.is-open]="isOpen()" aria-label="Apollo chat">
 	@if (isOpen()) {
-		<section #chatDialog class="chat-panel" role="dialog" aria-label="Apollo chat" aria-labelledby="chat-title">
+		<section #chatDialog class="chat-panel" role="dialog" aria-label="Ask Apollo chat" aria-labelledby="chat-title">
 			<header class="chat-header">
 				<app-animated-sprite
 					class="avatar"
@@ -10,15 +10,17 @@
 					aria-hidden="true"
 				/>
 				<div><p class="chat-kicker">ASK APOLLO</p><h2 id="chat-title">Apollo, your rescue astronaut</h2></div>
-				<button class="close-button" type="button" (click)="closeChat()" aria-label="Close chat">×</button>
+				<button class="close-button" type="button" (click)="closeChat()" aria-label="Close chat" title="Close chat">
+					<svg class="chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12" /></svg>
+				</button>
 			</header>
-			<div class="chat-body" aria-live="polite" aria-relevant="additions text">
+			<div #chatBody class="chat-body" aria-live="polite" aria-relevant="additions text">
 				@for (message of messages(); track $index) {
 					<div class="message-row" [class.message-row--user]="message.role === 'user'">
 						<p class="message" [class.message--user]="message.role === 'user'">{{ message.text }}</p>
 					</div>
 				}
-				@if (isThinking()) { <p class="thinking">Checking your completed story files…</p> }
+				@if (isThinking()) { <p class="thinking">Checking your completed story files...</p> }
 			</div>
 			@if (messages().length === 1) {
 				<div class="suggestions" aria-label="Suggested questions">
@@ -29,8 +31,10 @@
 			}
 			<form class="chat-form" (ngSubmit)="send()">
 				<label class="visually-hidden" for="chat-message">Your question</label>
-				<input #messageInput id="chat-message" name="message" [(ngModel)]="draft" placeholder="Ask a question…" autocomplete="off" />
-				<button type="submit" [disabled]="!draft.trim() || isThinking()" aria-label="Send message">↑</button>
+				<input #messageInput id="chat-message" name="message" [(ngModel)]="draft" placeholder="Ask a question..." autocomplete="off" />
+				<button type="submit" [disabled]="!draft.trim() || isThinking()" aria-label="Send message">
+					<svg class="chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+				</button>
 			</form>
 			<p class="chat-note">Apollo can answer from stories you have completed.</p>
 		</section>
@@ -57,7 +61,7 @@
 			aria-label="Chat with Apollo"
 		>
 			@if (spriteFailed()) {
-				<span class="launcher-icon" aria-hidden="true">✦</span>
+				<svg class="launcher-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2Z"/><path d="m19 16 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z"/></svg>
 				<span aria-hidden="true">Ask Apollo</span>
 			} @else {
 				<app-animated-sprite

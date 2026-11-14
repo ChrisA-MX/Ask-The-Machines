@@ -1,0 +1,41 @@
+:host { position:fixed; z-index:1100; inset:0; display:block; }
+.mini-game-backdrop { position:fixed; inset:0; display:grid; place-items:center; padding:clamp(.5rem,3vh,1.5rem); background:#020715dc; backdrop-filter:blur(9px); }
+.mini-game-dialog { box-sizing:border-box; display:flex; width:min(54rem,100%); max-height:calc(100dvh - 2rem); flex-direction:column; overflow:hidden; border:1px solid #4775aa; border-radius:1.2rem; background:linear-gradient(145deg,#0d1d38,#080f20 65%,#111127); color:#f3f7ff; box-shadow:0 2rem 6rem #000d,0 0 2rem #57aaff28; }
+.mini-game-header { z-index:1; display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.2rem; border-bottom:1px solid #4b638552; background:#0b1730; }
+.mini-game-header .eyebrow { margin:0 0 .25rem; color:#87d9ff; font-size:.68rem; font-weight:800; letter-spacing:.15em; }
+.mini-game-header h2 { margin:0; color:#fff; font:700 clamp(1.3rem,3vw,1.9rem)/1.1 'Space Grotesk',sans-serif; }
+.close-game { display:grid; width:44px; min-width:44px; height:44px; place-items:center; padding:0; border:1px solid #547294; border-radius:50%; background:#142843; color:#f2f8ff; cursor:pointer; }
+.close-game svg { width:20px; height:20px; }
+.close-game:hover,.close-game:focus-visible { border-color:#a9e5ff; background:#244b6e; }
+.close-game:focus-visible,.success-actions button:focus-visible,.nasa-status:focus-visible { outline:2px solid #fff; outline-offset:3px; }
+.how-to-play { flex:0 0 auto; margin:0; padding:.85rem 1.2rem; border-bottom:1px solid #52698940; color:#d7e8fc; font-size:.9rem; line-height:1.45; }
+.how-to-play span { margin-left:.35rem; color:#a5c5e5; white-space:nowrap; }
+.game-content { min-height:0; overflow:auto; overscroll-behavior:contain; padding:1rem 1.2rem 1.2rem; }
+.game-success { overflow:auto; padding:clamp(1.3rem,4vw,2.5rem); text-align:center; }
+.success-star { display:grid; width:3.4rem; aspect-ratio:1; place-items:center; margin:0 auto .7rem; border:1px solid #ffe392; border-radius:50%; background:#ffc85a21; color:#ffdc7b; box-shadow:0 0 1.7rem #ffd36a55; }
+.success-star svg { width:1.7rem; height:1.7rem; }
+.game-success .eyebrow { margin:0 0 .45rem; color:#8cdbff; font-size:.73rem; font-weight:800; letter-spacing:.15em; }
+.game-success h3 { margin:0 0 1rem; color:#fff; font:700 clamp(1.5rem,4vw,2.3rem)/1.12 'Space Grotesk',sans-serif; }
+.success-facts { max-width:42rem; margin:0 auto 1rem; padding:.8rem 1rem; border-left:3px solid #ffd272; border-radius:.4rem; background:#0d1d33; color:#dcecff; font-size:.9rem; line-height:1.5; text-align:left; }
+.success-facts p { margin:.35rem 0 0; }
+.nasa-status { display:inline-flex; align-items:center; gap:.35rem; margin-bottom:1.2rem; color:#9ee1ff; font-weight:700; }
+.nasa-status svg { width:1rem; height:1rem; }
+.success-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem; }
+.success-actions button { min-height:44px; padding:.65rem 1rem; border:1px solid #ffe08a; border-radius:999px; background:#ffd36f; color:#162034; font-weight:800; cursor:pointer; }
+.success-actions .secondary-action,.success-actions .replay-action { border-color:#627b9e; background:#12243d; color:#ecf5ff; }
+.success-actions .replay-action { border-color:#9e8bd5; color:#e4d7ff; }
+@media (max-width:600px) {
+ .mini-game-backdrop { align-items:end; padding:env(safe-area-inset-top) 8px calc(8px + env(safe-area-inset-bottom)); }
+ .mini-game-dialog { width:100%; max-height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); border-radius:1.1rem 1.1rem .7rem .7rem; }
+ .mini-game-header { padding:.7rem .8rem; }.how-to-play { padding:.7rem .8rem; }.game-content { padding:.8rem; }
+}
+@media (max-height:500px) {
+ .mini-game-backdrop { padding:.25rem; }
+ .mini-game-dialog { max-height:calc(100dvh - .5rem); }
+ .mini-game-header { padding:.4rem .7rem; }
+ .mini-game-header .eyebrow { font-size:.58rem; }
+ .how-to-play { padding:.45rem .7rem; font-size:.82rem; }
+ .game-content { padding:.5rem .7rem; }
+ .success-star { width:2rem; margin-bottom:.3rem; }
+}
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }

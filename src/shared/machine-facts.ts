@@ -1,21 +1,10 @@
 import { MACHINES } from '../app/storyline/machines.data';
 
+/** Chat API identifiers stay stable for retained stories while all content comes from machines.data.ts. */
 export const CHAT_MACHINE_IDS = [
-  'apollo-lm',
-  'lrv',
-  'surveyor-3',
-  'lunar-prospector',
-  'mars-pathfinder',
-  'sojourner',
-  'spirit',
-  'opportunity',
-  'curiosity-sky-crane',
-  'perseverance-sky-crane',
-  'ingenuity',
-  'cassini',
-  'huygens',
-  'dawn',
-  'pioneer-10',
+  'apollo-lm', 'lrv', 'surveyor-3', 'apollo-17-alsep',
+  'sojourner', 'opportunity', 'insight', 'ingenuity',
+  'pioneer-10', 'voyager-1', 'voyager-2', 'new-horizons',
 ] as const;
 
 export type ChatMachineId = (typeof CHAT_MACHINE_IDS)[number];
@@ -24,18 +13,15 @@ export const CHAT_MACHINE_STORY_IDS: Readonly<Record<ChatMachineId, string>> = {
   'apollo-lm': 'apollo-lunar-module-stages',
   lrv: 'lunar-roving-vehicles',
   'surveyor-3': 'surveyor-3',
-  'lunar-prospector': 'lunar-prospector',
-  'mars-pathfinder': 'mars-pathfinder',
+  'apollo-17-alsep': 'apollo-17-alsep',
   sojourner: 'sojourner',
-  spirit: 'spirit-mer-a',
   opportunity: 'opportunity-mer-b',
-  'curiosity-sky-crane': 'curiosity',
-  'perseverance-sky-crane': 'perseverance',
+  insight: 'insight',
   ingenuity: 'ingenuity',
-  cassini: 'cassini',
-  huygens: 'huygens',
-  dawn: 'dawn',
   'pioneer-10': 'pioneer-10',
+  'voyager-1': 'voyager-1',
+  'voyager-2': 'voyager-2',
+  'new-horizons': 'new-horizons',
 };
 
 export interface VerifiedMachineFacts {
@@ -55,30 +41,13 @@ const TODO_TEXT = /TODO/i;
 export const VERIFIED_MACHINE_FACTS: Partial<Record<ChatMachineId, VerifiedMachineFacts>> =
   Object.fromEntries(
     CHAT_MACHINE_IDS.flatMap((id) => {
-      const storyId = CHAT_MACHINE_STORY_IDS[id];
-      const machine = machinesByStoryId.get(storyId);
-      if (
-        !machine ||
-        !machine.sourceUrl ||
-        [
-          machine.year,
-          machine.location,
-          machine.hook,
-          machine.fact,
-          machine.sourceLabel,
-          ...machine.paragraphs,
-        ].some((text) => TODO_TEXT.test(text))
-      ) {
-        return [];
-      }
+      const machine = machinesByStoryId.get(CHAT_MACHINE_STORY_IDS[id]);
+      if (!machine || !machine.sourceUrl || [
+        machine.year, machine.location, machine.hook, machine.fact, machine.sourceLabel, ...machine.paragraphs,
+      ].some((text) => TODO_TEXT.test(text))) return [];
       return [[id, {
-        id,
-        name: machine.name,
-        year: machine.year,
-        location: machine.location,
-        hook: machine.hook,
-        paragraphs: machine.paragraphs,
-        fact: machine.fact,
+        id, name: machine.name, year: machine.year, location: machine.location,
+        hook: machine.hook, paragraphs: machine.paragraphs, fact: machine.fact,
         sourceLabel: machine.sourceLabel,
       } satisfies VerifiedMachineFacts]];
     }),

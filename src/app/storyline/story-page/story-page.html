@@ -1,0 +1,81 @@
+﻿<a class="skip-link" href="#story-main">Skip to story</a>
+<div class="reading-progress" aria-hidden="true"><span [style.width.%]="readProgress()"></span></div>
+<div class="story-cosmos" [class.theme-moon]="world()?.id === 'moon'" [class.theme-mars]="world()?.id === 'mars'" [class.theme-outer]="world()?.id === 'outer'" aria-hidden="true"><span class="cosmos-star star-one"></span><span class="cosmos-star star-two"></span><span class="cosmos-star star-three"></span><span class="cosmos-planet"></span></div>
+
+@if (isNotFound()) {
+  <main id="story-main" class="story-shell message-shell" tabindex="-1">
+    <nav class="story-topbar" aria-label="Story navigation"><a class="back-link" routerLink="/storylines"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7"/></svg> Back to trail</a></nav>
+    <section class="route-message"><p class="eyebrow">MISSION FILE</p><h1 #storyHeading tabindex="-1">Story not found</h1><p>We could not find that machine story. Head back to the worlds and choose another stop.</p><a class="primary-action" routerLink="/storylines">Return to Stories</a></section>
+  </main>
+} @else if (isLocked()) {
+  <main id="story-main" class="story-shell message-shell" tabindex="-1">
+    <nav class="story-topbar" aria-label="Story navigation"><button class="back-link" type="button" (click)="backToTrail()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7"/></svg> Back to trail</button></nav>
+    <section class="route-message locked-message"><p class="eyebrow">MISSION FILE LOCKED</p><h1 #storyHeading tabindex="-1">Locked</h1><p>Finish the earlier machine stories in this world to unlock this story.</p><button class="primary-action" type="button" (click)="backToTrail()">Back to the trail</button></section>
+  </main>
+} @else if (world(); as currentWorld) {
+  @if (machine(); as story) {
+    <main id="story-main" class="story-shell" [class.theme-moon]="currentWorld.id === 'moon'" [class.theme-mars]="currentWorld.id === 'mars'" [class.theme-outer]="currentWorld.id === 'outer'">
+      <header class="story-topbar">
+        <button class="back-link" type="button" (click)="backToTrail()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7"/></svg> Back to trail</button>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a routerLink="/storylines">Stories</a><span aria-hidden="true">/</span><span>{{ currentWorld.name }}</span><span aria-hidden="true">/</span><span aria-current="page">{{ story.name }}</span></nav>
+        <div class="story-status"><span class="status-pill" [class.is-active]="story.id === 'voyager-1' || story.id === 'voyager-2'">{{ story.storyPage?.currentStatus }}</span><span class="step-pill">Story {{ storyNumber() }} of {{ storyCount() }}</span></div>
+      </header>
+      <div class="world-progress-label" aria-live="polite">{{ completedCount() }} / {{ storyCount() }} complete in {{ currentWorld.shortName }}<div class="world-progress-track" role="progressbar" [attr.aria-label]="currentWorld.shortName + ' story completion'" [attr.aria-valuenow]="completedCount()" [attr.aria-valuemin]="0" [attr.aria-valuemax]="storyCount()"><span [style.width.%]="worldProgressPercent()"></span></div></div>
+
+      <article class="story-article">
+        <section class="story-hero" aria-labelledby="story-title">
+          <div class="hero-copy"><p class="eyebrow">{{ currentWorld.name }} <span aria-hidden="true">/</span> MISSION FILE</p><p class="year-label">{{ story.year }}</p><h1 id="story-title" #storyHeading tabindex="-1">{{ story.name }}</h1><p class="story-tagline">{{ story.hook }}</p></div>
+          <div class="hero-art" aria-hidden="true"><svg viewBox="0 0 220 180" fill="none"><circle cx="110" cy="90" r="60" stroke="currentColor" stroke-opacity=".4"/><circle cx="110" cy="90" r="40" stroke="currentColor" stroke-opacity=".55"/><circle cx="110" cy="90" r="9" fill="currentColor"/><path d="M26 90h54M140 90h54M110 6v44M110 130v44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m45 43 18 18m94 58 18 18M175 44l-18 18M63 119l-18 18" stroke="currentColor" stroke-opacity=".7" stroke-width="2"/></svg><span>{{ story.imageKey }}</span></div>
+        </section>
+
+        <section class="story-section" aria-labelledby="who-heading"><h2 id="who-heading">Who I am</h2>@if (story.storyPage?.voiceNote) { <span class="creative-voice">Creative voice</span> }<p>{{ story.storyPage?.whoIAm }}</p></section>
+        <section class="story-section" aria-labelledby="worked-heading"><h2 id="worked-heading">How I worked</h2><p>{{ story.storyPage?.howIWorked }}</p></section>
+        <section class="story-section" aria-labelledby="found-heading"><h2 id="found-heading">What I found</h2><p>{{ story.storyPage?.whatIFound }}</p></section>
+
+        @if (story.video; as video) {
+          <section class="story-section watch-section" aria-labelledby="watch-heading">
+            <h2 id="watch-heading">Watch</h2>
+            <div class="video-frame" [class.has-fallback]="posterFailed() || videoFailed()">
+              @if (videoStarted() && videoEmbed() && !videoFailed()) {
+                <iframe [src]="videoEmbed()" [title]="video.title + ' video player'" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" loading="eager" (load)="onVideoLoad()" (error)="onVideoError()"></iframe>
+              } @else if (videoFailed()) {
+                <div class="embed-fallback" role="status"><strong>Video unavailable here</strong><p>You can still watch it on YouTube using the link below.</p></div>
+              } @else {
+                @if (!posterFailed()) { <img class="video-poster" [src]="videoPoster()" [alt]="'Poster for ' + video.title" width="480" height="270" loading="lazy" (error)="markPosterFailed()" /> }
+                <div class="poster-shade" aria-hidden="true"></div>
+                <button class="play-video" type="button" (click)="startVideo()" [attr.aria-label]="'Play video: ' + video.title"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.8c0-.8.9-1.3 1.6-.9l10 6.2a1.1 1.1 0 0 1 0 1.8l-10 6.2a1.1 1.1 0 0 1-1.6-.9z"/></svg></button>
+                <span class="duration-badge">{{ video.durationLabel }}</span>
+              }
+              @if (video.isLongForm) { <span class="long-video-badge">Long video, about 20 min</span> }
+              @if (video.bonusLabel) { <span class="long-video-badge bonus-badge">{{ video.bonusLabel }} bonus</span> }
+            </div>
+            <h3 class="video-title">{{ video.title }}</h3><p class="video-channel">{{ video.channel }} <span aria-hidden="true">&middot;</span> {{ video.durationLabel }}</p><p>{{ video.summary }}</p>
+            @if (video.note) { <p class="video-note">{{ video.note }}</p> }
+            @if (videoFailed()) { <p class="video-unavailable" role="status">The embedded player did not respond. Try the YouTube link instead.</p> }
+            <a class="youtube-link" [href]="youtubeUrl(video)" target="_blank" rel="noopener noreferrer">Watch on YouTube <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6m-1-5-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg></a>
+          </section>
+        }
+
+        <section class="story-section current-status" aria-labelledby="status-heading"><h2 id="status-heading">Where I am now</h2><span class="status-pill">{{ story.storyPage?.currentStatus }}</span></section>
+        <details class="fact-check"><summary>Fact check</summary><div class="fact-check-content"><p>{{ story.fact }}</p><ul>@for (source of sources(); track source.url) { <li><a [href]="source.url" target="_blank" rel="noopener noreferrer">{{ source.label }} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6m-1-5-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg></a></li> }</ul>@if (story.storyPage?.voiceNote) { <p class="voice-note"><strong>Creative voice:</strong> {{ story.storyPage?.voiceNote }}</p> }</div></details>
+
+        <section class="story-actions" aria-label="Story actions">
+          <div class="reader-actions">
+            @if (speechAvailable()) { <button type="button" class="secondary-action" (click)="listen()">{{ speechPlaying() ? 'Pause listening' : 'Listen' }}</button>@if (speechPlaying()) { <button type="button" class="secondary-action" (click)="stopListening()">Stop</button> } }
+            <button type="button" class="primary-action" [disabled]="storyComplete()" (click)="finishStory()">{{ storyComplete() ? 'Finished' : 'Finished reading' }}</button>
+          </div>
+          <p class="completion-message" role="status" aria-live="polite">{{ completionMessage() || (storyComplete() ? 'Story complete. Your progress is saved.' : '') }}</p>
+          <nav class="story-step-actions" aria-label="Previous and next stories">
+            @if (previousMachine(); as previous) { <button type="button" class="secondary-action" (click)="goToStory(previous)"><span aria-hidden="true">Previous</span><strong>{{ previous.name }}</strong></button> } @else { <span></span> }
+            @if (nextMachine(); as next) { <button type="button" class="primary-action next-action" (click)="goToStory(next)">Next story <strong>{{ next.name }}</strong></button> }
+            @else if (storyComplete() && storyNumber() < storyCount()) { <button type="button" class="primary-action next-action" disabled>Finish this story to unlock the next one</button> }
+            @else if (storyComplete() && currentWorld.id === 'outer' && storyNumber() === storyCount()) { <a class="primary-action next-action" routerLink="/missions">Continue to the connect-the-dots panel</a> }
+            @else if (storyComplete() && storyNumber() === storyCount()) { <button type="button" class="primary-action next-action" (click)="goToMiniGame()">Back to the trail: mini-game unlocked</button> }
+            @else { <button type="button" class="primary-action next-action" disabled>Finish this story to unlock the next one</button> }
+          </nav>
+        </section>
+      </article>
+      <footer class="story-footer"><span>{{ currentWorld.name }} <span aria-hidden="true">&middot;</span> Story {{ storyNumber() }} of {{ storyCount() }}</span><button type="button" class="footer-back" (click)="backToTrail()">Back to trail</button></footer>
+    </main>
+  }
+}

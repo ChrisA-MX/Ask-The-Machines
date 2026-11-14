@@ -1,16 +1,19 @@
 <section class="carousel" #host aria-label="Choose a world">
 	<div class="world-copy" [class.is-fading]="textFading" aria-live="polite" aria-atomic="true">
 		<p class="eyebrow">Mission atlas</p>
-		<h2>{{ activeWorld()?.name }}</h2>
+		<div class="world-title-row"><h2>{{ activeWorld()?.name }}</h2>@if (gamesCompleted[activeIndex]) { <span class="world-game-badge" aria-label="Mini-game badge earned"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="m10 1.8 2.5 5.1 5.7.8-4.1 4 .9 5.7-5-2.7-5.1 2.7 1-5.7-4.2-4 5.8-.8z"/></svg> Badge earned</span> }</div>
 		<p class="tagline">{{ activeWorld()?.tagline }}</p>
 		<p class="world-progress">{{ completed(activeIndex) }} / {{ activeWorld()?.machines?.length }} machines complete</p>
 		@if (!isUnlocked(activeIndex) || lockHint) {
-			<p class="lock-hint" role="status"><span aria-hidden="true">🔒</span> {{ lockHint ? 'Finish the previous world to unlock this one.' : 'Complete the previous world to unlock this destination.' }}</p>
+			<p class="lock-hint" role="status"><svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3"/></svg> {{ lockHint ? 'Finish the previous world to unlock this one.' : 'Complete the previous world to unlock this destination.' }}</p>
 		}
 	</div>
 	<div class="scene" [class.no-webgl]="!webglAvailable" [class.is-hovered]="centerHovered" [class.is-shaking]="lockShaking" [class.is-crossfading]="sceneFading">
-		<button type="button" class="arrow previous" aria-label="Previous world" [disabled]="isLoading() || !!loadError" (click)="previous()"><span aria-hidden="true">‹</span></button>
+		<button type="button" class="arrow previous" aria-label="Previous world" [disabled]="isLoading() || !!loadError" (click)="previous()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6" /></svg></button>
 		<canvas #canvas role="img" [attr.aria-label]="activeWorld()?.name + ' shown in a 3D world carousel. Activate to explore.'" tabindex="0" (pointerdown)="pointerDown($event)" (pointermove)="pointerMove($event)" (pointerup)="pointerUp($event)" (pointercancel)="cancelPointer()" (keydown.enter)="activateCenter()" (keydown.space)="$event.preventDefault(); activateCenter()" (click)="webglAvailable ? null : activateCenter()"></canvas>
+		@if (galaxyFallback && webglAvailable) {
+			<div class="fallback-galaxy" [class.is-left]="activeIndex === 0" [class.is-right]="activeIndex === 1" [class.is-current]="activeIndex === 2" aria-hidden="true"><span>Milky Way</span></div>
+		}
 		@if (isLoading()) {
 			<div class="world-loading" role="status" aria-live="polite"><span class="loading-orbit" aria-hidden="true"></span><span>Preparing the worlds...</span></div>
 		}
@@ -26,7 +29,7 @@
 		}
 		<button type="button" class="apollo-marker" [hidden]="!markerVisible" [style.left.px]="markerX" [style.top.px]="markerY" aria-label="Apollo 11 landing site on the Moon" [attr.aria-describedby]="markerTooltip ? 'apollo-marker-tip' : null" [attr.aria-expanded]="markerTooltip" (pointerenter)="showMarkerTooltip()" (pointerleave)="hideMarkerTooltip()" (focus)="focusMarker()" (blur)="blurMarker()" (click)="showMarkerTooltip()"><span aria-hidden="true"></span></button>
 		@if (markerTooltip && markerVisible) { <div id="apollo-marker-tip" class="apollo-tooltip" role="tooltip">Apollo 11 touched down at Tranquility Base.</div> }
-		<button type="button" class="arrow next" aria-label="Next world" [disabled]="isLoading() || !!loadError" (click)="next()"><span aria-hidden="true">›</span></button>
+		<button type="button" class="arrow next" aria-label="Next world" [disabled]="isLoading() || !!loadError" (click)="next()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg></button>
 	</div>
 	<div class="carousel-footer">
 		<div class="world-dots" role="group" aria-label="Jump to a world">
@@ -34,6 +37,6 @@
 				<button type="button" class="dot" [class.is-active]="activeIndex === i" [attr.aria-label]="'Show ' + world.name" [attr.aria-current]="activeIndex === i ? 'true' : null" (click)="jump(i)"></button>
 			}
 		</div>
-		<button type="button" class="explore-button" [class.is-locked]="!isUnlocked(activeIndex)" [disabled]="isLoading() || !!loadError" (click)="activateCenter()">{{ isUnlocked(activeIndex) ? 'Explore this world' : 'World locked' }} <span aria-hidden="true">→</span></button>
+		<button type="button" class="explore-button" [class.is-locked]="!isUnlocked(activeIndex)" [disabled]="isLoading() || !!loadError" (click)="activateCenter()">{{ isUnlocked(activeIndex) ? 'Explore this world' : 'World locked' }} <svg class="inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></button>
 	</div>
 </section>

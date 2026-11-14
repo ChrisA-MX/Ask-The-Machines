@@ -28,6 +28,7 @@ h2 span { color: #ffdf3d; }
 .story-backdrop { position: fixed; z-index: 1000; inset: 0; display: grid; overflow-y: auto; padding: 1.25rem; place-items: center; background: #020611cf; backdrop-filter: blur(8px); }
 .story-modal { position: relative; width: min(41rem, 100%); padding: clamp(1.3rem, 4vw, 2.2rem); border: 1px solid #3d5d93; border-radius: 1.3rem; background: radial-gradient(ellipse at top right, #183565, #0b1835 55%, #08132a); box-shadow: 0 2rem 7rem #000a; }
 .modal-close { position: absolute; top: 1rem; right: 1rem; display: grid; width: 2.5rem; height: 2.5rem; place-items: center; border: 1px solid #4b6390; border-radius: 50%; background: #09152d; color: #f7f8ff; cursor: pointer; font-size: 1.5rem; }
+.modal-close svg { display:block; width:20px; height:20px; }
 h3 { max-width: 31rem; padding-right: 2rem; font-size: clamp(1.7rem, 4vw, 2.5rem); line-height: 1.12; }
 .site-name { margin: .65rem 0 1.2rem; color: #a9cfff; }
 .motion-placeholder { display: flex; min-height: 12rem; align-items: center; justify-content: center; flex-direction: column; gap: .45rem; border: 1px dashed #579aff91; border-radius: .85rem; background: radial-gradient(ellipse at center, #16325a, #09152a 70%); color: #b8d8ff; font-size: .7rem; font-weight: 700; letter-spacing: .12em; }
@@ -37,6 +38,7 @@ h3 { max-width: 31rem; padding-right: 2rem; font-size: clamp(1.7rem, 4vw, 2.5rem
 .artifact-fact { display: grid; gap: .35rem; margin: 1rem 0; padding: .8rem 1rem; border-left: 2px solid #ffdf3d; background: #ffdf3d0a; color: #cbd9f4; font-size: .9rem; line-height: 1.5; }
 .artifact-fact span { color: #ffdf3d; font-size: .65rem; font-weight: 700; letter-spacing: .14em; }
 .source-link { color: #83c4ff; font-size: .84rem; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.inline-external-icon { display:inline-block; width:.95rem; height:.95rem; margin-left:.15rem; vertical-align:-.14em; }
 .source-link:hover { color: #ffdf3d; }
 :host ::ng-deep .leaflet-container { font: inherit; background: #0a1020; }
 :host ::ng-deep .leaflet-control-zoom a { border-color: #344f7c !important; background: #09152d !important; color: #eff5ff !important; }

@@ -2,7 +2,6 @@ import { isPlatformBrowser } from '@angular/common';
 import { afterNextRender, Component, DestroyRef, ElementRef, EventEmitter, HostListener, inject, Input, OnInit, Output, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import type * as ThreeTypes from 'three';
 import { WorldId, WorldStory } from '../machines.data';
-import { ProceduralWorld, qualityForDevice, WorldQuality, WorldsService } from '../../worlds/worlds.service';
 import { LoadingService } from '../../services/loading.service';
 
 // NASA Solar System Exploration models: gltf_embed/2366 (Moon) and /2372 (Mars).
@@ -15,6 +14,28 @@ interface CarouselWorld {
   id: WorldId;
   object: ThreeTypes.Object3D;
   radius: number;
+  update(dt: number): void;
+  resize?(drawingBufferWidth: number, drawingBufferHeight: number): void;
+  setBrightness?(brightness: number): void;
+  dispose?(): void;
+}
+
+export interface CarouselLayout {
+  centerScale: number;
+  sideScale: number;
+  sideSpacing: number;
+  sideDepth: number;
+}
+
+const PLANET_RADIUS = 1.3;
+
+interface WorldSlotTween {
+  fromPosition: ThreeTypes.Vector3;
+  toPosition: ThreeTypes.Vector3;
+  fromScale: number;
+  toScale: number;
+  fromBrightness: number;
+  toBrightness: number;
 }
 
 @Component({
@@ -27,6 +48,7 @@ export class WorldCarousel implements OnInit {
   @Input({ required: true }) worlds: WorldStory[] = [];
   @Input() unlocked: boolean[] = [];
   @Input() progress: number[] = [];
+  @Input() gamesCompleted: boolean[] = [];
   @Input() initialIndex = 0;
   @Output() enterWorld = new EventEmitter<number>();
   @ViewChild('host') private host?: ElementRef<HTMLElement>;
@@ -40,6 +62,7 @@ export class WorldCarousel implements OnInit {
   protected sceneFading = false;
   protected webglAvailable = true;
   protected readonly isLoading = signal(true);
+  protected galaxyFallback = false;
   protected loadError = '';
   protected lockHint = false;
   protected markerVisible = false;
@@ -49,7 +72,6 @@ export class WorldCarousel implements OnInit {
 
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly worldsService = inject(WorldsService);
   private readonly loading = inject(LoadingService);
   private readonly finishLoadingTasks = new Set<() => void>();
   private THREE?: typeof import('three');
@@ -57,12 +79,14 @@ export class WorldCarousel implements OnInit {
   private scene?: ThreeTypes.Scene;
   private camera?: ThreeTypes.PerspectiveCamera;
   private ring?: ThreeTypes.Group;
-  private handles: ProceduralWorld[] = [];
+  private handles: CarouselWorld[] = [];
   private carouselObjects: ThreeTypes.Object3D[] = [];
-  private rotatingWorlds: ThreeTypes.Object3D[] = [];
   private nasaModels?: Promise<Partial<Record<WorldId, ThreeTypes.Object3D>>>;
   private slots: ThreeTypes.Group[] = [];
-  private dimmers: ThreeTypes.Mesh<ThreeTypes.SphereGeometry, ThreeTypes.MeshBasicMaterial>[] = [];
+  private appearanceMaterials: ThreeTypes.Material[][] = [];
+  private readonly originalMaterials = new Map<ThreeTypes.Object3D, ThreeTypes.Material | ThreeTypes.Material[]>();
+  private slotBrightness: number[] = [];
+  private slotTweens: WorldSlotTween[] = [];
   private markerSurface?: ThreeTypes.Mesh;
   private markerDot?: ThreeTypes.Mesh;
   private markerGeometry?: ThreeTypes.SphereGeometry;
@@ -71,7 +95,6 @@ export class WorldCarousel implements OnInit {
   private markerGlowMaterial?: ThreeTypes.MeshBasicMaterial;
   private auxiliaryGeometries: ThreeTypes.BufferGeometry[] = [];
   private auxiliaryMaterials: ThreeTypes.Material[] = [];
-  private satelliteOrbits: ThreeTypes.Group[] = [];
   private frame = 0;
   private resizeObserver?: ResizeObserver;
   private intersectionObserver?: IntersectionObserver;
@@ -79,10 +102,10 @@ export class WorldCarousel implements OnInit {
   private hidden = false;
   private animating = false;
   private reducedMotion = false;
-  private transitionStart = 0;
-  private fromRotation = 0;
-  private toRotation = 0;
-  private readonly animationDuration = 700;
+  private transitionDuration = 800;
+  private transitionFrom = 0;
+  private qualityMobile = false;
+  private slotLayout: CarouselLayout = { centerScale: 1.43, sideScale: 0.93, sideSpacing: 3.25, sideDepth: 0.6 };
   private dragStart?: { x: number; y: number; pointerId: number };
   private pointerX = 0;
   private lastTime = 0;
@@ -94,11 +117,9 @@ export class WorldCarousel implements OnInit {
   private textTimer?: number;
   private shakeTimer?: number;
   private sceneFadeTimer?: number;
-  private qualityCheckTimer?: number;
   private nextIndex = 0;
   private jumpTarget?: number;
   private loadSequence = 0;
-  private quality: WorldQuality = 'low';
   private markerFocused = false;
   private destroyed = false;
 
@@ -118,19 +139,13 @@ export class WorldCarousel implements OnInit {
   protected next(): void { this.move(1); }
 
   protected jump(index: number): void {
-    if (index === this.activeIndex || this.transitioning || this.isLoading() || this.loadError) return;
+    if (index === this.activeIndex || this.isLoading() || this.loadError) return;
     this.jumpTarget = index;
     if (this.reducedMotion) {
       this.nextIndex = index;
-      this.toRotation = this.rotationFor(index);
-      this.sceneFading = true;
-      this.textFading = true;
-      if (this.ring) this.ring.rotation.y = this.toRotation;
       this.activeIndex = index;
       this.jumpTarget = undefined;
-      if (this.sceneFadeTimer) window.clearTimeout(this.sceneFadeTimer);
-      this.sceneFadeTimer = window.setTimeout(() => { this.sceneFading = false; this.textFading = false; this.schedule(); }, 100);
-      this.schedule();
+      this.applyImmediateSlots(index);
       return;
     }
     this.move(this.directionTo(index), true);
@@ -144,7 +159,7 @@ export class WorldCarousel implements OnInit {
 
   protected retryGeneration(): void {
     if (!this.THREE || this.destroyed) return;
-    void this.loadGeneratedWorlds(this.quality, true);
+    void this.loadGeneratedWorlds();
   }
 
   protected showMarkerTooltip(): void { this.markerTooltip = true; }
@@ -178,8 +193,9 @@ export class WorldCarousel implements OnInit {
       return;
     }
     document.addEventListener('visibilitychange', this.onVisibility);
+    window.addEventListener('orientationchange', this.onOrientationChange);
     if (typeof ResizeObserver !== 'undefined') {
-      this.resizeObserver = new ResizeObserver(() => { this.resize(); this.scheduleQualityCheck(); });
+      this.resizeObserver = new ResizeObserver(() => this.resize());
       this.resizeObserver.observe(this.canvas.nativeElement.parentElement ?? this.host.nativeElement);
       this.resizeObserver.observe(this.host.nativeElement);
     }
@@ -212,7 +228,7 @@ export class WorldCarousel implements OnInit {
       this.markerWorldPosition = new THREE.Vector3();
       this.markerProjectedPosition = new THREE.Vector3();
       const hostWidth = this.host.nativeElement.getBoundingClientRect().width;
-      this.quality = qualityForDevice(hostWidth, navigator.hardwareConcurrency || 4);
+      this.qualityMobile = hostWidth < 760;
       this.resize();
     } catch {
       this.webglAvailable = false;
@@ -220,10 +236,10 @@ export class WorldCarousel implements OnInit {
       return;
     }
 
-    await this.loadGeneratedWorlds(this.quality);
+    await this.loadGeneratedWorlds();
   }
 
-  private async loadGeneratedWorlds(quality: WorldQuality, retry = false): Promise<void> {
+  private async loadGeneratedWorlds(): Promise<void> {
     if (!this.THREE || this.destroyed) return;
     const sequence = ++this.loadSequence;
     const finishLoading = this.loading.begin();
@@ -231,27 +247,72 @@ export class WorldCarousel implements OnInit {
     this.isLoading.set(true);
     this.loadError = '';
     try {
-      const [worlds, nasaModels] = await Promise.all([
-        retry
-          ? this.worldsService.retryWorlds(this.THREE, quality)
-          : this.worldsService.getWorlds(this.THREE, quality),
-        this.loadNasaModels(),
-      ]);
+      const nasaModels = await this.loadNasaModels();
       if (this.destroyed || sequence !== this.loadSequence) return;
       this.removeWorldsFromRing();
-      this.handles = worlds;
-      this.mountWorlds(worlds, nasaModels);
+      const moon = this.normalizePlanet(nasaModels.moon!, 'Moon');
+      const mars = this.normalizePlanet(nasaModels.mars!, 'Mars');
+      const visuals: CarouselWorld[] = [
+        { id: 'moon', object: moon.object, radius: moon.radius, update: (dt) => { moon.object.rotation.y += dt * 0.05; } },
+        { id: 'mars', object: mars.object, radius: mars.radius, update: (dt) => { mars.object.rotation.y += dt * 0.062; } },
+      ];
+      try {
+        const galaxyModule = await import('../../worlds/milky-way');
+        const galaxy = galaxyModule.createMilkyWay(this.THREE, this.qualityMobile, PLANET_RADIUS);
+        visuals.push({
+          id: 'outer', object: galaxy.object, radius: galaxy.radius,
+          update: (dt) => galaxy.update(dt, this.activeIndex === 2),
+          resize: galaxy.resize, setBrightness: galaxy.setBrightness, dispose: galaxy.dispose,
+        });
+      } catch (error) {
+        console.error('[WorldCarousel] Milky Way generation failed; using the static CSS galaxy fallback.', error);
+        this.galaxyFallback = true;
+        visuals.push({ id: 'outer', object: new this.THREE!.Group(), radius: PLANET_RADIUS, update: () => undefined });
+      }
+      this.handles = visuals;
+      this.mountWorlds(visuals);
       this.isLoading.set(false);
       this.resize();
       this.schedule();
-    } catch {
+    } catch (error) {
       if (this.destroyed || sequence !== this.loadSequence) return;
+      console.error('[WorldCarousel] World generation failed:', error);
       this.loadError = 'The worlds could not be prepared. Please try again.';
       this.isLoading.set(false);
     } finally {
       finishLoading();
       this.finishLoadingTasks.delete(finishLoading);
     }
+  }
+
+  /**
+   * The NASA GLBs use roughly 1,000-unit diameter spheres while the carousel
+   * positions are expressed in ~unit radii. Without normalization the camera
+   * sits inside their front-face-culled meshes, making Moon and Mars disappear.
+   */
+  private normalizePlanet(model: ThreeTypes.Object3D, label: string): { object: ThreeTypes.Group; radius: number } {
+    const THREE = this.THREE!;
+    model.updateMatrixWorld(true);
+    const bounds = new THREE.Box3().setFromObject(model);
+    const center = bounds.getCenter(new THREE.Vector3());
+    let sourceRadius = 0;
+    model.traverse((object) => {
+      const mesh = object as ThreeTypes.Mesh;
+      const positions = mesh.isMesh ? mesh.geometry?.getAttribute('position') : undefined;
+      if (!positions) return;
+      const vertex = new THREE.Vector3();
+      for (let index = 0; index < positions.count; index++) {
+        vertex.fromBufferAttribute(positions, index).applyMatrix4(mesh.matrixWorld);
+        sourceRadius = Math.max(sourceRadius, vertex.distanceTo(center));
+      }
+    });
+    if (!Number.isFinite(sourceRadius) || sourceRadius <= 0) throw new Error(`${label} model has no measurable geometry.`);
+    model.position.sub(center);
+    const normalized = new THREE.Group();
+    normalized.name = `${label} normalized to carousel units`;
+    normalized.scale.setScalar(planetNormalizationScale(sourceRadius, PLANET_RADIUS));
+    normalized.add(model);
+    return { object: normalized, radius: PLANET_RADIUS };
   }
 
   private loadNasaModels(): Promise<Partial<Record<WorldId, ThreeTypes.Object3D>>> {
@@ -272,78 +333,34 @@ export class WorldCarousel implements OnInit {
     return this.nasaModels;
   }
 
-  private mountWorlds(
-    worlds: ProceduralWorld[],
-    nasaModels: Partial<Record<WorldId, ThreeTypes.Object3D>>,
-  ): void {
+  private mountWorlds(orderedWorlds: CarouselWorld[]): void {
     const THREE = this.THREE;
     const ring = this.ring;
     if (!THREE || !ring) return;
 
-    const visuals = new Map<WorldId, CarouselWorld>();
-    for (const id of ['moon', 'mars'] as const) {
-      const model = nasaModels[id];
-      if (!model) throw new Error(`NASA's ${id} model was not loaded.`);
-      const bounds = new THREE.Box3().setFromObject(model);
-      const center = bounds.getCenter(new THREE.Vector3());
-      const radius = bounds.getBoundingSphere(new THREE.Sphere()).radius;
-      if (!Number.isFinite(radius) || radius <= 0) {
-        throw new Error(`NASA's ${id} model has invalid dimensions.`);
-      }
-      const scale = 1.82 / radius;
-      const normalizedModel = new THREE.Group();
-      normalizedModel.add(model);
-      normalizedModel.scale.setScalar(scale);
-      normalizedModel.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
-      visuals.set(id, { id, object: normalizedModel, radius: 1.82 });
-    }
-    for (const world of worlds) {
-      visuals.set(world.id, { id: world.id, object: world.object, radius: world.radius });
-    }
-
-    const orderedWorlds = this.worlds.map((story) => {
-      const visual = visuals.get(story.id);
-      if (!visual) throw new Error(`The ${story.id} world model is unavailable.`);
-      return visual;
-    });
-
     this.carouselObjects = orderedWorlds.map((world) => world.object);
-    this.rotatingWorlds = orderedWorlds
-      .filter((world) => world.id !== 'outer')
-      .map((world) => world.object);
+    this.appearanceMaterials = [];
     orderedWorlds.forEach((world, index) => {
       const slot = new THREE.Group();
-      const angle = index * Math.PI * 2 / orderedWorlds.length;
-      slot.position.set(Math.sin(angle) * 3.85, index === 0 ? 0 : 0.28, Math.cos(angle) * 3.85);
+      const target = worldSlotTarget(index, this.activeIndex, orderedWorlds.length, this.slotLayout);
+      slot.position.copy(target.position);
       world.object.userData['carouselIndex'] = index;
-      if (world.id === 'outer') {
-        // The supplied module places its procedural star shell at radius 40–50;
-        // scale that child cloud and the full composition into the carousel slot.
-        const outerContents = world.object.children[0];
-        if (outerContents) {
-          outerContents.scale.setScalar(0.5);
-          const stars = outerContents.children.find((child) => (child as ThreeTypes.Points).isPoints);
-          stars?.scale.setScalar(0.05);
-        }
-      }
       slot.add(world.object);
-
-      // A separate transparent shell dims rear worlds without mutating module materials.
-      const shellRadius = world.radius * (world.id === 'outer' ? 1.72 : 1.025);
-      const shellGeometry = new THREE.SphereGeometry(shellRadius, 48, 48);
-      const shellMaterial = new THREE.MeshBasicMaterial({ color: 0x020611, transparent: true, opacity: index === this.activeIndex ? 0 : 0.44, depthWrite: false });
-      const dimmer = new THREE.Mesh(shellGeometry, shellMaterial);
-      dimmer.renderOrder = 4;
-      slot.add(dimmer);
-      if (world.id === 'outer') this.addOuterSatellites(THREE, slot);
-      slot.scale.setScalar(index === this.activeIndex ? 1.55 : 0.93);
+      this.appearanceMaterials[index] = world.setBrightness ? [] : this.cloneAppearanceMaterials(world.object);
+      slot.scale.setScalar(target.scale);
       ring.add(slot);
       this.slots.push(slot);
-      this.dimmers.push(dimmer);
+      this.setWorldBrightness(index, target.brightness);
+      this.slotBrightness[index] = target.brightness;
+      this.slotTweens.push({
+        fromPosition: new THREE.Vector3(target.position.x, target.position.y, target.position.z),
+        toPosition: new THREE.Vector3(target.position.x, target.position.y, target.position.z),
+        fromScale: target.scale, toScale: target.scale,
+        fromBrightness: target.brightness, toBrightness: target.brightness,
+      });
     });
-    ring.rotation.y = this.rotationFor(this.activeIndex);
-    this.mountApolloMarker(visuals.get('moon'));
-    this.updateSlotAppearance();
+    ring.rotation.y = 0;
+    this.mountApolloMarker(orderedWorlds.find((world) => world.id === 'moon'));
   }
 
   private mountApolloMarker(moon?: CarouselWorld): void {
@@ -357,14 +374,15 @@ export class WorldCarousel implements OnInit {
     if (!surface) return;
 
     this.markerSurface = surface;
-    this.markerGeometry = new THREE.SphereGeometry(0.022, 16, 12);
+    const modelScale = moon.object.scale.x;
+    this.markerGeometry = new THREE.SphereGeometry(0.022 / modelScale, 16, 12);
     this.markerMaterial = new THREE.MeshStandardMaterial({ color: 0xffdb66, emissive: 0xffa824, emissiveIntensity: 2.4, roughness: 0.35 });
-    this.markerGlowGeometry = new THREE.SphereGeometry(0.045, 16, 12);
+    this.markerGlowGeometry = new THREE.SphereGeometry(0.045 / modelScale, 16, 12);
     this.markerGlowMaterial = new THREE.MeshBasicMaterial({ color: 0xffc44f, transparent: true, opacity: 0.38, depthWrite: false });
     this.markerDot = new THREE.Mesh(this.markerGeometry, this.markerMaterial);
     const phi = THREE.MathUtils.degToRad(90 - 0.67408);
     const theta = THREE.MathUtils.degToRad(23.47297 + 90);
-    const markerRadius = moon.radius + 0.035;
+    const markerRadius = (moon.radius + 0.035) / modelScale;
     this.markerDot.position.set(
       -markerRadius * Math.sin(phi) * Math.cos(theta),
       markerRadius * Math.cos(phi),
@@ -403,83 +421,116 @@ export class WorldCarousel implements OnInit {
 
   private removeWorldsFromRing(): void {
     if (this.markerDot) this.markerDot.removeFromParent();
+    this.handles.forEach((world) => world.dispose?.());
+    for (const [object, material] of this.originalMaterials) (object as ThreeTypes.Mesh).material = material;
+    this.originalMaterials.clear();
+    this.appearanceMaterials.flat().forEach((material) => material.dispose());
     for (const slot of this.slots) {
       const world = slot.children.find((child) => child.userData['carouselIndex'] !== undefined);
       if (world) slot.remove(world);
       this.ring?.remove(slot);
     }
-    for (const dimmer of this.dimmers) {
-      dimmer.geometry.dispose();
-      dimmer.material.dispose();
-    }
     this.slots = [];
-    this.dimmers = [];
+    this.appearanceMaterials = [];
+    this.slotBrightness = [];
+    this.slotTweens = [];
     this.markerSurface = undefined;
     this.markerDot = undefined;
     this.markerGeometry?.dispose(); this.markerMaterial?.dispose();
     this.markerGlowGeometry?.dispose(); this.markerGlowMaterial?.dispose();
     this.markerGeometry = undefined; this.markerMaterial = undefined;
     this.markerGlowGeometry = undefined; this.markerGlowMaterial = undefined;
-    for (const geometry of this.auxiliaryGeometries) geometry.dispose();
-    for (const material of this.auxiliaryMaterials) material.dispose();
-    this.auxiliaryGeometries = [];
-    this.auxiliaryMaterials = [];
-    this.satelliteOrbits = [];
     this.carouselObjects = [];
-    this.rotatingWorlds = [];
-  }
-
-  private addOuterSatellites(THREE: typeof import('three'), slot: ThreeTypes.Group): void {
-    for (let index = 0; index < 4; index++) {
-      const orbit = new THREE.Group();
-      orbit.rotation.z = 0.28 + index * 0.13;
-      orbit.rotation.x = index * 0.32;
-      const satellite = new THREE.Group();
-      satellite.position.set(0.76 + (index % 2) * 0.16, 0, 0);
-      const bodyGeometry = new THREE.BoxGeometry(0.075, 0.065, 0.11);
-      const panelGeometry = new THREE.PlaneGeometry(0.15, 0.085);
-      const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xdfe8f4, emissive: 0x34445e, metalness: 0.48, roughness: 0.52 });
-      const panelMaterial = new THREE.MeshBasicMaterial({ color: 0x4f8edc, side: THREE.DoubleSide });
-      const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-      const left = new THREE.Mesh(panelGeometry, panelMaterial);
-      const right = new THREE.Mesh(panelGeometry, panelMaterial);
-      left.position.x = -0.12;
-      right.position.x = 0.12;
-      satellite.add(body, left, right);
-      orbit.add(satellite);
-      slot.add(orbit);
-      this.satelliteOrbits.push(orbit);
-      this.auxiliaryGeometries.push(bodyGeometry, panelGeometry);
-      this.auxiliaryMaterials.push(bodyMaterial, panelMaterial);
-    }
+    this.handles = [];
   }
 
   private move(direction: number, isDotJump = false): void {
-    if (this.transitioning || this.worlds.length < 2 || this.isLoading() || this.loadError) return;
+    if (this.worlds.length < 2 || this.isLoading() || this.loadError) return;
     if (!isDotJump) this.jumpTarget = undefined;
     this.nextIndex = nextCarouselIndex(this.activeIndex, direction, this.worlds.length);
     this.lockHint = false;
-    this.fromRotation = this.ring?.rotation.y ?? 0;
-    this.toRotation = this.rotationFor(this.nextIndex);
-    this.toRotation += Math.round((this.fromRotation - this.toRotation) / (Math.PI * 2)) * Math.PI * 2;
-    this.transitionStart = performance.now();
-    this.transitioning = true;
-    this.animating = true;
+    this.activeIndex = this.nextIndex;
     this.textFading = true;
     if (this.textTimer) window.clearTimeout(this.textTimer);
-    this.textTimer = window.setTimeout(() => { this.activeIndex = this.nextIndex; this.textFading = false; }, 180);
+    this.textTimer = window.setTimeout(() => { this.textFading = false; }, 100);
+    if (this.reducedMotion) {
+      this.applyImmediateSlots(this.activeIndex);
+      this.textFading = false;
+      return;
+    }
+    this.startSlotTween(this.activeIndex);
+  }
+
+  private cloneAppearanceMaterials(object: ThreeTypes.Object3D): ThreeTypes.Material[] {
+    const cloned: ThreeTypes.Material[] = [];
+    object.traverse((child) => {
+      const isRenderable = (child as ThreeTypes.Mesh).isMesh || (child as ThreeTypes.Points).isPoints;
+      const mesh = child as ThreeTypes.Mesh;
+      if (!isRenderable || !mesh.material) return;
+      if (!this.originalMaterials.has(child)) this.originalMaterials.set(child, mesh.material);
+      const clone = (material: ThreeTypes.Material): ThreeTypes.Material => {
+        const copy = material.clone();
+        const colorMaterial = copy as ThreeTypes.Material & { color?: ThreeTypes.Color };
+        if (colorMaterial.color) copy.userData['carouselBaseColor'] = colorMaterial.color.clone();
+        copy.userData['carouselBaseOpacity'] = copy.opacity;
+        const uniforms = (copy as ThreeTypes.ShaderMaterial).uniforms;
+        const opacityUniform = uniforms?.['opacity']?.value;
+        if (typeof opacityUniform === 'number') copy.userData['carouselBaseUniformOpacity'] = opacityUniform;
+        const uniformColor = uniforms?.['color']?.value as ThreeTypes.Color | undefined;
+        if (uniformColor?.isColor) copy.userData['carouselBaseUniformColor'] = uniformColor.clone();
+        cloned.push(copy);
+        return copy;
+      };
+      mesh.material = Array.isArray(mesh.material) ? mesh.material.map(clone) : clone(mesh.material);
+    });
+    return cloned;
+  }
+
+  private setWorldBrightness(index: number, brightness: number): void {
+    this.slotBrightness[index] = brightness;
+    this.handles[index]?.setBrightness?.(brightness);
+    for (const material of this.appearanceMaterials[index] ?? []) {
+      const colorMaterial = material as ThreeTypes.Material & { color?: ThreeTypes.Color };
+      const baseColor = material.userData['carouselBaseColor'] as ThreeTypes.Color | undefined;
+      if (colorMaterial.color && baseColor) colorMaterial.color.copy(baseColor).multiplyScalar(brightness);
+      const baseOpacity = material.userData['carouselBaseOpacity'] as number | undefined;
+      if (baseOpacity !== undefined && material.transparent) material.opacity = baseOpacity * brightness;
+      const uniforms = (material as ThreeTypes.ShaderMaterial).uniforms;
+      const baseUniformOpacity = material.userData['carouselBaseUniformOpacity'] as number | undefined;
+      if (uniforms?.['opacity'] && baseUniformOpacity !== undefined) uniforms['opacity'].value = baseUniformOpacity * brightness;
+      const baseUniformColor = material.userData['carouselBaseUniformColor'] as ThreeTypes.Color | undefined;
+      if (uniforms?.['color']?.value?.isColor && baseUniformColor) uniforms['color'].value.copy(baseUniformColor).multiplyScalar(brightness);
+    }
+  }
+
+  private startSlotTween(activeIndex: number): void {
+    this.slotTweens = this.slots.map((slot, index) => {
+      const target = worldSlotTarget(index, activeIndex, this.slots.length, this.slotLayout);
+      return {
+        fromPosition: slot.position.clone(),
+        toPosition: new this.THREE!.Vector3(target.position.x, target.position.y, target.position.z),
+        fromScale: slot.scale.x,
+        toScale: target.scale,
+        fromBrightness: this.slotBrightness[index] ?? (index === activeIndex ? 1 : 0.62),
+        toBrightness: target.brightness,
+      };
+    });
+    this.transitionFrom = performance.now();
+    this.transitioning = true;
+    this.animating = true;
     this.schedule();
   }
 
-  private updateSlotAppearance(): void {
+  private applyImmediateSlots(activeIndex: number): void {
     this.slots.forEach((slot, index) => {
-      slot.scale.setScalar(index === this.activeIndex ? 1.55 : 0.93);
-      const dimmer = this.dimmers[index];
-      if (dimmer) dimmer.material.opacity = index === this.activeIndex ? 0 : 0.44;
+      const target = worldSlotTarget(index, activeIndex, this.slots.length, this.slotLayout);
+      slot.position.set(target.position.x, target.position.y, target.position.z);
+      slot.scale.setScalar(target.scale);
+      this.setWorldBrightness(index, target.brightness);
     });
+    this.transitioning = false;
+    this.animating = false;
   }
-
-  private rotationFor(index: number): number { return -index * Math.PI * 2 / Math.max(this.worlds.length, 1); }
 
   private directionTo(target: number): number {
     const forward = (target - this.activeIndex + this.worlds.length) % this.worlds.length;
@@ -491,24 +542,21 @@ export class WorldCarousel implements OnInit {
     if (!this.renderer || !this.camera || !this.canvas) return;
     const bounds = this.canvas.nativeElement.getBoundingClientRect();
     if (!bounds.width || !bounds.height) return;
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     this.renderer.setSize(bounds.width, bounds.height, false);
     this.camera.aspect = bounds.width / bounds.height;
     this.camera.updateProjectionMatrix();
+    this.slotLayout = carouselLayout(this.camera, bounds.width, bounds.height, PLANET_RADIUS);
+    const drawingBuffer = this.renderer.getDrawingBufferSize(new this.THREE!.Vector2());
+    this.handles.forEach((world) => world.resize?.(drawingBuffer.x, drawingBuffer.y));
+    if (this.slots.length) {
+      if (this.animating) this.startSlotTween(this.activeIndex);
+      else this.applyImmediateSlots(this.activeIndex);
+    }
     this.schedule();
   }
 
-  private scheduleQualityCheck(): void {
-    if (!isPlatformBrowser(this.platformId) || !this.host || !this.THREE || this.reducedMotion) return;
-    if (this.qualityCheckTimer) window.clearTimeout(this.qualityCheckTimer);
-    this.qualityCheckTimer = window.setTimeout(() => {
-      if (!this.host) return;
-      const nextQuality = qualityForDevice(this.host.nativeElement.getBoundingClientRect().width, navigator.hardwareConcurrency || 4);
-      if (nextQuality !== this.quality) {
-        this.quality = nextQuality;
-        void this.loadGeneratedWorlds(nextQuality);
-      }
-    }, 300);
-  }
+  private readonly onOrientationChange = (): void => this.resize();
 
   private schedule(): void {
     if (!this.frame && this.renderer && this.visible && !this.hidden) this.frame = requestAnimationFrame(this.render);
@@ -520,17 +568,25 @@ export class WorldCarousel implements OnInit {
     const dt = Math.min((time - (this.lastTime || time)) / 1000, 0.05);
     this.lastTime = time;
     this.handles.forEach((world) => world.update(dt));
-    this.rotatingWorlds.forEach((world) => { world.rotation.y += dt * 0.05; });
-    this.satelliteOrbits.forEach((orbit, index) => { orbit.rotation.y += dt * (0.18 + index * 0.025); });
-    if (this.animating && this.ring) {
-      const t = Math.min((time - this.transitionStart) / this.animationDuration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      this.ring.rotation.y = this.fromRotation + (this.toRotation - this.fromRotation) * eased;
+    if (this.animating) {
+      const t = Math.min((time - this.transitionFrom) / this.transitionDuration, 1);
+      const eased = t * t * (3 - 2 * t);
+      this.slots.forEach((slot, index) => {
+        const tween = this.slotTweens[index];
+        if (!tween) return;
+        const wrapsBehind = Math.abs(tween.fromPosition.x - tween.toPosition.x) > 4.5;
+        const depthArc = wrapsBehind ? Math.sin(Math.PI * eased) : 0;
+        slot.position.lerpVectors(tween.fromPosition, tween.toPosition, eased);
+        slot.position.z -= depthArc * 1.35;
+        const scale = tween.fromScale + (tween.toScale - tween.fromScale) * eased - depthArc * 0.2;
+        slot.scale.setScalar(scale);
+        const brightness = tween.fromBrightness + (tween.toBrightness - tween.fromBrightness) * eased - depthArc * 0.28;
+        this.setWorldBrightness(index, Math.max(0.24, brightness));
+      });
       if (t >= 1) {
         this.animating = false;
         this.transitioning = false;
-        this.ring.rotation.y = this.toRotation;
-        this.updateSlotAppearance();
+        this.applyImmediateSlots(this.activeIndex);
         if (this.jumpTarget !== undefined) {
           if (this.activeIndex === this.jumpTarget) this.jumpTarget = undefined;
           else this.move(this.directionTo(this.jumpTarget), true);
@@ -602,12 +658,12 @@ export class WorldCarousel implements OnInit {
     this.finishLoadingTasks.clear();
     if (isPlatformBrowser(this.platformId)) {
       document.removeEventListener('visibilitychange', this.onVisibility);
+      window.removeEventListener('orientationchange', this.onOrientationChange);
       if (this.frame) cancelAnimationFrame(this.frame);
       if (this.lockTimer) clearTimeout(this.lockTimer);
       if (this.textTimer) clearTimeout(this.textTimer);
       if (this.shakeTimer) clearTimeout(this.shakeTimer);
       if (this.sceneFadeTimer) clearTimeout(this.sceneFadeTimer);
-      if (this.qualityCheckTimer) clearTimeout(this.qualityCheckTimer);
     }
     this.resizeObserver?.disconnect();
     this.intersectionObserver?.disconnect();
@@ -622,4 +678,43 @@ export class WorldCarousel implements OnInit {
 
 export function nextCarouselIndex(index: number, direction: number, count: number): number {
   return count > 0 ? (index + direction + count) % count : 0;
+}
+
+export interface WorldSlotTarget {
+  position: { x: number; y: number; z: number };
+  scale: number;
+  brightness: number;
+}
+
+/** Stable carousel slots; the scene interpolates between these positions instead of rotating a ring. */
+export function carouselLayout(camera: Pick<ThreeTypes.PerspectiveCamera, 'fov' | 'position'>, width: number, height: number, worldRadius = PLANET_RADIUS): CarouselLayout {
+  const aspect = Math.max(width / Math.max(height, 1), 0.1);
+  const visibleHeight = 2 * camera.position.z * Math.tan(camera.fov * Math.PI / 360);
+  const centerScale = visibleHeight * 0.25 / worldRadius;
+  return {
+    centerScale,
+    sideScale: centerScale * 0.62,
+    sideSpacing: Math.min(3.25, visibleHeight * aspect * 0.31),
+    sideDepth: visibleHeight * 0.08,
+  };
+}
+
+export function planetNormalizationScale(sourceRadius: number, targetRadius = PLANET_RADIUS): number {
+  return sourceRadius > 0 && Number.isFinite(sourceRadius) ? targetRadius / sourceRadius : 1;
+}
+
+export function worldSlotTarget(index: number, activeIndex: number, count: number, layout: CarouselLayout = { centerScale: 1.43, sideScale: 0.89, sideSpacing: 3.25, sideDepth: 0.6 }): WorldSlotTarget {
+  if (count <= 0) return { position: { x: 0, y: 0, z: 0 }, scale: 1, brightness: 1 };
+  let relative = ((index - activeIndex) % count + count) % count;
+  if (relative > count / 2) relative -= count;
+  const distance = Math.abs(relative);
+  // On narrow screens the hero galaxy can visually crowd its neighbors; give
+  // the side worlds a little more breathing room without changing the tween.
+  const narrowGalaxyFocus = activeIndex === 2 && layout.sideSpacing < 3;
+  const sideScale = layout.sideScale * (narrowGalaxyFocus ? 0.72 : 1);
+  return {
+    position: { x: relative * layout.sideSpacing, y: 0, z: distance ? -layout.sideDepth : 0 },
+    scale: distance === 0 ? layout.centerScale : sideScale,
+    brightness: distance === 0 ? 1 : 0.58,
+  };
 }

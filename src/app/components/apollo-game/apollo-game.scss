@@ -26,7 +26,12 @@ h3 { color: #fff; font-size: 1.12rem; }
 .surface-list.cdk-drop-list-receiving { background: #ff995522; }
 .gear-card { display: flex; min-height: 4.5rem; align-items: center; gap: .7rem; padding: .75rem; border: 1px solid #385785; border-radius: .75rem; background: #122b50; color: #eff5ff; cursor: grab; touch-action: none; transition: border-color .2s ease, background .2s ease; }
 .gear-card:hover { border-color: #79bdff; }
+.gear-card.is-selected { border-color:#ffe16a; box-shadow:0 0 0 2px #ffe16a55; }
 .gear-card:active { cursor: grabbing; }
+.gear-select,.zone-action { min-height:44px; padding:.55rem .8rem; border:1px solid #76caff; border-radius:999px; background:#12365e; color:#f4faff; font:700 .82rem 'DM Sans',sans-serif; cursor:pointer; }
+.gear-select:focus-visible,.zone-action:focus-visible { outline:2px solid #fff; outline-offset:3px; }
+.zone-action { margin:.25rem; border-color:#ffbd70; background:#432c26; color:#ffe5c7; }
+.zone-action--bring { border-color:#83d9ff; background:#12365e; color:#e0f6ff; }
 .discarded-card { border-color: #805339; background: #352629; }
 .discarded-card:hover { border-color: #ffac72; }
 .gear-icon { display: grid; width: 2.2rem; height: 2.2rem; flex: 0 0 auto; place-items: center; border-radius: .55rem; background: #1c3b65; color: #ffdf3d; font-size: 1.15rem; }

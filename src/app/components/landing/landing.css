@@ -135,10 +135,12 @@ h1 span {
   color: #ffe986;
   transform: translateY(-2px);
 }
-.mission-link span {
+.mission-link .inline-external-icon {
+	width: .95rem;
+	height: .95rem;
   transition: transform 0.2s ease;
 }
-.mission-link:hover span {
+.mission-link:hover .inline-external-icon {
   transform: translate(2px, -2px);
 }
 :host-context(app-root.landing-intro-ready) .site-header,

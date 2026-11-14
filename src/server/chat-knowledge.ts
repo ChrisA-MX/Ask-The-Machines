@@ -1,7 +1,7 @@
 import { CHAT_MACHINE_IDS, CHAT_MACHINE_STORY_IDS, ChatMachineId, VERIFIED_MACHINE_FACTS } from '../shared/machine-facts';
 import { MACHINES } from '../app/storyline/machines.data';
 
-const projectNotes = `Ask the Machines is an educational NASA Space Apps project introducing school-age space enthusiasts to abandoned equipment and spacecraft across the solar system. The site has interactive stories, a planetary artifact map, and a simplified Apollo cargo activity. The website is an independent educational project and does not represent or speak for NASA.`;
+const projectNotes = `Ask the Machines is an educational project introducing school-age space enthusiasts to machines and hardware left behind during exploration of the Moon, Mars, and the outer solar system. Each world has four machine stories and one optional bonus mini-game. The site also has a planetary artifact map and a simplified Apollo cargo activity. The website is independent and does not represent or speak for NASA.`;
 
 const machinesByStoryId = new Map(MACHINES.map((machine) => [machine.id, machine]));
 const validMachineIds = new Set<string>(CHAT_MACHINE_IDS);

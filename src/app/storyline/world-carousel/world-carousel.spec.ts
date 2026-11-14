@@ -3,8 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import type { Group } from 'three';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { WORLDS, WorldId } from '../machines.data';
-import { nextCarouselIndex, WorldCarousel } from './world-carousel';
+import { carouselLayout, nextCarouselIndex, planetNormalizationScale, worldSlotTarget, WorldCarousel } from './world-carousel';
 import { ProceduralWorld, WORLD_MODULE_LOADER, WorldsService } from '../../worlds/worlds.service';
+import { MILKY_WAY_STYLE } from '../../worlds/milky-way';
 
 describe('world carousel', () => {
   afterEach(() => {
@@ -16,6 +17,44 @@ describe('world carousel', () => {
   it('wraps next and previous selection around the three worlds', () => {
     expect(nextCarouselIndex(2, 1, WORLDS.length)).toBe(0);
     expect(nextCarouselIndex(0, -1, WORLDS.length)).toBe(2);
+  });
+
+  it('places the active world in front and keeps adjacent worlds symmetric', () => {
+    const center = worldSlotTarget(1, 1, 3);
+    const left = worldSlotTarget(0, 1, 3);
+    const right = worldSlotTarget(2, 1, 3);
+    expect(center).toMatchObject({ position: { x: 0, z: 0 }, scale: 1.43, brightness: 1 });
+    expect(left.position.x).toBe(-right.position.x);
+    expect(left.position.z).toBe(right.position.z);
+    expect(left.scale).toBeLessThan(center.scale);
+  });
+
+  it('gives side worlds extra room on narrow screens when the galaxy is centered', () => {
+    const mobileLayout = { centerScale: 1.43, sideScale: 0.89, sideSpacing: 2.5, sideDepth: 0.6 };
+    expect(worldSlotTarget(1, 2, 3, mobileLayout).scale).toBeCloseTo(0.89 * 0.72);
+    expect(worldSlotTarget(0, 2, 3, mobileLayout).scale).toBeCloseTo(0.89 * 0.72);
+    expect(worldSlotTarget(0, 1, 3, mobileLayout).scale).toBe(0.89);
+  });
+
+  it('normalizes NASA model radii from source units into the carousel radius', () => {
+    expect(planetNormalizationScale(500, 1.3)).toBeCloseTo(0.0026);
+  });
+
+  it('keeps the Milky Way centered, tilted, and rotating at the intended rates', () => {
+    expect(MILKY_WAY_STYLE.centerSpinRadiansPerSecond).toBeCloseTo(0.10472, 4);
+    expect(MILKY_WAY_STYLE.sideSpinRadiansPerSecond).toBeCloseTo(0.05236, 4);
+    expect(MILKY_WAY_STYLE.tiltDegrees).toBe(55);
+    expect(MILKY_WAY_STYLE.scale).toBe(1.38);
+    expect(MILKY_WAY_STYLE.colorGain).toBe(1.65);
+  });
+
+  it('sizes the center slot consistently and adapts side spacing to canvas aspect', () => {
+    const camera = { fov: 38, position: { z: 10.8 } } as never;
+    const visibleHeight = 2 * 10.8 * Math.tan(38 * Math.PI / 360);
+    const canvases = [[1184, 544], [944, 430], [688, 544], [335, 312]];
+    const layouts = canvases.map(([width, height]) => carouselLayout(camera, width, height, 1.3));
+    for (const layout of layouts) expect(2 * 1.3 * layout.centerScale / visibleHeight).toBeCloseTo(0.5);
+    expect(layouts[3].sideSpacing).toBeLessThan(layouts[0].sideSpacing);
   });
 
   it('maps the page arrow keys to carousel navigation', () => {

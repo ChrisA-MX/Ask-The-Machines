@@ -1,0 +1,19 @@
+﻿<section class="voyager-game" aria-label="Voyager radio signal challenge">
+  <div class="radio-display" [class.is-tuned]="strength() >= 80">
+    <p class="radio-label">DEEP SPACE RADIO</p>
+    <div class="signal-bars" role="progressbar" aria-label="Signal strength" [attr.aria-valuenow]="strength()" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuetext]="strength() + ' percent signal strength'">
+      @for (bar of [1,2,3,4,5,6,7,8,9,10,11,12]; track bar) { <i [class.is-lit]="strength() >= bar * 8" [style.height.%]="30 + ((bar * 29) % 60)"></i> }
+    </div>
+    <strong>{{ strength() }}% <span>signal strength</span></strong>
+    <div class="dial" aria-hidden="true"><span class="dial-needle" [style.transform]="'rotate(' + dialAngle() + 'deg)'"></span><i>STATIC</i><b>VOYAGER</b></div>
+  </div>
+  <label class="dial-control">Tune the radio <span>{{ dialAngle() }}Â°</span>
+    <input type="range" min="0" max="359" step="1" [value]="dialAngle()" (input)="setDial($event)" [disabled]="state() !== 'running'" [attr.aria-valuetext]="dialAngle() + ' degrees; use the arrow keys or slider to tune'" />
+  </label>
+  <div class="signal-static" aria-hidden="true"></div>
+  <p class="timer-readout" aria-live="off">{{ secondsLeft() }} seconds to find the signal</p>
+  <p class="game-feedback" role="status" aria-live="polite">{{ announcement() || 'Listen with your eyes: the meter rises as the dial approaches the signal.' }}</p>
+  @if (state() === 'ready' || state() === 'retry') { <button type="button" class="game-action" (click)="start()">{{ state() === 'retry' ? 'Search again' : 'Start the search' }}</button> }
+  @if (state() === 'running') { <button type="button" class="game-action" [disabled]="!canLock()" (click)="lockOn()">Lock on</button> }
+</section>
+

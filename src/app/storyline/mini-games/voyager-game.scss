@@ -1,0 +1,28 @@
+﻿:host { display:block; }
+.voyager-game { display:grid; gap:.85rem; color:#edf5ff; }
+.radio-display { position:relative; display:flex; min-height:14rem; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; gap:.45rem; border:1px solid #465a86; border-radius:1rem; background:radial-gradient(ellipse at center,#1d2850,#0a1227 72%); box-shadow:inset 0 0 2.5rem #7460dc18; transition:box-shadow .2s ease; }
+.radio-display::before { position:absolute; inset:-50%; background:repeating-linear-gradient(0deg,transparent 0 5px,#a7c1ff08 6px 7px); content:''; pointer-events:none; }
+.radio-display.is-tuned { box-shadow:inset 0 0 3rem #a37cff44,0 0 1.2rem #8e75ff33; }
+.radio-label { z-index:1; margin:0; color:#a8b8e6; font-size:.68rem; font-weight:800; letter-spacing:.2em; }
+.signal-bars { z-index:1; display:flex; height:2.4rem; align-items:end; gap:3px; }
+.signal-bars i { width:.42rem; min-height:8px; border-radius:2px 2px 0 0; background:#283653; transition:background .1s ease; }
+.signal-bars i.is-lit { background:linear-gradient(#f3deff,#9a87ff); box-shadow:0 0 .6rem #9f8cff99; }
+.radio-display strong { z-index:1; color:#fff; font:700 1rem 'Space Grotesk',sans-serif; }
+.radio-display strong span { color:#b4c1e0; font:500 .75rem 'DM Sans',sans-serif; }
+.dial { position:relative; z-index:1; display:grid; width:5.5rem; aspect-ratio:1; place-items:center; border:4px solid #626f9b; border-radius:50%; background:radial-gradient(circle,#263456,#121b37 68%); color:#c7d0ec; box-shadow:0 0 0 5px #171f3a,0 0 .8rem #9686ff44; }
+.dial::before { position:absolute; inset:8px; border:1px dashed #9a94be88; border-radius:50%; content:''; }
+.dial-needle { position:absolute; top:4px; left:calc(50% - 2px); width:4px; height:2.2rem; border-radius:999px; background:linear-gradient(#fff1a8,#ff9d6b); transform-origin:50% 2.7rem; transition:transform .1s linear; }
+.dial i,.dial b { position:absolute; font-size:.43rem; font-style:normal; letter-spacing:.08em; }
+.dial i { top:1rem; }.dial b { bottom:1rem; color:#edc6ff; }
+.dial-control { display:grid; grid-template-columns:1fr auto; gap:.55rem .8rem; color:#fff; font-weight:700; }
+.dial-control span { color:#c0b4ff; font-variant-numeric:tabular-nums; }
+.dial-control input { grid-column:1/-1; width:100%; accent-color:#ad94ff; }
+input[type=range]:focus-visible { outline:2px solid #fff; outline-offset:4px; }
+.signal-static { width:min(22rem,90%); height:1rem; margin:0 auto; background:repeating-linear-gradient(90deg,#8588aa 0 3px,transparent 3px 9px,#515b80 9px 12px,transparent 12px 18px); opacity:.6; mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent); }
+.timer-readout { margin:0; color:#b7c8e4; text-align:center; }
+.game-feedback { min-height:1.4em; margin:0; color:#d8e7ff; text-align:center; }
+.game-action { min-height:44px; justify-self:center; padding:.65rem 1.2rem; border:1px solid #e3c5ff; border-radius:999px; background:#c2a1ff; color:#15162a; font-weight:800; cursor:pointer; }
+.game-action:disabled { opacity:.45; cursor:not-allowed; }
+.game-action:focus-visible { outline:2px solid #fff; outline-offset:3px; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+
