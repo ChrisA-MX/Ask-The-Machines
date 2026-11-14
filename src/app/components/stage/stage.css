@@ -202,7 +202,7 @@
 @media (max-width: 700px) {
   .earth {
     --earth-rest-transform: translateX(-50%);
-    --earth-size: min(26rem, 88vw);
+    --earth-size: min(34rem, 110vw);
     top: calc(100% + 13vh - var(--earth-size));
     left: 50%;
   }
