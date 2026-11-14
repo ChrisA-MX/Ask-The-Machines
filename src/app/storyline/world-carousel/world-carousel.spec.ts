@@ -31,8 +31,8 @@ describe('world carousel', () => {
     fixture.componentRef.setInput('unlocked', [true, true, true]);
     fixture.componentRef.setInput('progress', [0, 0, 0]);
     fixture.detectChanges();
-    const instance = fixture.componentInstance as unknown as { isLoading: boolean; loadError: string; activeIndex: number; transitioning: boolean };
-    instance.isLoading = false;
+    const instance = fixture.componentInstance as unknown as { isLoading: { set(value: boolean): void }; loadError: string; activeIndex: number; transitioning: boolean };
+    instance.isLoading.set(false);
     instance.loadError = '';
 
     vi.useFakeTimers();
@@ -69,7 +69,7 @@ describe('world carousel', () => {
     fixture.destroy();
   });
 
-  it('creates three worlds once through WorldsService and disposes them at service teardown', async () => {
+  it('creates only the procedural outer world and disposes it at service teardown', async () => {
     const disposals: ReturnType<typeof vi.fn>[] = [];
     const createWorld = vi.fn((_three: unknown, id: WorldId): ProceduralWorld => {
       const dispose = vi.fn();
@@ -98,11 +98,11 @@ describe('world carousel', () => {
     const firstLoad = await service.getWorlds(three, 'low');
     const secondLoad = await service.getWorlds(three, 'low');
     expect(firstLoad).toBe(secondLoad);
-    expect(firstLoad.map((world) => world.id)).toEqual(['moon', 'mars', 'outer']);
-    expect(createWorld).toHaveBeenCalledTimes(3);
+    expect(firstLoad.map((world) => world.id)).toEqual(['outer']);
+    expect(createWorld).toHaveBeenCalledTimes(1);
     TestBed.resetTestingModule();
     await Promise.resolve();
-    expect(disposals).toHaveLength(3);
+    expect(disposals).toHaveLength(1);
     expect(disposals.every((dispose) => dispose.mock.calls.length === 1)).toBe(true);
   });
 

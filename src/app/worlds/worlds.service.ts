@@ -31,8 +31,8 @@ export const WORLD_MODULE_LOADER = new InjectionToken<() => Promise<WorldModule>
 );
 
 /**
- * Owns the generated worlds for the app lifetime. Route changes can dispose
- * their renderer while reusing these cached, already-generated world objects.
+ * Owns the generated outer system for the app lifetime. Route changes can
+ * dispose their renderer while reusing this cached world object.
  */
 @Injectable({ providedIn: 'root' })
 export class WorldsService implements OnDestroy {
@@ -81,7 +81,7 @@ export class WorldsService implements OnDestroy {
     const { createWorld } = await this.loadModule();
     if (this.destroyed) throw new Error('World generation was cancelled during application teardown.');
 
-    const ids: WorldId[] = ['moon', 'mars', 'outer'];
+    const ids: WorldId[] = ['outer'];
     const started = new Map<WorldId, number>();
     const worlds: ProceduralWorld[] = [];
     const timings: Partial<Record<WorldId, number>> = {};

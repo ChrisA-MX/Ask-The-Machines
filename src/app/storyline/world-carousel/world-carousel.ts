@@ -1,9 +1,21 @@
 import { isPlatformBrowser } from '@angular/common';
-import { afterNextRender, Component, DestroyRef, ElementRef, EventEmitter, HostListener, inject, Input, Output, PLATFORM_ID, ViewChild } from '@angular/core';
+import { afterNextRender, Component, DestroyRef, ElementRef, EventEmitter, HostListener, inject, Input, Output, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import type * as ThreeTypes from 'three';
-import { WorldStory } from '../machines.data';
+import { WorldId, WorldStory } from '../machines.data';
 import { ProceduralWorld, qualityForDevice, WorldQuality, WorldsService } from '../../worlds/worlds.service';
 import { LoadingService } from '../../services/loading.service';
+
+// NASA Solar System Exploration models: gltf_embed/2366 (Moon) and /2372 (Mars).
+const NASA_WORLD_MODELS = {
+  moon: '/assets/models/Moon_1_3474.glb',
+  mars: '/assets/models/Mars_1_6792.glb',
+} as const;
+
+interface CarouselWorld {
+  id: WorldId;
+  object: ThreeTypes.Object3D;
+  radius: number;
+}
 
 @Component({
   selector: 'app-world-carousel',
@@ -26,7 +38,7 @@ export class WorldCarousel {
   protected lockShaking = false;
   protected sceneFading = false;
   protected webglAvailable = true;
-  protected isLoading = true;
+  protected readonly isLoading = signal(true);
   protected loadError = '';
   protected lockHint = false;
   protected markerVisible = false;
@@ -45,6 +57,9 @@ export class WorldCarousel {
   private camera?: ThreeTypes.PerspectiveCamera;
   private ring?: ThreeTypes.Group;
   private handles: ProceduralWorld[] = [];
+  private carouselObjects: ThreeTypes.Object3D[] = [];
+  private rotatingWorlds: ThreeTypes.Object3D[] = [];
+  private nasaModels?: Promise<Partial<Record<WorldId, ThreeTypes.Object3D>>>;
   private slots: ThreeTypes.Group[] = [];
   private dimmers: ThreeTypes.Mesh<ThreeTypes.SphereGeometry, ThreeTypes.MeshBasicMaterial>[] = [];
   private markerSurface?: ThreeTypes.Mesh;
@@ -98,7 +113,7 @@ export class WorldCarousel {
   protected next(): void { this.move(1); }
 
   protected jump(index: number): void {
-    if (index === this.activeIndex || this.transitioning || this.isLoading || this.loadError) return;
+    if (index === this.activeIndex || this.transitioning || this.isLoading() || this.loadError) return;
     this.jumpTarget = index;
     if (this.reducedMotion) {
       this.nextIndex = index;
@@ -117,7 +132,7 @@ export class WorldCarousel {
   }
 
   protected activateCenter(): void {
-    if (this.isLoading || this.loadError) return;
+    if (this.isLoading() || this.loadError) return;
     if (!this.isUnlocked(this.activeIndex)) { this.showLockHint(); return; }
     this.enterWorld.emit(this.activeIndex);
   }
@@ -138,7 +153,7 @@ export class WorldCarousel {
     const target = event.target;
     if (target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
     event.preventDefault();
-    if (!this.isLoading && !this.loadError) this.move(event.key === 'ArrowRight' ? 1 : -1);
+    if (!this.isLoading() && !this.loadError) this.move(event.key === 'ArrowRight' ? 1 : -1);
   }
 
   @HostListener('document:click', ['$event'])
@@ -154,7 +169,7 @@ export class WorldCarousel {
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (this.reducedMotion) {
       this.webglAvailable = false;
-      this.isLoading = false;
+      this.isLoading.set(false);
       return;
     }
     document.addEventListener('visibilitychange', this.onVisibility);
@@ -196,7 +211,7 @@ export class WorldCarousel {
       this.resize();
     } catch {
       this.webglAvailable = false;
-      this.isLoading = false;
+      this.isLoading.set(false);
       return;
     }
 
@@ -208,36 +223,92 @@ export class WorldCarousel {
     const sequence = ++this.loadSequence;
     const finishLoading = this.loading.begin();
     this.finishLoadingTasks.add(finishLoading);
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.loadError = '';
     try {
-      const worlds = retry
-        ? await this.worldsService.retryWorlds(this.THREE, quality)
-        : await this.worldsService.getWorlds(this.THREE, quality);
+      const [worlds, nasaModels] = await Promise.all([
+        retry
+          ? this.worldsService.retryWorlds(this.THREE, quality)
+          : this.worldsService.getWorlds(this.THREE, quality),
+        this.loadNasaModels(),
+      ]);
       if (this.destroyed || sequence !== this.loadSequence) return;
       this.removeWorldsFromRing();
       this.handles = worlds;
-      this.mountWorlds(worlds);
-      this.isLoading = false;
+      this.mountWorlds(worlds, nasaModels);
+      this.isLoading.set(false);
       this.resize();
       this.schedule();
     } catch {
       if (this.destroyed || sequence !== this.loadSequence) return;
       this.loadError = 'The worlds could not be prepared. Please try again.';
-      this.isLoading = false;
+      this.isLoading.set(false);
     } finally {
       finishLoading();
       this.finishLoadingTasks.delete(finishLoading);
     }
   }
 
-  private mountWorlds(worlds: ProceduralWorld[]): void {
+  private loadNasaModels(): Promise<Partial<Record<WorldId, ThreeTypes.Object3D>>> {
+    if (!this.nasaModels) {
+      this.nasaModels = (async () => {
+        const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+        const loader = new GLTFLoader();
+        const [moon, mars] = await Promise.all([
+          loader.loadAsync(NASA_WORLD_MODELS.moon),
+          loader.loadAsync(NASA_WORLD_MODELS.mars),
+        ]);
+        return { moon: moon.scene, mars: mars.scene };
+      })().catch((error: unknown) => {
+        this.nasaModels = undefined;
+        throw error;
+      });
+    }
+    return this.nasaModels;
+  }
+
+  private mountWorlds(
+    worlds: ProceduralWorld[],
+    nasaModels: Partial<Record<WorldId, ThreeTypes.Object3D>>,
+  ): void {
     const THREE = this.THREE;
     const ring = this.ring;
     if (!THREE || !ring) return;
-    worlds.forEach((world, index) => {
+
+    const visuals = new Map<WorldId, CarouselWorld>();
+    for (const id of ['moon', 'mars'] as const) {
+      const model = nasaModels[id];
+      if (!model) throw new Error(`NASA's ${id} model was not loaded.`);
+      const bounds = new THREE.Box3().setFromObject(model);
+      const center = bounds.getCenter(new THREE.Vector3());
+      const radius = bounds.getBoundingSphere(new THREE.Sphere()).radius;
+      if (!Number.isFinite(radius) || radius <= 0) {
+        throw new Error(`NASA's ${id} model has invalid dimensions.`);
+      }
+      const scale = 1.82 / radius;
+      const normalizedModel = new THREE.Group();
+      normalizedModel.add(model);
+      normalizedModel.scale.setScalar(scale);
+      normalizedModel.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
+      visuals.set(id, { id, object: normalizedModel, radius: 1.82 });
+    }
+    for (const world of worlds) {
+      visuals.set(world.id, { id: world.id, object: world.object, radius: world.radius });
+    }
+
+    const orderedWorlds = this.worlds.map((story) => {
+      const visual = visuals.get(story.id);
+      if (!visual) throw new Error(`The ${story.id} world model is unavailable.`);
+      return visual;
+    });
+
+    this.carouselObjects = orderedWorlds.map((world) => world.object);
+    this.rotatingWorlds = orderedWorlds
+      .filter((world) => world.id !== 'outer')
+      .map((world) => world.object);
+    orderedWorlds.forEach((world, index) => {
       const slot = new THREE.Group();
-      const angle = index * Math.PI * 2 / worlds.length;
+      const angle = index * Math.PI * 2 / orderedWorlds.length;
       slot.position.set(Math.sin(angle) * 3.85, index === 0 ? 0 : 0.28, Math.cos(angle) * 3.85);
       world.object.userData['carouselIndex'] = index;
       if (world.id === 'outer') {
@@ -266,17 +337,17 @@ export class WorldCarousel {
       this.dimmers.push(dimmer);
     });
     ring.rotation.y = this.rotationFor(this.activeIndex);
-    this.mountApolloMarker(worlds.find((world) => world.id === 'moon'));
+    this.mountApolloMarker(visuals.get('moon'));
     this.updateSlotAppearance();
   }
 
-  private mountApolloMarker(moon?: ProceduralWorld): void {
+  private mountApolloMarker(moon?: CarouselWorld): void {
     const THREE = this.THREE;
     if (!THREE || !moon) return;
     let surface: ThreeTypes.Mesh | undefined;
     moon.object.traverse((object) => {
       const candidate = object as ThreeTypes.Mesh;
-      if (!surface && candidate.isMesh && candidate.geometry?.type === 'SphereGeometry') surface = candidate;
+      if (!surface && candidate.isMesh) surface = candidate;
     });
     if (!surface) return;
 
@@ -286,10 +357,17 @@ export class WorldCarousel {
     this.markerGlowGeometry = new THREE.SphereGeometry(0.045, 16, 12);
     this.markerGlowMaterial = new THREE.MeshBasicMaterial({ color: 0xffc44f, transparent: true, opacity: 0.38, depthWrite: false });
     this.markerDot = new THREE.Mesh(this.markerGeometry, this.markerMaterial);
-    this.markerDot.position.copy(moon.latLonToVector3(0.67408, 23.47297, 0.035));
+    const phi = THREE.MathUtils.degToRad(90 - 0.67408);
+    const theta = THREE.MathUtils.degToRad(23.47297 + 90);
+    const markerRadius = moon.radius + 0.035;
+    this.markerDot.position.set(
+      -markerRadius * Math.sin(phi) * Math.cos(theta),
+      markerRadius * Math.cos(phi),
+      markerRadius * Math.sin(phi) * Math.sin(theta),
+    );
     const glow = new THREE.Mesh(this.markerGlowGeometry, this.markerGlowMaterial);
     this.markerDot.add(glow);
-    surface.add(this.markerDot);
+    moon.object.add(this.markerDot);
   }
 
   private updateMarkerProjection(): void {
@@ -342,6 +420,8 @@ export class WorldCarousel {
     this.auxiliaryGeometries = [];
     this.auxiliaryMaterials = [];
     this.satelliteOrbits = [];
+    this.carouselObjects = [];
+    this.rotatingWorlds = [];
   }
 
   private addOuterSatellites(THREE: typeof import('three'), slot: ThreeTypes.Group): void {
@@ -370,7 +450,7 @@ export class WorldCarousel {
   }
 
   private move(direction: number, isDotJump = false): void {
-    if (this.transitioning || this.worlds.length < 2 || this.isLoading || this.loadError) return;
+    if (this.transitioning || this.worlds.length < 2 || this.isLoading() || this.loadError) return;
     if (!isDotJump) this.jumpTarget = undefined;
     this.nextIndex = nextCarouselIndex(this.activeIndex, direction, this.worlds.length);
     this.lockHint = false;
@@ -435,6 +515,7 @@ export class WorldCarousel {
     const dt = Math.min((time - (this.lastTime || time)) / 1000, 0.05);
     this.lastTime = time;
     this.handles.forEach((world) => world.update(dt));
+    this.rotatingWorlds.forEach((world) => { world.rotation.y += dt * 0.05; });
     this.satelliteOrbits.forEach((orbit, index) => { orbit.rotation.y += dt * (0.18 + index * 0.025); });
     if (this.animating && this.ring) {
       const t = Math.min((time - this.transitionStart) / this.animationDuration, 1);
@@ -465,11 +546,11 @@ export class WorldCarousel {
 
   protected pointerMove(event: PointerEvent): void {
     this.pointerX = (event.clientX / Math.max(window.innerWidth, 1) - 0.5) * 2;
-    if (!this.raycaster || !this.pointer || !this.camera || !this.canvas || !this.handles.length) return;
+    if (!this.raycaster || !this.pointer || !this.camera || !this.canvas || !this.carouselObjects.length) return;
     const bounds = this.canvas.nativeElement.getBoundingClientRect();
     this.pointer.set(((event.clientX - bounds.left) / bounds.width) * 2 - 1, -((event.clientY - bounds.top) / bounds.height) * 2 + 1);
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    const hit = this.raycaster.intersectObjects(this.handles.map((world) => world.object), true)[0];
+    const hit = this.raycaster.intersectObjects(this.carouselObjects, true)[0];
     let root: ThreeTypes.Object3D | undefined = hit?.object;
     while (root && root.userData['carouselIndex'] === undefined) root = root.parent ?? undefined;
     this.centerHovered = root?.userData['carouselIndex'] === this.activeIndex;
@@ -482,11 +563,11 @@ export class WorldCarousel {
     const dy = event.clientY - this.dragStart.y;
     this.dragStart = undefined;
     if (Math.abs(dx) > 52 && Math.abs(dx) > Math.abs(dy)) { this.move(dx < 0 ? 1 : -1); return; }
-    if (!this.raycaster || !this.pointer || !this.camera || !this.canvas || !this.handles.length) return;
+    if (!this.raycaster || !this.pointer || !this.camera || !this.canvas || !this.carouselObjects.length) return;
     const bounds = this.canvas.nativeElement.getBoundingClientRect();
     this.pointer.set(((event.clientX - bounds.left) / bounds.width) * 2 - 1, -((event.clientY - bounds.top) / bounds.height) * 2 + 1);
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    const hit = this.raycaster.intersectObjects(this.handles.map((world) => world.object), true)[0];
+    const hit = this.raycaster.intersectObjects(this.carouselObjects, true)[0];
     let root: ThreeTypes.Object3D | undefined = hit?.object;
     while (root && root.userData['carouselIndex'] === undefined) root = root.parent ?? undefined;
     if (root?.userData['carouselIndex'] === this.activeIndex) this.activateCenter();

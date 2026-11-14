@@ -9,9 +9,9 @@
 		}
 	</div>
 	<div class="scene" [class.no-webgl]="!webglAvailable" [class.is-hovered]="centerHovered" [class.is-shaking]="lockShaking" [class.is-crossfading]="sceneFading">
-		<button type="button" class="arrow previous" aria-label="Previous world" [disabled]="isLoading || !!loadError" (click)="previous()"><span aria-hidden="true">‹</span></button>
+		<button type="button" class="arrow previous" aria-label="Previous world" [disabled]="isLoading() || !!loadError" (click)="previous()"><span aria-hidden="true">‹</span></button>
 		<canvas #canvas role="img" [attr.aria-label]="activeWorld()?.name + ' shown in a 3D world carousel. Activate to explore.'" tabindex="0" (pointerdown)="pointerDown($event)" (pointermove)="pointerMove($event)" (pointerup)="pointerUp($event)" (pointercancel)="cancelPointer()" (keydown.enter)="activateCenter()" (keydown.space)="$event.preventDefault(); activateCenter()" (click)="webglAvailable ? null : activateCenter()"></canvas>
-		@if (isLoading) {
+		@if (isLoading()) {
 			<div class="world-loading" role="status" aria-live="polite"><span class="loading-orbit" aria-hidden="true"></span><span>Preparing the worlds...</span></div>
 		}
 		@if (loadError) {
@@ -26,7 +26,7 @@
 		}
 		<button type="button" class="apollo-marker" [hidden]="!markerVisible" [style.left.px]="markerX" [style.top.px]="markerY" aria-label="Apollo 11 landing site on the Moon" [attr.aria-describedby]="markerTooltip ? 'apollo-marker-tip' : null" [attr.aria-expanded]="markerTooltip" (pointerenter)="showMarkerTooltip()" (pointerleave)="hideMarkerTooltip()" (focus)="focusMarker()" (blur)="blurMarker()" (click)="showMarkerTooltip()"><span aria-hidden="true"></span></button>
 		@if (markerTooltip && markerVisible) { <div id="apollo-marker-tip" class="apollo-tooltip" role="tooltip">Apollo 11 touched down at Tranquility Base.</div> }
-		<button type="button" class="arrow next" aria-label="Next world" [disabled]="isLoading || !!loadError" (click)="next()"><span aria-hidden="true">›</span></button>
+		<button type="button" class="arrow next" aria-label="Next world" [disabled]="isLoading() || !!loadError" (click)="next()"><span aria-hidden="true">›</span></button>
 	</div>
 	<div class="carousel-footer">
 		<div class="world-dots" role="group" aria-label="Jump to a world">
@@ -34,6 +34,6 @@
 				<button type="button" class="dot" [class.is-active]="activeIndex === i" [attr.aria-label]="'Show ' + world.name" [attr.aria-current]="activeIndex === i ? 'true' : null" (click)="jump(i)"></button>
 			}
 		</div>
-		<button type="button" class="explore-button" [class.is-locked]="!isUnlocked(activeIndex)" [disabled]="isLoading || !!loadError" (click)="activateCenter()">{{ isUnlocked(activeIndex) ? 'Explore this world' : 'World locked' }} <span aria-hidden="true">→</span></button>
+		<button type="button" class="explore-button" [class.is-locked]="!isUnlocked(activeIndex)" [disabled]="isLoading() || !!loadError" (click)="activateCenter()">{{ isUnlocked(activeIndex) ? 'Explore this world' : 'World locked' }} <span aria-hidden="true">→</span></button>
 	</div>
 </section>
