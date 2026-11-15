@@ -148,6 +148,8 @@ h1 span {
   cursor: pointer;
   backdrop-filter: blur(12px);
   transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  animation: title-arrival 0.7s ease-out 2.15s both;
+  animation-play-state: paused;
 }
 .apollo-link:hover,
 .apollo-link:focus-visible {
@@ -159,11 +161,15 @@ h1 span {
 .landing-tracker {
   margin-top: clamp(.8rem, 1.8vh, 1.3rem);
   pointer-events: auto;
+  animation: title-arrival 0.7s ease-out 2.3s both;
+  animation-play-state: paused;
 }
 .audience-note {
   margin: clamp(.7rem, 1.4vh, 1.15rem) 0 0;
   color: #9fb6d8;
   font-size: 0.86rem;
+  animation: title-arrival 0.7s ease-out 2.45s both;
+  animation-play-state: paused;
 }
 .mission-link:hover,
 .mission-link:focus-visible {
@@ -185,7 +191,10 @@ h1 span {
 :host-context(app-root.landing-intro-ready) h1,
 :host-context(app-root.landing-intro-ready) .intro,
 :host-context(app-root.landing-intro-ready) .journey-button,
-:host-context(app-root.landing-intro-ready) .mission-link {
+:host-context(app-root.landing-intro-ready) .mission-link,
+:host-context(app-root.landing-intro-ready) .apollo-link,
+:host-context(app-root.landing-intro-ready) .landing-tracker,
+:host-context(app-root.landing-intro-ready) .audience-note {
   animation-play-state: running;
 }
 @keyframes title-arrival {
@@ -290,7 +299,10 @@ h1 span {
   h1,
   .intro,
   .journey-button,
-  .mission-link {
+  .mission-link,
+  .apollo-link,
+  .landing-tracker,
+  .audience-note {
     animation: none;
   }
 }

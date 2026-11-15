@@ -116,12 +116,13 @@ describe('world carousel', () => {
     fixture.componentRef.setInput('worlds', WORLDS);
     fixture.componentRef.setInput('unlocked', [true, false, false]);
     fixture.componentRef.setInput('progress', [0, 0, 0]);
+    fixture.componentRef.setInput('initialIndex', 1);
     fixture.detectChanges();
-    (fixture.componentInstance as unknown as { activeIndex: number }).activeIndex = 1;
-    fixture.detectChanges();
+    (fixture.componentInstance as unknown as { isLoading: { set(value: boolean): void } }).isLoading.set(false);
     const enterWorld = vi.fn();
     fixture.componentInstance.enterWorld.subscribe(enterWorld);
     const button = fixture.nativeElement.querySelector('.explore-button') as HTMLButtonElement;
+    expect(button.textContent).toContain('World locked');
     button.click();
     expect(enterWorld).not.toHaveBeenCalled();
     fixture.destroy();
