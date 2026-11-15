@@ -16,7 +16,7 @@ export class OpportunityGame {
   protected readonly stormActive = signal(false);
   protected readonly state = signal<'ready' | 'running' | 'retry' | 'won'>('ready');
   protected readonly announcement = signal('');
-  protected readonly facts = MACHINES.filter((machine) => machine.id === 'opportunity-mer-b' || machine.id === 'insight').map((machine) => machine.fact);
+  protected readonly facts = MACHINES.filter((machine) => machine.id === 'opportunity-mer-b' || machine.id === 'insight').flatMap((machine) => machine.facts.map((fact) => fact.text));
   private readonly destroyRef = inject(DestroyRef);
   private interval?: number;
   private reducedMotion = false;

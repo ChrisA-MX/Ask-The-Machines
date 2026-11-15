@@ -1,10 +1,12 @@
 import { afterEveryRender, afterNextRender, Component, computed, DestroyRef, ElementRef, HostBinding, HostListener, inject, Injector, PLATFORM_ID, ViewChild, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AnimatedSprite, ApolloAnimation } from '../animated-sprite/animated-sprite';
 import { ChatAvailabilityService } from '../../services/chat-availability.service';
-import { ChatService } from '../../services/chat.service';
+import { ChatHistoryMessage, ChatService } from '../../services/chat.service';
 import { PlayerProfileService } from '../../services/player-profile.service';
+import { MACHINES, MachineStory } from '../../storyline/machines.data';
 
 interface ChatMessage {
   role: 'assistant' | 'user';
@@ -27,6 +29,7 @@ export class ChatWidget {
 
   private readonly platformId = inject(PLATFORM_ID);
   private readonly chat = inject(ChatService);
+  private readonly router = inject(Router);
   private readonly availability = inject(ChatAvailabilityService);
   private readonly profile = inject(PlayerProfileService);
   private readonly destroyRef = inject(DestroyRef);
@@ -44,11 +47,11 @@ export class ChatWidget {
   );
   protected readonly messages = signal<ChatMessage[]>([]);
   protected draft = '';
-  protected readonly suggestions = [
+  protected readonly suggestions = signal([
     'What is this project about?',
     'Who are the machines?',
     'What will I learn?',
-  ];
+  ]);
 
   private isHovered = false;
   private isFocused = false;
@@ -102,6 +105,7 @@ export class ChatWidget {
 
   protected openChat(): void {
     if (!this.availability.isAvailable() || this.isOpen()) return;
+    this.updateStorySuggestions();
     this.isOpen.set(true);
     this.bubbleVisible.set(false);
     this.returnToIdleAfterWave = false;
@@ -163,16 +167,41 @@ export class ChatWidget {
     const question = text.trim();
     if (!question || this.isThinking()) return;
 
+    const previousMessages = this.messages().slice(1);
+    const history: ChatHistoryMessage[] = previousMessages.slice(-6).map(({ role, text: content }) => ({ role, content }));
+    const story = this.currentStory();
+    this.updateStorySuggestions(story);
     this.messages.update((items) => [...items, { role: 'user', text: question }]);
     this.draft = '';
     this.isThinking.set(true);
     try {
-      const result = await this.chat.ask(question);
+      const result = await this.chat.ask(question, history, story?.routeId);
       this.messages.update((items) => [...items, { role: 'assistant', text: result.reply }]);
+      if (story && result.suggestions?.length) this.suggestions.set(result.suggestions.slice(0, 3));
       this.playAnimation(result.succeeded ? 'happy' : 'sad', 2000);
     } finally {
       this.isThinking.set(false);
     }
+  }
+
+  private currentStory(): MachineStory | undefined {
+    const match = this.router.url.match(/^\/storylines\/[^/?#]+\/([^/?#]+)/);
+    if (!match) return undefined;
+    let routeId = match[1];
+    try { routeId = decodeURIComponent(routeId); } catch { /* Keep the encoded route segment. */ }
+    return MACHINES.find((machine) => machine.routeId === routeId);
+  }
+
+  private updateStorySuggestions(story = this.currentStory()): void {
+    if (!story) {
+      this.suggestions.set(['What is this project about?', 'Who are the machines?', 'What will I learn?']);
+      return;
+    }
+    this.suggestions.set([
+      `What did ${story.name} find?`,
+      `Is ${story.name} still working?`,
+      `How did ${story.name} work?`,
+    ]);
   }
 
   @HostListener('document:keydown', ['$event'])

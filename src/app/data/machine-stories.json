@@ -1,0 +1,574 @@
+{
+  "schemaVersion": 1,
+  "audience": "ages 9-14",
+  "worlds": {
+    "moon": {
+      "name": "The Moon",
+      "intro": "A quiet world still holding the footprints of exploration.",
+      "gameCard": "Apollo 11’s crew left behind their backpacks, overshoes and even bags of trash to make room for moon rocks."
+    },
+    "mars": {
+      "name": "Mars",
+      "intro": "A cold red desert where robots worked far longer than anyone planned.",
+      "gameCard": "Dust ended both Opportunity’s and InSight’s missions. On Mars, sunlight is a robot’s lifeline."
+    },
+    "outer": {
+      "name": "The Outer Solar System",
+      "intro": "Four travelers beyond the planets, sailing toward the stars.",
+      "gameCard": "A radio signal from Voyager 1 takes about a day to reach Earth, so even a quick hello is a two-day wait."
+    }
+  },
+  "machines": [
+    {
+      "id": "surveyor-3",
+      "world": "moon",
+      "order": 1,
+      "name": "Surveyor 3",
+      "years": "1967",
+      "tagline": "The robot that tested the Moon’s ground before anyone trusted it.",
+      "status": "silent-surface",
+      "statusLabel": "Silent on the surface",
+      "whoIAm": "I’m Surveyor 3: no legs, no wheels, just a camera, a scoop arm and one very big question. Before astronauts risked a landing, NASA had to know whether the Moon’s ground would hold up a spacecraft or swallow it whole. I was sent to find out.",
+      "howIWorked": "I touched down in April 1967 inside a crater in the Ocean of Storms, and it was a bumpy arrival: I bounced before I settled on a slope. Then my camera started sending pictures home, thousands of them. My scoop arm dug little trenches and pressed on the soil, like a scientist poking a sandcastle to see how firm it is.",
+      "whatIFound": "Good news: the ground was firm enough to hold a spacecraft. My 6,000-plus photos and my trenches gave Apollo’s planners the proof they needed. Then came the twist. Two and a half years later, Apollo 12 landed about 180 meters (600 feet) from me, and astronauts Pete Conrad and Alan Bean walked over for a visit. They snipped off my camera, my scoop and some tubing and carried them home. Scientists studied those pieces to learn how metal and wires age on the Moon.",
+      "whereIAmNow": "I’ve been silent since 1967, still sitting in my crater. But parts of me are back on Earth, which makes me the first, and so far the only, spacecraft that people have visited on another world.",
+      "sidebar": null,
+      "voiceNote": "First-person voice is creative. The facts come from NASA records.",
+      "facts": [
+        {
+          "text": "Surveyor 3 made a soft landing in Oceanus Procellarum (the Ocean of Storms) in April 1967.",
+          "source": "NASA Space Science Data Coordinated Archive (NSSDCA)",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It sent back more than 6,000 images and dug trenches with a soil scoop to test how strong the lunar ground was.",
+          "source": "NASA Space Science Data Coordinated Archive (NSSDCA)",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Apollo 12 landed about 180 meters (600 feet) away in November 1969, and the crew brought back its camera and other parts.",
+          "source": "NASA Apollo 12 mission pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It is the only spacecraft on another world that humans have visited so far.",
+          "source": "NASA Apollo 12 mission pages",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "surveyor-3"
+    },
+    {
+      "id": "apollo-11-eagle",
+      "world": "moon",
+      "order": 2,
+      "name": "Apollo 11 “Eagle” and the Laser Mirror",
+      "years": "1969",
+      "tagline": "The launch pad that stayed behind, and the mirror that still answers lasers.",
+      "status": "silent-surface",
+      "statusLabel": "Descent stage silent; mirror still used",
+      "whoIAm": "I’m the descent stage of Eagle, the bottom half of the lunar module that carried Neil Armstrong and Buzz Aldrin to the Moon. Think of me as a rocket-powered elevator on the way down, and a launch pad on the way up. My top half flew the astronauts home. I stayed.",
+      "howIWorked": "On July 20, 1969, my engine slowed Eagle’s fall and set us down at Tranquility Base. When the moonwalk was over, my top half fired its own engine, used my body as a launch platform and left me behind. Every kilogram counted, so the crew also left things they no longer needed, like backpacks, overshoes, cameras and bags of trash, to make room for moon rocks. They also left a plaque and a tiny disc carrying messages from leaders around the world.",
+      "whatIFound": "Near me, the astronauts set up a mirror panel called a retroreflector: 100 small glass prisms that bounce light straight back to where it came from. Within weeks, scientists on Earth were firing laser beams at it and timing how long the light took to return. That timing measures the distance to the Moon extremely precisely. What it revealed: the Moon is slowly drifting away from Earth, about 3.8 centimeters every year, roughly how fast your fingernails grow.",
+      "whereIAmNow": "I’m still at Tranquility Base, silent but not forgotten. The mirror is still there, and scientists still aim lasers at the Moon. In 2020, the United States passed a law to help protect the Apollo landing sites, so our footprints stay safe.",
+      "sidebar": {
+        "title": "Not the only mirror",
+        "text": "Apollo 14 and Apollo 15 left laser mirrors too, and scientists use them all."
+      },
+      "voiceNote": "First-person voice is creative. The facts come from NASA records.",
+      "facts": [
+        {
+          "text": "Apollo 11 landed at Tranquility Base on July 20, 1969.",
+          "source": "NASA Apollo 11 mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "The descent stage served as the launch platform for the ascent stage and remains on the Moon.",
+          "source": "NASA Apollo 11 mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "The Apollo 11 retroreflector has 100 corner-cube reflectors, and lasers from Earth still bounce off it.",
+          "source": "NASA Apollo 11 science pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Measurements from the retroreflectors show the Moon moving away from Earth by about 3.8 centimeters per year.",
+          "source": "NASA science pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Apollo 14 and Apollo 15 also left retroreflectors on the Moon.",
+          "source": "NASA Apollo science pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "The One Small Step to Protect Human Heritage in Space Act became U.S. law in December 2020.",
+          "source": "U.S. Congress",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "apollo-11-eagle"
+    },
+    {
+      "id": "apollo-lrv",
+      "world": "moon",
+      "order": 3,
+      "name": "Apollo Lunar Roving Vehicles",
+      "years": "1971–1972",
+      "tagline": "Three electric buggies, parked on the Moon.",
+      "status": "silent-surface",
+      "statusLabel": "Silent on the surface",
+      "whoIAm": "We’re the Moon buggies: three battery-powered rovers, one each for Apollo 15, 16 and 17. We folded up like lawn chairs to fit inside the lander, then unfolded on the Moon. Suddenly astronauts could go kilometers instead of just walking distance.",
+      "howIWorked": "We ran on batteries, with a motor in each wire-mesh wheel and no air in our tires, so nothing to pop. The Moon fights back, though: its dust is sharp, sticky and gets everywhere. On Apollo 17, commander Gene Cernan accidentally snapped one of my fenders. Without it, my wheel flung up a fountain of dust that coated everything. The crew fixed it with maps and duct tape. Yes, real duct tape.",
+      "whatIFound": "With us, the crews reached many kinds of terrain and brought back rocks from places they could never have walked to. Apollo 17’s crew drove about 35 kilometers in all. We also carried a TV camera that controllers on Earth could steer, so people at home could watch the astronauts’ rocket lift off. The biggest lesson we taught engineers: on the Moon, dust is a bigger problem than almost anything.",
+      "whereIAmNow": "All three of us are still parked where the crews left us: near Hadley Rille, in the Descartes Highlands and in the Taurus-Littrow valley. Our batteries are long dead, but our wheel tracks are still there.",
+      "sidebar": null,
+      "voiceNote": "First-person voice is creative. The facts come from NASA records.",
+      "facts": [
+        {
+          "text": "Lunar Roving Vehicles were used on Apollo 15 (1971), Apollo 16 and Apollo 17 (1972).",
+          "source": "NASA Apollo program pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "The rovers were battery powered and folded to fit inside the lunar module.",
+          "source": "NASA Apollo program pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Gene Cernan broke a rover fender on Apollo 17, and the crew repaired it with maps and duct tape.",
+          "source": "NASA Apollo 17 mission pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "The rover’s TV camera could be steered from Earth to watch the lunar module lift off.",
+          "source": "NASA Apollo program pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "All three rovers remain on the Moon.",
+          "source": "NASA Apollo program pages",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "apollo-lrv"
+    },
+    {
+      "id": "apollo-17-alsep",
+      "world": "moon",
+      "order": 4,
+      "name": "Apollo 17 Science Station (ALSEP)",
+      "years": "1972–1977",
+      "tagline": "The night-shift scientist that listened to the Moon.",
+      "status": "silent-surface",
+      "statusLabel": "Silent on the surface",
+      "whoIAm": "I’m ALSEP, the science station Apollo 17 left behind in the Taurus-Littrow valley: a cluster of instruments, a radio and a nuclear-powered battery. The astronauts set me up in a few hours, then flew home. My real job started when they left: to listen.",
+      "howIWorked": "The Moon’s nights last about two weeks and drop to around −170°C, so solar panels weren’t an option. I carried a small generator that made electricity from the heat of plutonium, about 70 watts, as much as a bright light bulb. That power ran my instruments through the long dark: one to feel the ground shake, one built to measure tiny changes in gravity, and one to sniff the Moon’s ultra-thin atmosphere.",
+      "whatIFound": "Along with the other Apollo stations, I helped show that the Moon isn’t a dead rock. It has quakes. Some are deep moonquakes that rise and fall with Earth’s pull, like tides in solid rock. Others are shallow shakes, and others are meteorites crashing in. By timing how the shaking traveled, scientists mapped the Moon’s inside: a crust, a mantle and a core.",
+      "whereIAmNow": "On September 30, 1977, NASA ended the Apollo station program and stopped listening. I’m still on the Moon, silent, but scientists still dig through the old data tapes. Decades later, they keep finding new things in what we heard.",
+      "sidebar": null,
+      "voiceNote": "First-person voice is creative. The facts come from NASA records.",
+      "facts": [
+        {
+          "text": "The Apollo 17 ALSEP was powered by a SNAP-27 radioisotope generator providing about 70 watts.",
+          "source": "NASA Apollo 17 science pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Apollo seismometers recorded moonquakes, including deep quakes linked to Earth’s tidal pull and impacts from meteorites.",
+          "source": "NASA Apollo science pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Seismic data from the Apollo network showed the Moon has a crust, mantle and core.",
+          "source": "NASA Apollo science pages",
+          "sourceUrl": ""
+        },
+        {
+          "text": "NASA ended Apollo surface station operations on September 30, 1977.",
+          "source": "NASA Apollo science pages",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "apollo-17-alsep"
+    },
+    {
+      "id": "sojourner",
+      "world": "mars",
+      "order": 1,
+      "name": "Sojourner (Mars Pathfinder)",
+      "years": "1997",
+      "tagline": "The first rover to roll on Mars: small, brave and curious.",
+      "status": "silent-surface",
+      "statusLabel": "Silent on the surface",
+      "whoIAm": "I’m Sojourner, a rover about the size of a microwave oven, with six wheels and a solar panel for a hat. I was the first rover ever to drive on Mars. My home base, the Pathfinder lander, was my radio, my camera tower and my best friend.",
+      "howIWorked": "Landing was wild. On July 4, 1997, Pathfinder dropped in wrapped in giant airbags, like a cocoon of bouncy balls, and bounced across the ground before it stopped. Then it opened up and I rolled down a ramp onto Mars. My signals traveled to Earth through the lander, and since radio takes minutes to cross space, my team couldn’t drive me live. I had to avoid hazards by myself.",
+      "whatIFound": "I pressed an instrument against rocks nicknamed Barnacle Bill and Yogi to read what they’re made of. They held more silica than scientists expected, a hint that Mars’s volcanic story was more complicated than they thought. My landing area was an ancient flood channel, scattered with rocks that water probably moved. NASA planned for me to work for one week. I kept going for nearly three months.",
+      "whereIAmNow": "On September 27, 1997, the lander’s last signal reached Earth, and then it was quiet. Without my lander, I couldn’t call home. I’m still parked in Ares Vallis next to Pathfinder. My team had told me to circle the lander if contact was ever lost, so maybe I did.",
+      "sidebar": {
+        "title": "Where does the name come from?",
+        "text": "Sojourner is named after Sojourner Truth, a 19th-century abolitionist and women’s rights activist who traveled the country speaking the truth."
+      },
+      "voiceNote": "The ending is imagined. NASA does not know what Sojourner did after contact was lost.",
+      "facts": [
+        {
+          "text": "Mars Pathfinder landed in Ares Vallis on July 4, 1997, using parachutes, rockets and airbags.",
+          "source": "NASA JPL Mars Pathfinder mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Sojourner carried an alpha proton X-ray spectrometer to measure the chemistry of rocks such as Barnacle Bill and Yogi.",
+          "source": "NASA JPL Mars Pathfinder mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Sojourner was designed to operate for about 7 Mars days and worked for far longer.",
+          "source": "NASA JPL Mars Pathfinder mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "The Pathfinder lander’s last transmission was on September 27, 1997.",
+          "source": "NASA JPL Mars Pathfinder mission page",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "sojourner"
+    },
+    {
+      "id": "opportunity",
+      "world": "mars",
+      "order": 2,
+      "name": "Opportunity",
+      "years": "2004–2018",
+      "tagline": "Built for 90 days. Lasted 14 years.",
+      "status": "silent-surface",
+      "statusLabel": "Silent on the surface",
+      "whoIAm": "I’m Opportunity, but my friends call me Oppy. I’m a golf-cart-sized rover with six wheels, a robotic arm and a mission to follow the water on Mars. NASA planned for me to last 90 Martian days. My twin sister Spirit landed three weeks before me, on the other side of the planet.",
+      "howIWorked": "I landed on Meridiani Planum in January 2004. My solar panels were my lifeline, and every bit of dust that settled on them stole some of my power. But every so often, a gust of wind swept them clean, a gift that kept me going year after year. I scratched into rocks, took photos of everything and drove, and drove, and drove.",
+      "whatIFound": "My first big find was tiny round balls of an iron mineral called hematite, nicknamed blueberries, in the rocks and soil. They form in water, which meant Mars once had liquid water soaking its ground. Over 14 years I drove more than 45 kilometers, longer than a marathon, to explore craters like Victoria and Endeavour.",
+      "whereIAmNow": "In June 2018, a dust storm swallowed much of Mars and blocked the Sun. My last message reached Earth on June 10. If I could have said anything, it might have been: my battery is low and it’s getting dark. NASA sent more than a thousand commands to wake me, and in February 2019 declared my mission complete.",
+      "sidebar": {
+        "title": "Meet my twin, Spirit",
+        "text": "Spirit explored Gusev Crater and drove almost 8 kilometers. One of her wheels stopped working, so she dragged it behind her, and it dug up bright, silica-rich soil that hinted at ancient hot springs. In 2009 she got stuck in soft sand, and her last contact with Earth came in March 2010."
+      },
+      "voiceNote": "The line “my battery is low and it’s getting dark” was a poetic interpretation of Opportunity’s final data by a NASA team member, not words the rover wrote.",
+      "facts": [
+        {
+          "text": "Opportunity landed on Meridiani Planum in January 2004, and its mission was planned for 90 Mars days.",
+          "source": "NASA JPL Mars Exploration Rover mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It found hematite spherules, nicknamed blueberries, evidence that liquid water once soaked the area.",
+          "source": "NASA JPL Mars Exploration Rover mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Opportunity drove about 45.16 kilometers (28.06 miles).",
+          "source": "NASA JPL Mars Exploration Rover mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Its last communication was on June 10, 2018, during a global dust storm.",
+          "source": "NASA JPL Mars Exploration Rover mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "NASA declared the mission complete on February 13, 2019, after trying more than 1,000 recovery commands.",
+          "source": "NASA JPL Mars Exploration Rover mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Spirit’s last contact with Earth was on March 22, 2010.",
+          "source": "NASA JPL Mars Exploration Rover mission page",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "opportunity"
+    },
+    {
+      "id": "insight",
+      "world": "mars",
+      "order": 3,
+      "name": "InSight",
+      "years": "2018–2022",
+      "tagline": "The lander that listened to Mars’s heartbeat.",
+      "status": "silent-surface",
+      "statusLabel": "Silent on the surface",
+      "whoIAm": "I’m InSight, a lander with no wheels and no legs. I don’t explore by moving. I explore by listening. My job was to find out what’s inside Mars, the way a doctor listens to your heartbeat.",
+      "howIWorked": "I landed in November 2018 on a flat, sandy plain called Elysium Planitia. My robotic arm lifted a seismometer off my deck, placed it gently on the ground and covered it with a dome to shield it from the wind. That instrument could feel incredibly tiny shakes. I also carried a self-hammering probe called the mole, meant to dig down and measure heat. But Mars’s clumpy soil gave it no grip, so it never got deep.",
+      "whatIFound": "In four years, I recorded more than 1,300 marsquakes, including a big magnitude-5 quake in May 2022, plus the rumble of meteorites crashing into the planet. By watching how the waves traveled, scientists measured how thick Mars’s crust is and discovered it has a liquid core. For the first time, we could picture what the inside of Mars looks like.",
+      "whereIAmNow": "Dust slowly buried my solar panels, and my power faded. In December 2022, NASA declared my mission over. I’m still on Elysium Planitia, silent, but you can still listen to the sounds I recorded.",
+      "sidebar": null,
+      "voiceNote": "First-person voice is creative. The facts come from NASA records.",
+      "facts": [
+        {
+          "text": "InSight landed on Elysium Planitia on November 26, 2018.",
+          "source": "NASA JPL InSight mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Its seismometer recorded more than 1,300 marsquakes, including a magnitude-5 quake in May 2022.",
+          "source": "NASA JPL InSight mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "InSight’s data helped scientists measure the thickness of Mars’s crust and showed the planet has a liquid core.",
+          "source": "NASA JPL InSight mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "The heat probe (mole) could not dig deep because the soil did not give it enough grip.",
+          "source": "NASA JPL InSight mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "NASA ended the mission in December 2022 because dust covered the solar panels.",
+          "source": "NASA JPL InSight mission page",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "insight"
+    },
+    {
+      "id": "ingenuity",
+      "world": "mars",
+      "order": 4,
+      "name": "Ingenuity",
+      "years": "2021–2024",
+      "tagline": "A little helicopter that flew on another world 72 times.",
+      "status": "grounded",
+      "statusLabel": "Grounded on Mars",
+      "whoIAm": "I’m Ingenuity, a helicopter about as heavy as a big bag of sugar. I rode to Mars in February 2021, tucked under the belly of the Perseverance rover. NASA called me a technology demonstration, which means a “let’s see if this is even possible” project.",
+      "howIWorked": "Mars’s air is only about 1% as thick as Earth’s, so flying there is like flying 30 kilometers above Earth, higher than any helicopter can go. To get lift, my two blades spin in opposite directions at about 2,400 rotations per minute, much faster than a helicopter on Earth. A tiny computer and a camera that watches the ground below kept me steady.",
+      "whatIFound": "On April 19, 2021, I made the first powered, controlled flight on another planet: a 39-second hop about 3 meters high. NASA had planned for five flights. I flew 72 times, covered about 17 kilometers and scouted safe routes and interesting rocks for Perseverance. And I carried a postage-stamp-sized piece of fabric from the Wright brothers’ first airplane.",
+      "whereIAmNow": "On my 72nd flight, in January 2024, my camera couldn’t find landmarks over a stretch of smooth sand ripples. I lost track of where I was, and my blades were damaged on landing. NASA ended my mission, and I’m grounded in Jezero Crater. But a rotorcraft called Dragonfly is already being built to fly on Saturn’s moon Titan.",
+      "sidebar": null,
+      "voiceNote": "First-person voice is creative. The facts come from NASA records.",
+      "facts": [
+        {
+          "text": "Ingenuity arrived on Mars attached to the Perseverance rover in February 2021.",
+          "source": "NASA JPL Ingenuity mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Its first flight, on April 19, 2021, was the first powered, controlled flight on another planet.",
+          "source": "NASA JPL Ingenuity mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "NASA planned for five flights, and Ingenuity completed 72.",
+          "source": "NASA JPL Ingenuity mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "In January 2024, Ingenuity damaged its rotor blades on landing during Flight 72, ending the mission.",
+          "source": "NASA JPL Ingenuity mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It carried a small piece of fabric from the Wright brothers’ 1903 airplane.",
+          "source": "NASA JPL Ingenuity mission page",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "ingenuity"
+    },
+    {
+      "id": "pioneer-10",
+      "world": "outer",
+      "order": 1,
+      "name": "Pioneer 10",
+      "years": "1972–2003",
+      "tagline": "The trailblazer: first through the asteroid belt, first to Jupiter, still sailing silently outward.",
+      "status": "silent-flying",
+      "statusLabel": "Silent, still flying",
+      "whoIAm": "I’m Pioneer 10, the trailblazer. Before me, nobody knew if a spacecraft could survive the asteroid belt or the deadly radiation near Jupiter. I launched in March 1972 to find out.",
+      "howIWorked": "Out where sunlight is too weak for solar panels, I ran on four small nuclear generators. I spun slowly like a top to stay steady and kept my dish aimed at Earth. In December 1973, I swept past Jupiter about 130,000 kilometers above its clouds and sent back the first close-up pictures of the giant planet.",
+      "whatIFound": "I showed that the asteroid belt is far less crowded than people feared, so other spacecraft could safely follow. I also measured Jupiter’s fierce radiation, which helped engineers design tougher spacecraft for the journeys after mine.",
+      "whereIAmNow": "My power faded as my generators aged. On January 23, 2003, I sent my last faint signal from about 12 billion kilometers away. I’m still coasting outward, aimed roughly toward the star Aldebaran, a trip that will take more than two million years. On my side hangs a gold-colored plaque with a map of our solar system and a drawing of a man and a woman, a message in case anyone finds me.",
+      "sidebar": {
+        "title": "The Pioneer mystery",
+        "text": "For years, Pioneer 10 and its twin Pioneer 11 seemed to slow down a tiny bit more than expected. Scientists finally worked out why: heat leaving the spacecraft itself gave them a very small push."
+      },
+      "voiceNote": "First-person voice is creative. The facts come from NASA records.",
+      "facts": [
+        {
+          "text": "Pioneer 10 launched in March 1972 and was the first spacecraft to cross the asteroid belt.",
+          "source": "NASA Pioneer mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It made the first flyby of Jupiter in December 1973.",
+          "source": "NASA Pioneer mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "NASA received its last signal on January 23, 2003.",
+          "source": "NASA Pioneer mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It is heading toward the star Aldebaran, a journey of more than two million years.",
+          "source": "NASA Pioneer mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It carries the Pioneer plaque, designed by Carl Sagan and Frank Drake and drawn by Linda Salzman Sagan.",
+          "source": "NASA Pioneer plaque page",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "pioneer-10"
+    },
+    {
+      "id": "voyager-1",
+      "world": "outer",
+      "order": 2,
+      "name": "Voyager 1",
+      "years": "1977–today",
+      "tagline": "The farthest human-made object, and still talking.",
+      "status": "still-talking",
+      "statusLabel": "Still talking, in interstellar space",
+      "whoIAm": "I’m Voyager 1, launched September 5, 1977, and I’m farther from home than anything people have ever built. I carry a golden record, a message for anyone who might find me, with greetings in dozens of languages, music, whale songs and the sounds of rain and thunder.",
+      "howIWorked": "I flew past Jupiter in 1979 and Saturn in 1980, then used Saturn’s gravity to fling myself above the planets’ path and out of the solar system. In 1990, I turned my camera around and took one last picture of the family: Earth as a pale blue dot, a tiny speck in a beam of sunlight.",
+      "whatIFound": "In August 2012, I crossed the edge of the Sun’s bubble of particles and magnetic field, called the heliopause, and became the first human-made object to enter interstellar space, the space between the stars. My instruments felt the surrounding plasma change.",
+      "whereIAmNow": "I’m still alive and still talking. In late 2023, my computer began sending nonsense when a memory chip failed. Engineers chopped up the broken code, tucked the pieces into other memory spots and sent the fix across billions of kilometers. A radio message takes about 22 hours one way, so they waited nearly two days for my answer. In April 2024, it worked. This month, NASA expects me to reach one light-day from Earth: a radio signal takes a full day to reach me.",
+      "sidebar": null,
+      "voiceNote": "First-person voice is creative. The facts come from NASA records. Check NASA’s Voyager status page for the live distance.",
+      "facts": [
+        {
+          "text": "Voyager 1 launched on September 5, 1977, and flew past Jupiter (1979) and Saturn (1980).",
+          "source": "NASA Science Voyager mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It entered interstellar space in August 2012.",
+          "source": "NASA Science Voyager mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It carries a Golden Record with sounds and images of Earth.",
+          "source": "NASA Science Voyager mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "A flight data system memory problem began in November 2023, and engineers restored science data in 2024 by relocating code.",
+          "source": "NASA JPL Voyager news",
+          "sourceUrl": ""
+        },
+        {
+          "text": "NASA expects Voyager 1 to reach one light-day from Earth in November 2026.",
+          "source": "NASA JPL Voyager news",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "voyager-1"
+    },
+    {
+      "id": "voyager-2",
+      "world": "outer",
+      "order": 3,
+      "name": "Voyager 2",
+      "years": "1977–today",
+      "tagline": "The only spacecraft to visit Uranus and Neptune.",
+      "status": "still-talking",
+      "statusLabel": "Still talking, in interstellar space",
+      "whoIAm": "I’m Voyager 2, Voyager 1’s twin. I launched first, on August 20, 1977, 16 days earlier, but I took the scenic route.",
+      "howIWorked": "A rare lineup of the outer planets, which happens about once every 175 years, let me use each planet’s gravity as a slingshot to reach the next one: Jupiter in 1979, Saturn in 1981, Uranus in 1986 and Neptune in 1989. It was called the Grand Tour. Each flyby bent my path and sped me up, with no extra fuel.",
+      "whatIFound": "At Uranus, I discovered 10 new moons and got sharper looks at its rings. At Neptune, I spotted the Great Dark Spot, a storm about the size of Earth, and geysers on its moon Triton. I’m still the only spacecraft that has ever visited these two ice giants.",
+      "whereIAmNow": "In November 2018, I crossed into interstellar space too. My power drops by about 4 watts every year, so engineers switch off heaters and instruments one at a time to keep me going. In 2023, a wrong command pointed my antenna away from Earth, and NASA sent a powerful shout across space to turn me back. It worked.",
+      "sidebar": null,
+      "voiceNote": "First-person voice is creative. The facts come from NASA records.",
+      "facts": [
+        {
+          "text": "Voyager 2 launched on August 20, 1977, and is the only spacecraft to have visited Uranus (1986) and Neptune (1989).",
+          "source": "NASA Science Voyager mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It discovered 10 new moons at Uranus and observed Neptune’s Great Dark Spot and Triton’s geysers.",
+          "source": "NASA Science Voyager mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It entered interstellar space in November 2018.",
+          "source": "NASA Science Voyager mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "Its power output declines by about 4 watts per year, so engineers turn off systems to conserve it.",
+          "source": "NASA JPL Voyager news",
+          "sourceUrl": ""
+        },
+        {
+          "text": "In 2023, NASA used a powerful transmission to regain contact after a command pointed Voyager 2’s antenna away from Earth.",
+          "source": "NASA JPL Voyager news",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "voyager-2"
+    },
+    {
+      "id": "new-horizons",
+      "world": "outer",
+      "order": 4,
+      "name": "New Horizons",
+      "years": "2006–today",
+      "tagline": "The speedster that met Pluto and kept going.",
+      "status": "still-flying",
+      "statusLabel": "Still flying and working",
+      "whoIAm": "I’m New Horizons, the fastest spacecraft ever launched from Earth. I left in January 2006 at about 58,000 kilometers per hour. I’m about the size of a grand piano, and I carry a small portion of the ashes of Clyde Tombaugh, the man who discovered Pluto.",
+      "howIWorked": "I swung past Jupiter in 2007 for an extra boost of speed, then slept through most of the long trip, waking up only for check-ups. Sunlight is faint way out there, so I run on a nuclear battery. When I reached Pluto, I couldn’t slow down and orbit, so I had just a few hours to take every picture and measurement I could.",
+      "whatIFound": "On July 14, 2015, I discovered that Pluto is a living, surprising world: mountains of water ice, plains of frozen nitrogen with glaciers, a giant heart-shaped region and a blue sky with layers of haze. In 2019, I visited Arrokoth, a snowman-shaped rock in the Kuiper Belt, the farthest world explored up close at that time.",
+      "whereIAmNow": "I’m still flying and still working, deep in the Kuiper Belt, the icy region beyond Neptune, studying dust, particles and faraway objects. Of all the travelers in this fleet, I’m the youngest, and I’m still exploring.",
+      "sidebar": null,
+      "voiceNote": "First-person voice is creative. The facts come from NASA records.",
+      "facts": [
+        {
+          "text": "New Horizons launched in January 2006 and was the fastest spacecraft launched from Earth.",
+          "source": "NASA New Horizons mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It flew past Pluto on July 14, 2015, revealing water-ice mountains and nitrogen-ice glaciers.",
+          "source": "NASA New Horizons mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It flew past the Kuiper Belt object Arrokoth on January 1, 2019, a snowman-shaped contact binary.",
+          "source": "NASA New Horizons mission page",
+          "sourceUrl": ""
+        },
+        {
+          "text": "It is continuing to operate in an extended mission in the Kuiper Belt.",
+          "source": "NASA New Horizons mission page",
+          "sourceUrl": ""
+        }
+      ],
+      "verified": false,
+      "imageKey": "new-horizons"
+    }
+  ],
+  "connectTheDots": {
+    "title": "Connect the dots",
+    "lines": [
+      "Surveyor 3 showed the Moon’s ground could hold a spacecraft, so Apollo could land. Then Apollo’s mirrors and seismometers measured how the Moon drifts and shakes.",
+      "Sojourner proved a rover could work on Mars. Spirit and Opportunity followed the water, and Curiosity and Perseverance, which carried Ingenuity, now search for signs of ancient life. Meanwhile, InSight listened to what’s inside the planet.",
+      "Pioneer opened the road, the Voyagers carried our message out of the solar system and New Horizons reached the Kuiper Belt. Every machine on this trail made the next one possible."
+    ],
+    "note": "Curiosity and Perseverance are still active missions, so they are mentioned here only."
+  }
+}

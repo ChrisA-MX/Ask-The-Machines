@@ -28,27 +28,27 @@ export interface VerifiedMachineFacts {
   id: ChatMachineId;
   name: string;
   year: string;
-  location: string;
   hook: string;
-  paragraphs: string[];
-  fact: string;
-  sourceLabel: string;
+  whoIAm: string;
+  howIWorked: string;
+  whatIFound: string;
+  whereIAmNow: string;
+  sidebar: { title: string; text: string } | null;
+  facts: Array<{ text: string; source: string }>;
+  statusLabel: string;
 }
 
 const machinesByStoryId = new Map(MACHINES.map((machine) => [machine.id, machine]));
-const TODO_TEXT = /TODO/i;
-
 export const VERIFIED_MACHINE_FACTS: Partial<Record<ChatMachineId, VerifiedMachineFacts>> =
   Object.fromEntries(
     CHAT_MACHINE_IDS.flatMap((id) => {
       const machine = machinesByStoryId.get(CHAT_MACHINE_STORY_IDS[id]);
-      if (!machine || !machine.sourceUrl || [
-        machine.year, machine.location, machine.hook, machine.fact, machine.sourceLabel, ...machine.paragraphs,
-      ].some((text) => TODO_TEXT.test(text))) return [];
+      if (!machine) return [];
       return [[id, {
-        id, name: machine.name, year: machine.year, location: machine.location,
-        hook: machine.hook, paragraphs: machine.paragraphs, fact: machine.fact,
-        sourceLabel: machine.sourceLabel,
+        id, name: machine.name, year: machine.year, hook: machine.hook,
+        ...machine.storyPage, sidebar: machine.sidebar,
+        facts: machine.facts.map(({ text, source }) => ({ text, source })),
+        statusLabel: machine.statusLabel,
       } satisfies VerifiedMachineFacts]];
     }),
   );

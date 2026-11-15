@@ -6,18 +6,24 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
-import { buildApolloInstructions, normalizeCompletedMachineIds } from './server/chat-knowledge';
+import { retrieveMachineStories } from './server/chat-knowledge';
+import { answerWithProviderChain, ChatHistoryMessage } from './server/chat-provider';
+import { ChatRateLimiter } from './server/chat-rate-limit';
+
+try {
+  process.loadEnvFile();
+} catch {
+  // Deployments may inject environment variables directly and omit a local .env file.
+}
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-const requestTimes = new Map<string, number[]>();
-const CHAT_WINDOW_MS = 10 * 60 * 1000;
-const CHAT_REQUEST_LIMIT = 20;
+const chatRateLimiter = new ChatRateLimiter(20, 60_000);
 
-app.use(express.json({ limit: '4kb' }));
+app.use(express.json({ limit: '12kb' }));
 
 app.post('/chat', async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
@@ -28,78 +34,71 @@ app.post('/chat', async (req, res) => {
     return;
   }
 
-  const request = body as { message?: unknown; completedMachineIds?: unknown };
+  const request = body as { message?: unknown; history?: unknown; machineId?: unknown };
   const { message } = request;
   if (typeof message !== 'string' || !message.trim()) {
     res.status(400).json({ error: 'message must be non-empty text.' });
     return;
   }
-  if (message.trim().length > 1000) {
-    res.status(413).json({ error: 'Please keep your question under 1,000 characters.' });
+  if (message.trim().length > 300) {
+    res.status(413).json({ error: 'Please keep your question under 300 characters.' });
     return;
   }
 
-  const now = Date.now();
-  const clientKey = req.ip ?? 'unknown';
-  const recentRequests = (requestTimes.get(clientKey) ?? []).filter((time) => now - time < CHAT_WINDOW_MS);
-  if (recentRequests.length >= CHAT_REQUEST_LIMIT) {
-    res.status(429).json({ error: 'Apollo is taking a short break. Please try again in a few minutes.' });
+  if (request.history !== undefined && !Array.isArray(request.history)) {
+    res.status(400).json({ error: 'history must be a list of messages.' });
     return;
   }
-  recentRequests.push(now);
-  requestTimes.set(clientKey, recentRequests);
-
-  const apiKey = process.env['OPENAI_API_KEY'];
-  if (!apiKey) {
-    res.status(503).json({ error: 'The chat service is not configured yet.' });
+  const rawHistory = Array.isArray(request.history) ? request.history : [];
+  const validHistory: ChatHistoryMessage[] = [];
+  for (const item of rawHistory) {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      res.status(400).json({ error: 'Each history message needs a role and text.' });
+      return;
+    }
+    const candidate = item as { role?: unknown; content?: unknown };
+    if ((candidate.role !== 'user' && candidate.role !== 'assistant') || typeof candidate.content !== 'string') {
+      res.status(400).json({ error: 'Each history message needs a user or assistant role and text.' });
+      return;
+    }
+    validHistory.push({ role: candidate.role, content: candidate.content.slice(0, 1200) });
+  }
+  if (request.machineId !== undefined && (typeof request.machineId !== 'string' || request.machineId.length > 80)) {
+    res.status(400).json({ error: 'machineId must be text.' });
     return;
   }
 
-  const completedMachineIds = normalizeCompletedMachineIds(request.completedMachineIds);
+  const clientKey = req.ip ?? req.socket.remoteAddress ?? 'unknown';
+  if (!chatRateLimiter.allow(clientKey)) {
+    res.status(429).json({
+      reply: 'Apollo is helping lots of explorers right now. Please wait a minute, then try again.',
+      suggestions: [],
+    });
+    return;
+  }
 
   try {
-    const model = process.env['OPENAI_MODEL'] || 'gpt-4.1-mini';
-    const upstream = await fetch('https://api.openai.com/v1/responses', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model,
-        instructions: buildApolloInstructions(completedMachineIds),
-        input: message.trim(),
-        max_output_tokens: 220,
-        store: false,
-      }),
-      signal: AbortSignal.timeout(30_000),
+    const question = message.trim();
+    const history = validHistory.slice(-6);
+    const retrieval = retrieveMachineStories(question, history, request.machineId as string | undefined);
+    const result = await answerWithProviderChain({
+      question,
+      history,
+      retrieval,
+      nvidiaApiKey: process.env['NVIDIA_API_KEY'],
+      nvidiaModel: process.env['NVIDIA_MODEL'],
+      openAiApiKey: process.env['OPENAI_API_KEY'],
+      openAiModel: process.env['OPENAI_MODEL'],
     });
-
-    if (!upstream.ok) {
-      console.error('Chat provider returned status', upstream.status);
-      res.status(502).json({ error: 'Apollo could not reach the answer service. Please try again.' });
-      return;
-    }
-
-    const result = await upstream.json() as {
-      output_text?: string;
-      output?: Array<{ content?: Array<{ type?: string; text?: string }> }>;
-    };
-    const reply = result.output_text?.trim() || result.output
-      ?.flatMap((item) => item.content ?? [])
-      .filter((item) => item.type === 'output_text' && item.text)
-      .map((item) => item.text)
-      .join('\n')
-      .trim();
-
-    if (!reply) {
-      res.status(502).json({ error: 'Apollo received an empty answer. Please try again.' });
-      return;
-    }
-    res.json({ reply });
-  } catch (error) {
-    console.error('Chat request failed:', error instanceof Error ? error.message : 'unknown error');
-    res.status(502).json({ error: 'Apollo is temporarily unavailable. Please try again.' });
+    res.json({ reply: result.reply, suggestions: result.suggestions });
+  } catch {
+    console.warn('[chat] Provider chain failed unexpectedly; using the local story reply.');
+    const result = await answerWithProviderChain({
+      question: message.trim(),
+      history: validHistory.slice(-6),
+      retrieval: retrieveMachineStories(message.trim(), validHistory.slice(-6), request.machineId as string | undefined),
+    });
+    res.json({ reply: result.reply, suggestions: result.suggestions });
   }
 });
 

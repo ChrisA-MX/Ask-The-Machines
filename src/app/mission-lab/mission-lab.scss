@@ -3,8 +3,7 @@
 .site-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1rem; padding: 1.8rem 0; }
 .brand { color: #ffe13f; font-family: 'Space Grotesk', sans-serif; font-size: 1.12rem; font-weight: 700; letter-spacing: -.03em; text-decoration: none; }
 .eyebrow { margin: 0 0 1.2rem; color: #4ea8ff; font-size: .82rem; font-weight: 700; letter-spacing: .22em; }
-.lab-section { max-width: 76rem; margin: 0 auto 6rem; }
-.game-lab { padding-top: 1rem; }
+.lab-section { max-width: 76rem; margin: 0 auto 3rem; }
 .mission-footer { display: flex; max-width: 76rem; align-items: center; justify-content: space-between; gap: 1rem; margin: 0 auto; padding: 1.2rem 0; border-top: 1px solid #233b67; color: #8fa4c8; font-size: .68rem; letter-spacing: .12em; }
 .mission-footer a { color: #bddcff; font-size: .82rem; letter-spacing: normal; text-decoration: none; }
 .mission-footer a:hover { color: #ffdf3d; }

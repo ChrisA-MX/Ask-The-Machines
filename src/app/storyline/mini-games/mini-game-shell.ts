@@ -1,7 +1,7 @@
 import { A11yModule } from '@angular/cdk/a11y';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ApolloGame } from '../../components/apollo-game/apollo-game';
-import { MACHINES, WorldId, WorldStory } from '../machines.data';
+import { WorldId, WorldStory } from '../machines.data';
 import { OpportunityGame } from './opportunity-game';
 import { VoyagerGame } from './voyager-game';
 
@@ -34,9 +34,7 @@ export class MiniGameShell {
   }
 
   protected facts(): string[] {
-    if (this.world.id === 'mars') return this.machineFacts(['opportunity-mer-b', 'insight']);
-    if (this.world.id === 'outer') return this.machineFacts(['voyager-1']);
-    return [];
+    return [this.world.gameCard];
   }
 
   protected backToWorlds(): void { this.closed.emit(); }
@@ -46,7 +44,4 @@ export class MiniGameShell {
     if (event.target === event.currentTarget) this.closed.emit();
   }
 
-  private machineFacts(ids: string[]): string[] {
-    return ids.flatMap((id) => MACHINES.find((machine) => machine.id === id)?.fact ?? []);
-  }
 }

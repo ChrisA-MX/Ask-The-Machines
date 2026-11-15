@@ -32,7 +32,10 @@
 					<div class="scene-title"><p class="eyebrow">{{ activeWorld()!.name }}</p><h2 id="scene-heading">{{ activeWorld()!.name }} trail</h2></div>
 					<div class="scene-progress"><p class="scene-stop">Stop {{ stopNumber(activeWorld()!) }} of {{ stopCount(activeWorld()!) }}</p><p>{{ completedCount(activeWorld()!) }} / {{ activeWorld()!.machines.length }} machines complete</p><div class="progress-track" role="progressbar" [attr.aria-label]="activeWorld()!.name + ' progress'" [attr.aria-valuenow]="completedCount(activeWorld()!)" [attr.aria-valuemin]="0" [attr.aria-valuemax]="activeWorld()!.machines.length"><span [style.width.%]="completedCount(activeWorld()!) / activeWorld()!.machines.length * 100"></span></div><p class="mini-game-status">Mini-game: {{ gameStatus(activeWorld()!) }}</p></div>
 				</header>
-				<p class="scene-hint">Explore the next unlocked machine. Finish its story to open the next stop.</p>
+				@if (activeWorld()!.id === 'outer' && completedCount(activeWorld()!) === activeWorld()!.machines.length && completedGameIds().has('outer')) {
+					<section class="connect-the-dots-panel" aria-labelledby="connect-dots-title"><p class="eyebrow">MISSION COMPLETE</p><h3 id="connect-dots-title">{{ connectTheDots.title }}</h3><svg class="connect-dots-art" viewBox="0 0 600 120" role="img" aria-label="Three connected spacecraft on a path through space"><path d="M70 60H530"/><circle cx="70" cy="60" r="12"/><circle cx="300" cy="60" r="12"/><circle cx="530" cy="60" r="12"/><path d="m70 40 8 20-8 20-8-20zm230 0 8 20-8 20-8-20zm230 0 8 20-8 20-8-20z"/></svg><div class="connect-dots-lines">@for (line of connectTheDots.lines; track $index) { <p>{{ line }}</p> }</div><p class="connect-dots-note">{{ connectTheDots.note }}</p><button class="back-button" type="button" (click)="backToWorldMap()">Back to worlds</button></section>
+				} @else {
+				<p class="scene-hint">{{ activeWorld()!.intro }}</p>
 				<div #sceneRoadmap class="scene-roadmap" [style.aspect-ratio]="sceneViewBoxWidth() + ' / ' + sceneViewBoxHeight(activeWorld()!)" aria-label="Machine trail">
 					<svg class="trail" [attr.viewBox]="'0 0 ' + sceneViewBoxWidth() + ' ' + sceneViewBoxHeight(activeWorld()!)" aria-hidden="true"><path #trailPath class="trail-line" [attr.d]="trailPathFor(activeWorld()!)" /></svg>
 					<div class="node-layer" aria-label="Machine stops on the path">
@@ -51,6 +54,7 @@
 						}
 					</div>
 				</div>
+				}
 			</section>
 		}
 		<ng-template #previewCardTemplate let-machine="machine" let-world="world" let-machineIndex="machineIndex" let-isMiniGame="isMiniGame">

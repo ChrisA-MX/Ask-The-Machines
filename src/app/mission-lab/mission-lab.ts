@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { ArtifactMap } from '../components/artifact-map/artifact-map';
-import { ApolloGame } from '../components/apollo-game/apollo-game';
+import { MachineViewer } from './machine-viewer';
 
 @Component({
   selector: 'app-mission-lab',
-  imports: [RouterLink, RouterLinkActive, ArtifactMap, ApolloGame],
+  imports: [RouterLink, RouterLinkActive, MachineViewer],
   templateUrl: './mission-lab.html',
   styleUrl: './mission-lab.scss',
 })

@@ -33,6 +33,7 @@
 .story-section h2,.fact-check summary { margin:0 0 .6rem; color:#a8ddff; font:700 clamp(1.25rem,3vw,1.55rem)/1.2 'Space Grotesk',sans-serif; }
 .story-section p,.fact-check-content { margin:0; color:#e4edf9; font-size:1.02rem; line-height:1.75; overflow-wrap:anywhere; }
 .creative-voice { display:inline-flex; margin:-.1rem 0 .65rem; padding:.2rem .5rem; border:1px solid #b38be3; border-radius:999px; background:#45286155; color:#e4caff; font-size:.68rem; font-weight:800; letter-spacing:.04em; }
+.about-story { margin-top:1.8rem; }
 .watch-section { max-width:38rem; }
 .video-frame { position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; border:1px solid #82bce855; border-radius:1rem; background:radial-gradient(ellipse at 50% 45%,#1a4c70,#0a1328 68%,#050a15); box-shadow:0 .7rem 1.8rem #0006; }
 .video-frame iframe,.video-poster { position:absolute; inset:0; display:block; width:100%; height:100%; border:0; object-fit:cover; }
@@ -51,7 +52,7 @@
 .youtube-link svg,.fact-check svg { width:.9rem; height:.9rem; }
 .current-status { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; }.current-status h2 { margin:0; }
 .fact-check { margin:1.8rem 0 0; padding:1rem 1.1rem; border:1px solid #d1a55166; border-radius:.9rem; background:#3a2b141c; }
-.fact-check summary { display:flex; min-height:44px; align-items:center; margin:0; cursor:pointer; }.fact-check[open] summary { margin-bottom:.65rem; }
+.fact-check-toggle { display:flex; width:100%; min-height:48px; align-items:center; justify-content:space-between; gap:1rem; padding:0; border:0; background:none; color:#a8ddff; text-align:left; cursor:pointer; }.fact-check-toggle span { display:grid; gap:.2rem; }.fact-check-toggle strong { font:700 1.25rem/1.2 'Space Grotesk',sans-serif; }.fact-check-toggle small { color:#cad9eb; font-size:.78rem; }.fact-check-toggle svg { width:1.25rem; height:1.25rem; transition:transform .2s ease; }.fact-check-toggle svg.is-expanded { transform:rotate(180deg); }
 .fact-check-content { font-size:.9rem; line-height:1.6; }.fact-check-content ul { display:grid; gap:.35rem; margin:.7rem 0; padding-left:1.3rem; }.fact-check-content a { color:#a9ddff; }.fact-check-content a svg { vertical-align:-.1em; }
 .voice-note { padding:.65rem .8rem; border-radius:.5rem; background:#9670b621; color:#eadcff; font-size:.84rem; }
 .story-actions { margin-top:2rem; padding-top:1.25rem; border-top:1px solid #8eb3db2c; }

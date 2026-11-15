@@ -1,0 +1,59 @@
+<section class="lab-viewer" aria-labelledby="lab-title">
+  <header class="lab-heading">
+    <p class="lab-eyebrow">MISSION LAB</p>
+    <h1 id="lab-title">Mission Lab</h1>
+    <p>Pick a machine, then drag to turn it around.</p>
+  </header>
+
+  <div #stage id="lab-viewer-panel" role="tabpanel" [attr.aria-labelledby]="'lab-tab-' + selected().id" [attr.aria-label]="'3D view of ' + selected().label" class="viewer-stage" [class.is-swapping]="swapping()" [attr.aria-busy]="loading()">
+    @if (webglAvailable()) {
+      <canvas #canvas tabindex="0" role="img" [attr.aria-label]="'3D view of ' + selected().label + '. ' + selected().shortDescription" aria-describedby="machine-info keyboard-hint" (keydown)="onCanvasKeydown($event)"></canvas>
+      @if (loading() || errorMessage()) {
+        <div class="viewer-status-layer" aria-hidden="true">
+          @if (loading()) {
+            <div class="viewer-load-card"><span class="loading-orbit" aria-hidden="true"></span><strong>{{ loadMessage() }}</strong><span>{{ progress() | number:'1.0-0' }}%</span><div class="load-track"><span [style.width.%]="progress()"></span></div></div>
+          } @else {
+            <div class="viewer-load-card error-card" role="alert"><strong>{{ failed(selected()) ? 'Model not found' : 'Model unavailable' }}</strong><p>{{ errorMessage() }}</p><button type="button" (click)="retry()">Retry</button></div>
+          }
+        </div>
+      }
+      @if (contextLost()) {
+        <div class="context-lost" role="alert"><strong>3D view paused</strong><p>The graphics context was interrupted.</p><button type="button" (click)="retryContext()">Reload viewer</button></div>
+      }
+      <div class="viewer-controls" role="group" aria-label="3D model controls">
+        <button type="button" aria-label="Rotate left" title="Rotate left" (click)="rotateLeft()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V3m0 5h5M4.8 8A8 8 0 1 1 4 13"/><path d="m8 12 4-3v9"/></svg></button>
+        <button type="button" aria-label="Rotate right" title="Rotate right" (click)="rotateRight()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 8V3m0 5h-5m4.2 0A8 8 0 1 0 20 13"/><path d="m16 12-4-3v9"/></svg></button>
+        <button type="button" aria-label="Zoom in" title="Zoom in" (click)="zoomIn()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="M16 16l5 5M10.8 7.5v6.6m-3.3-3.3h6.6"/></svg></button>
+        <button type="button" aria-label="Zoom out" title="Zoom out" (click)="zoomOut()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="M16 16l5 5M7.5 10.8h6.6"/></svg></button>
+        <button type="button" aria-label="Reset view" title="Reset view" (click)="resetView()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.7-6.4L3 8"/><path d="M3 3v5h5"/></svg></button>
+        <button type="button" [attr.aria-label]="autoRotateEnabled() ? 'Turn auto-rotate off' : 'Turn auto-rotate on'" [attr.title]="autoRotateEnabled() ? 'Turn auto-rotate off' : 'Turn auto-rotate on'" [attr.aria-pressed]="autoRotateEnabled()" (click)="toggleAutoRotate()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.7L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.7 5.7L4 15.5M4 20v-4.5h4.5"/></svg></button>
+        @if (playAvailable()) { <button type="button" [attr.aria-label]="playing() ? 'Pause animation' : 'Play animation'" [attr.title]="playing() ? 'Pause animation' : 'Play animation'" [attr.aria-pressed]="playing()" (click)="togglePlayback()"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">@if (playing()) { <path d="M6 5h4v14H6zm8 0h4v14h-4z"/> } @else { <path d="M7 4.8c0-.8.9-1.3 1.6-.9l10 6.2a1.1 1.1 0 0 1 0 1.8l-10 6.2a1.1 1.1 0 0 1-1.6-.9z"/> }</svg></button> }
+        @if (fullscreenAvailable()) { <button type="button" [attr.aria-label]="fullscreenActive() ? 'Exit fullscreen' : 'Enter fullscreen'" [attr.title]="fullscreenActive() ? 'Exit fullscreen' : 'Enter fullscreen'" (click)="toggleFullscreen()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">@if (fullscreenActive()) { <path d="M8 3v5H3m13-5v5h5M8 21v-5H3m13 5v-5h5"/> } @else { <path d="M3 8V3h5m8 0h5v5M3 16v5h5m8 0h5v-5"/> }</svg></button> }
+      </div>
+      @if (hintVisible()) { <p class="viewer-hint">Drag to rotate · Scroll or pinch to zoom · Right-drag to move</p> }
+    } @else {
+      <div class="viewer-fallback" role="status"><div class="fallback-orbit" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m16 2 3.2 10.8L30 16l-10.8 3.2L16 30l-3.2-10.8L2 16l10.8-3.2z"/></svg></div><p class="lab-eyebrow">3D VIEW UNAVAILABLE</p><h2>{{ selected().label }}</h2><p>{{ selected().shortDescription }}</p>@if (storyUrl()) { <a class="story-link" [routerLink]="storyUrl()">Read the story</a> } @else if (worldUrl()) { <a class="story-link" [routerLink]="worldUrl()">Visit the {{ worldLabel() }} trail</a> }</div>
+    }
+  </div>
+  <p id="keyboard-hint" class="sr-only">Keyboard controls: focus the 3D view. Arrow keys rotate, plus and minus zoom, and zero resets the view.</p>
+  <p class="sr-only" aria-live="polite">{{ selected().label }}. {{ loading() ? loadMessage() : errorMessage() || 'Model ready.' }}</p>
+
+  <div class="tab-scroll" aria-label="Available machine models">
+    <div #tabs class="model-tabs" role="tablist" aria-label="Choose a machine model" aria-orientation="horizontal">
+      @for (model of models; track model.id; let i = $index) {
+        <button type="button" role="tab" class="model-tab" [id]="'lab-tab-' + model.id" aria-controls="lab-viewer-panel" [attr.aria-selected]="selectedIndex() === i" [attr.tabindex]="selectedIndex() === i ? 0 : -1" [class.is-selected]="selectedIndex() === i" [class.has-error]="failed(model)" (click)="choose(i, false)" (keydown)="onTabKeydown($event, i)" (mouseenter)="preloadOnIntent(model)" (focus)="preloadOnIntent(model)">
+          <svg class="tab-icon" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 2.5 9 5.2v12.6l-9 5.2-9-5.2V7.7z"/><path d="m5 7.7 9 5.2 9-5.2M14 13v12.5M9 4.8l9 5.2"/></svg>
+          <span>{{ model.label }}</span>@if (failed(model)) { <span class="tab-error-dot" aria-label="Model unavailable"></span> }
+        </button>
+      }
+    </div>
+  </div>
+
+  <section class="model-info" id="machine-info" [attr.aria-labelledby]="'lab-tab-' + selected().id">
+    <div><p class="model-kicker">SELECTED MACHINE</p><h2>{{ selected().label }}</h2><p>{{ selected().shortDescription }}</p></div>
+    @if (storyUrl()) { <a class="story-link" [routerLink]="storyUrl()">Read the story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a> }
+    @else if (worldUrl()) { <a class="story-link" [routerLink]="worldUrl()">Visit the {{ worldLabel() }} trail <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a> }
+  </section>
+
+  @if (credits().length) { <details class="model-credits"><summary>Model credits</summary><ul>@for (model of credits(); track model.id) { <li><a [href]="model.credit!.sourceUrl" target="_blank" rel="noopener noreferrer">{{ model.credit!.title }} by {{ model.credit!.author }} ({{ model.credit!.license }})</a></li> }</ul></details> }
+</section>

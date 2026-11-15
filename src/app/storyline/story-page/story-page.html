@@ -18,19 +18,59 @@
       <header class="story-topbar">
         <button class="back-link" type="button" (click)="backToTrail()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7"/></svg> Back to trail</button>
         <nav class="breadcrumbs" aria-label="Breadcrumb"><a routerLink="/storylines">Stories</a><span aria-hidden="true">/</span><span>{{ currentWorld.name }}</span><span aria-hidden="true">/</span><span aria-current="page">{{ story.name }}</span></nav>
-        <div class="story-status"><span class="status-pill" [class.is-active]="story.id === 'voyager-1' || story.id === 'voyager-2'">{{ story.storyPage?.currentStatus }}</span><span class="step-pill">Story {{ storyNumber() }} of {{ storyCount() }}</span></div>
+        <div class="story-status"><span class="status-pill" [class.is-active]="story.status === 'still-talking' || story.status === 'still-flying'">{{ story.statusLabel }}</span><span class="step-pill">Story {{ storyNumber() }} of {{ storyCount() }}</span></div>
       </header>
       <div class="world-progress-label" aria-live="polite">{{ completedCount() }} / {{ storyCount() }} complete in {{ currentWorld.shortName }}<div class="world-progress-track" role="progressbar" [attr.aria-label]="currentWorld.shortName + ' story completion'" [attr.aria-valuenow]="completedCount()" [attr.aria-valuemin]="0" [attr.aria-valuemax]="storyCount()"><span [style.width.%]="worldProgressPercent()"></span></div></div>
 
       <article class="story-article">
         <section class="story-hero" aria-labelledby="story-title">
-          <div class="hero-copy"><p class="eyebrow">{{ currentWorld.name }} <span aria-hidden="true">/</span> MISSION FILE</p><p class="year-label">{{ story.year }}</p><h1 id="story-title" #storyHeading tabindex="-1">{{ story.name }}</h1><p class="story-tagline">{{ story.hook }}</p></div>
-          <div class="hero-art" aria-hidden="true"><svg viewBox="0 0 220 180" fill="none"><circle cx="110" cy="90" r="60" stroke="currentColor" stroke-opacity=".4"/><circle cx="110" cy="90" r="40" stroke="currentColor" stroke-opacity=".55"/><circle cx="110" cy="90" r="9" fill="currentColor"/><path d="M26 90h54M140 90h54M110 6v44M110 130v44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m45 43 18 18m94 58 18 18M175 44l-18 18M63 119l-18 18" stroke="currentColor" stroke-opacity=".7" stroke-width="2"/></svg><span>{{ story.imageKey }}</span></div>
+          <div class="hero-copy"><p class="eyebrow">{{ currentWorld.name }} <span aria-hidden="true">/</span> MISSION FILE</p><p class="year-label">{{ story.year }}</p><h1 id="story-title" #storyHeading tabindex="-1" [class.speech-highlight]="isTitleSpeechHighlighted()">{{ story.name }}</h1><p class="story-tagline">{{ story.hook }}</p></div>
+          @if (!imageFailed()) {
+            <button #imageTrigger type="button" class="hero-art image-trigger" (click)="openLightbox()" [attr.aria-label]="'Enlarge illustration of ' + story.name">
+              <picture><source type="image/webp" [srcset]="machineImageSrcset(story)" sizes="(max-width: 640px) 240px, 220px"/><img [src]="machineImageUrl(story)" [alt]="story.imageAlt" width="220" height="220" loading="eager" fetchpriority="high" (error)="imageLoadFailed()"/></picture>
+            </button>
+          } @else {
+            <div class="hero-art image-fallback" role="img" [attr.aria-label]="'Illustration unavailable for ' + story.name"><svg viewBox="0 0 220 180" fill="none" aria-hidden="true"><circle cx="110" cy="90" r="60" stroke="currentColor" stroke-opacity=".4"/><circle cx="110" cy="90" r="40" stroke="currentColor" stroke-opacity=".55"/><circle cx="110" cy="90" r="9" fill="currentColor"/><path d="M26 90h54M140 90h54M110 6v44M110 130v44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>{{ story.name }}</span></div>
+          }
         </section>
 
-        <section class="story-section" aria-labelledby="who-heading"><h2 id="who-heading">Who I am</h2>@if (story.storyPage?.voiceNote) { <span class="creative-voice">Creative voice</span> }<p>{{ story.storyPage?.whoIAm }}</p></section>
-        <section class="story-section" aria-labelledby="worked-heading"><h2 id="worked-heading">How I worked</h2><p>{{ story.storyPage?.howIWorked }}</p></section>
-        <section class="story-section" aria-labelledby="found-heading"><h2 id="found-heading">What I found</h2><p>{{ story.storyPage?.whatIFound }}</p></section>
+        @if (speechAvailable()) {
+          <section #audioBar class="story-audio" aria-label="Story audio controls">
+            <div class="audio-primary-area">
+              <button type="button" class="listen-button" [class.is-discoverable]="listenDiscoveryVisible()" (click)="listen()" [attr.aria-pressed]="speechActive()" [attr.aria-label]="speechActive() ? (speechPaused() ? 'Resume story narration' : 'Pause story narration') : 'Listen to this story'">
+                @if (speechActive() && !speechPaused()) { <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zm7 0h4v14h-4z"/></svg> } @else { <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 8a5 5 0 0 1 0 8m2-11a9 9 0 0 1 0 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> }
+                <span>{{ speechActive() ? (speechPaused() ? 'Resume' : 'Pause') : 'Listen to this story' }}</span>
+              </button>
+              @if (listenDiscoveryVisible()) { <span class="listen-new-tag">New: listen instead of reading</span> }
+              <span class="audio-duration">about {{ estimatedMinutes() }} min</span>
+              @if (speechActive()) { <button type="button" class="audio-stop" (click)="stopListening()" aria-label="Stop story narration">Stop</button> }
+            </div>
+            <div class="voice-settings-desktop"><ng-container *ngTemplateOutlet="voiceSettings; context: { suffix: 'desktop' }"></ng-container></div>
+            <details class="voice-settings-mobile"><summary>Voice settings</summary><ng-container *ngTemplateOutlet="voiceSettings; context: { suffix: 'mobile' }"></ng-container></details>
+            <span class="sr-only" aria-live="polite" aria-atomic="true">{{ speechAnnouncement() }}</span>
+          </section>
+        } @else if (speechSupportChecked()) { <p class="audio-unavailable" role="status">Audio isn't available in this browser.</p> }
+
+        <ng-template #voiceSettings let-suffix="suffix">
+          <div class="speech-settings">
+            <label [for]="'story-voice-' + suffix">Voice</label>
+            <select [id]="'story-voice-' + suffix" [value]="selectedVoiceURI()" (change)="chooseVoice($event)" [disabled]="!availableVoices().length">
+              @for (voice of availableVoices(); track voice.voiceURI) { <option [value]="voice.voiceURI">{{ voice.name }} ({{ voice.lang }}){{ voice.voiceURI === recommendedVoiceURI() ? ' — Recommended' : '' }}</option> }
+              @if (!availableVoices().length) { <option value="">{{ voiceLoading() ? 'Loading English voices…' : 'No English voices available' }}</option> }
+            </select>
+            <button type="button" class="secondary-action preview-voice" (click)="previewVoice()" [disabled]="!availableVoices().length" aria-label="Preview selected voice">Preview</button>
+            <label [for]="'story-speed-' + suffix">Speed</label>
+            <select [id]="'story-speed-' + suffix" [value]="speechRate()" (change)="changeSpeechRate($event)">
+              <option value="0.8">0.8×</option><option value="0.9">0.9×</option><option value="0.95">0.95× (recommended)</option><option value="1">1×</option><option value="1.1">1.1×</option>
+            </select>
+            <button type="button" class="reset-voice" (click)="resetRecommendedVoice()" [disabled]="!recommendedVoiceURI() || selectedVoiceURI() === recommendedVoiceURI()">Reset to recommended</button>
+          </div>
+        </ng-template>
+
+        <section class="story-section" aria-labelledby="who-heading"><h2 id="who-heading">Who I am</h2>@for (paragraph of paragraphs(story.storyPage.whoIAm); track $index) { <p [class.speech-highlight]="isSpeechHighlighted('whoIAm', $index)">{{ paragraph }}</p> }</section>
+        <section class="story-section" aria-labelledby="worked-heading"><h2 id="worked-heading">How I worked</h2>@for (paragraph of paragraphs(story.storyPage.howIWorked); track $index) { <p [class.speech-highlight]="isSpeechHighlighted('howIWorked', $index)">{{ paragraph }}</p> }</section>
+        <section class="story-section" aria-labelledby="found-heading"><h2 id="found-heading">What I found</h2>@for (paragraph of paragraphs(story.storyPage.whatIFound); track $index) { <p [class.speech-highlight]="isSpeechHighlighted('whatIFound', $index)">{{ paragraph }}</p> }</section>
+        @if (story.sidebar; as sidebar) { <aside class="story-sidebar"><h2 [class.speech-highlight]="isSpeechHighlighted('sidebarTitle', 0)">{{ sidebar.title }}</h2>@for (paragraph of paragraphs(sidebar.text); track $index) { <p [class.speech-highlight]="isSpeechHighlighted('sidebarText', $index)">{{ paragraph }}</p> }</aside> }
 
         @if (story.video; as video) {
           <section class="story-section watch-section" aria-labelledby="watch-heading">
@@ -56,25 +96,38 @@
           </section>
         }
 
-        <section class="story-section current-status" aria-labelledby="status-heading"><h2 id="status-heading">Where I am now</h2><span class="status-pill">{{ story.storyPage?.currentStatus }}</span></section>
-        <details class="fact-check"><summary>Fact check</summary><div class="fact-check-content"><p>{{ story.fact }}</p><ul>@for (source of sources(); track source.url) { <li><a [href]="source.url" target="_blank" rel="noopener noreferrer">{{ source.label }} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6m-1-5-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg></a></li> }</ul>@if (story.storyPage?.voiceNote) { <p class="voice-note"><strong>Creative voice:</strong> {{ story.storyPage?.voiceNote }}</p> }</div></details>
+        <section class="story-section current-status" aria-labelledby="status-heading"><h2 id="status-heading">Where I am now</h2>@for (paragraph of paragraphs(story.storyPage.whereIAmNow); track $index) { <p [class.speech-highlight]="isSpeechHighlighted('whereIAmNow', $index)">{{ paragraph }}</p> }<span class="status-pill">{{ story.statusLabel }}</span></section>
+        <aside class="about-story"><div class="about-story-heading"><strong>About this story</strong><span class="creative-voice">Creative voice</span></div><p>{{ story.voiceNote }}</p></aside>
+        <section class="fact-check"><button type="button" class="fact-check-toggle" (click)="toggleFactCheck()" [attr.aria-expanded]="factCheckExpanded()" aria-controls="story-fact-list"><span><strong>Fact check</strong><small>Tap to see the sources</small></span><svg [class.is-expanded]="factCheckExpanded()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><ul id="story-fact-list" class="fact-list" [hidden]="!factCheckExpanded()">@for (fact of story.facts; track $index) { <li><p>{{ fact.text }}</p>@if (fact.sourceUrl) { <a [href]="fact.sourceUrl" target="_blank" rel="noopener noreferrer">{{ fact.source }} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6m-1-5-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg></a> } @else { <span>{{ fact.source }}</span> }</li> }</ul></section>
 
         <section class="story-actions" aria-label="Story actions">
           <div class="reader-actions">
-            @if (speechAvailable()) { <button type="button" class="secondary-action" (click)="listen()">{{ speechPlaying() ? 'Pause listening' : 'Listen' }}</button>@if (speechPlaying()) { <button type="button" class="secondary-action" (click)="stopListening()">Stop</button> } }
-            <button type="button" class="primary-action" [disabled]="storyComplete()" (click)="finishStory()">{{ storyComplete() ? 'Finished' : 'Finished reading' }}</button>
+            <button type="button" class="primary-action" [disabled]="storyComplete()" (click)="finishStory()">Finished</button>
           </div>
           <p class="completion-message" role="status" aria-live="polite">{{ completionMessage() || (storyComplete() ? 'Story complete. Your progress is saved.' : '') }}</p>
           <nav class="story-step-actions" aria-label="Previous and next stories">
             @if (previousMachine(); as previous) { <button type="button" class="secondary-action" (click)="goToStory(previous)"><span aria-hidden="true">Previous</span><strong>{{ previous.name }}</strong></button> } @else { <span></span> }
             @if (nextMachine(); as next) { <button type="button" class="primary-action next-action" (click)="goToStory(next)">Next story <strong>{{ next.name }}</strong></button> }
             @else if (storyComplete() && storyNumber() < storyCount()) { <button type="button" class="primary-action next-action" disabled>Finish this story to unlock the next one</button> }
-            @else if (storyComplete() && currentWorld.id === 'outer' && storyNumber() === storyCount()) { <a class="primary-action next-action" routerLink="/missions">Continue to the connect-the-dots panel</a> }
+            @else if (storyComplete() && currentWorld.id === 'outer' && storyNumber() === storyCount() && miniGameComplete()) { <button type="button" class="primary-action next-action" (click)="backToTrail()">Back to trail: Connect the dots</button> }
+            @else if (storyComplete() && currentWorld.id === 'outer' && storyNumber() === storyCount()) { <button type="button" class="primary-action next-action" (click)="goToMiniGame()">Back to trail: mini-game unlocked</button> }
             @else if (storyComplete() && storyNumber() === storyCount()) { <button type="button" class="primary-action next-action" (click)="goToMiniGame()">Back to the trail: mini-game unlocked</button> }
             @else { <button type="button" class="primary-action next-action" disabled>Finish this story to unlock the next one</button> }
           </nav>
         </section>
       </article>
+      @if (lightboxOpen()) {
+        <div class="story-image-lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" (click)="onLightboxBackdrop($event)">
+          <div class="lightbox-panel"><button #lightboxClose type="button" class="lightbox-close" (click)="closeLightbox()" aria-label="Close image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button><picture><source type="image/webp" [srcset]="machineImageUrl(story, 800)"/><img [src]="machineImageUrl(story)" [alt]="story.imageAlt" width="800" height="800"/></picture><h2 id="lightbox-title">{{ story.name }}</h2></div>
+        </div>
+      }
+      @if (stickyPlayerVisible() && speechActive()) {
+        <div class="sticky-audio-player" aria-label="Story audio mini player">
+          <button type="button" class="sticky-audio-toggle" (click)="listen()" [attr.aria-label]="speechPaused() ? 'Resume narration' : 'Pause narration'">{{ speechPaused() ? 'Resume' : 'Pause' }}</button>
+          <div class="sticky-audio-progress" role="progressbar" aria-label="Narration progress" [attr.aria-valuenow]="narrationProgress()" aria-valuemin="0" aria-valuemax="100"><span [style.width.%]="narrationProgress()"></span></div>
+          <button type="button" class="sticky-audio-toggle" (click)="stopListening()" aria-label="Stop narration">Stop</button>
+        </div>
+      }
       <footer class="story-footer"><span>{{ currentWorld.name }} <span aria-hidden="true">&middot;</span> Story {{ storyNumber() }} of {{ storyCount() }}</span><button type="button" class="footer-back" (click)="backToTrail()">Back to trail</button></footer>
     </main>
   }

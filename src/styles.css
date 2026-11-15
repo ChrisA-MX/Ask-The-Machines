@@ -142,3 +142,70 @@ app-root:has(app-storyline) {
 	overflow-x: clip;
 }
 /* You can add global styles to this file, and also import other style files */
+.connect-the-dots-panel{position:relative;z-index:2;width:min(760px,calc(100% - 2rem));max-height:calc(100% - 1rem);overflow:auto;margin:1rem auto;padding:clamp(1rem,3vw,2rem);border:1px solid #8ab9e766;border-radius:1.25rem;background:#091528ef;color:#f4f7ff;box-shadow:0 20px 60px #0008;text-align:center}
+.connect-the-dots-panel h3{margin:.2rem 0 .8rem;color:#d5eaff;font-size:clamp(1.4rem,3vw,2rem)}
+.connect-dots-art{display:block;width:min(100%,560px);height:auto;margin:.5rem auto 1rem}
+.connect-dots-art path{fill:none;stroke:#74caff;stroke-width:3;stroke-dasharray:8 8}
+.connect-dots-art circle{fill:#08152c;stroke:#9cdbff;stroke-width:3}
+.connect-dots-art path:last-child{fill:#ffcb76;stroke:#fff1c9;stroke-width:1}
+.connect-dots-lines{display:grid;gap:.45rem;text-align:left}
+.connect-dots-lines p,.connect-dots-note{margin:.35rem 0;line-height:1.55}
+.story-shell .speech-player{display:flex;min-width:0;flex:1 1 100%;flex-wrap:wrap;align-items:center;gap:.55rem}
+.story-shell .speech-settings{display:flex;min-width:0;flex:1 1 100%;flex-wrap:wrap;align-items:center;gap:.45rem .55rem;padding:.7rem;border:1px solid #5a789955;border-radius:.9rem;background:#0b1930}
+.story-shell .speech-settings label{color:#cde0f5;font-size:.82rem;font-weight:800}
+.story-shell .speech-settings select{box-sizing:border-box;min-height:42px;max-width:min(20rem,100%);padding:.45rem .65rem;border:1px solid #6685aa;border-radius:.55rem;background:#071326;color:#f4f8ff;font:600 .84rem 'DM Sans',sans-serif}
+.story-shell .speech-settings select:first-of-type{min-width:min(15rem,100%);flex:1 1 15rem}
+.story-shell .speech-settings select:focus-visible,.story-shell .speech-settings button:focus-visible{outline:3px solid #ffe184;outline-offset:2px}
+.story-shell .speech-settings select:disabled{opacity:.7;cursor:wait}
+.story-shell .preview-voice{min-height:42px;padding:.55rem .8rem}
+.story-shell .speech-highlight{border-radius:.35rem;background:linear-gradient(90deg,#ffe18427,#66cbff17);box-shadow:0 0 0 .22rem #ffe1841c;transition:background-color .2s ease,box-shadow .2s ease}
+@media(max-width:420px){.story-shell .speech-player>*{flex:1 1 auto}.story-shell .speech-settings{gap:.4rem}.story-shell .speech-settings select:first-of-type{flex-basis:100%}}
+@media(prefers-reduced-motion:reduce){.story-shell .speech-highlight{transition:none}}
+
+/* Story header artwork, audio controls, lightbox and responsive voice settings. */
+.story-shell .image-trigger{box-sizing:border-box;width:220px;height:220px;min-height:0;background:#08172d;border-color:#77bdf74d;box-shadow:0 0 1.5rem #4eafff22;}
+.story-shell .story-hero{grid-template-columns:minmax(0,1fr) 220px!important;}
+.story-shell .about-story-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.65rem;}
+.story-shell .about-story-heading strong{color:#a8ddff;font:700 1.25rem/1.2 'Space Grotesk',sans-serif;}
+.story-shell .hero-art picture,.story-shell .hero-art img{display:block;width:100%;height:100%;}
+.story-shell .hero-art img{object-fit:contain;}
+.story-shell .image-fallback{box-sizing:border-box;width:220px;height:220px;}
+.story-shell .image-fallback span{right:.65rem;bottom:.55rem;max-width:calc(100% - 1.3rem);color:#e0efff;font-size:.82rem;text-align:center;}
+.story-shell .story-audio{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1rem;padding:1rem 0 1.15rem;border-bottom:1px solid #8eb3db2c;}
+.story-shell .audio-primary-area{position:relative;display:flex;min-width:0;flex-wrap:wrap;align-items:center;gap:.55rem;}
+.story-shell .listen-button{display:inline-flex;min-height:48px;align-items:center;justify-content:center;gap:.55rem;padding:.7rem 1.1rem;border:1px solid #ffe184;border-radius:999px;background:linear-gradient(110deg,#ffe184,#ffbd63);color:#101a2b;font:800 .96rem 'DM Sans',sans-serif;cursor:pointer;}
+.story-shell .listen-button svg{width:1.25rem;height:1.25rem;}
+.story-shell .listen-button.is-discoverable{animation:atm-listen-glow 1.6s ease-in-out infinite;}
+@keyframes atm-listen-glow{50%{box-shadow:0 0 1.2rem #ffe18499,0 0 2rem #65caff55;}}
+.story-shell .audio-duration{color:#d3e4f7;font-size:.83rem;}
+.story-shell .listen-new-tag{position:absolute;z-index:2;top:calc(100% + .35rem);left:.5rem;max-width:17rem;padding:.35rem .6rem;border:1px solid #7bcfff88;border-radius:.6rem;background:#09203af2;color:#dff4ff;font-size:.72rem;font-weight:700;box-shadow:0 .3rem 1rem #0008;}
+.story-shell .audio-stop,.story-shell .reset-voice{min-height:40px;padding:.45rem .7rem;border:1px solid #7291b4;border-radius:999px;background:#122640;color:#f3f8ff;font:700 .8rem 'DM Sans',sans-serif;cursor:pointer;}
+.story-shell .voice-settings-desktop{min-width:0;flex:1 1 22rem;}
+.story-shell .voice-settings-mobile{display:none;}
+.story-shell .voice-settings-mobile summary{min-height:44px;color:#a8ddff;font-weight:800;cursor:pointer;}
+.story-shell .voice-settings-mobile[open] .speech-settings{margin-top:.45rem;}
+.story-shell .speech-settings{width:100%;box-sizing:border-box;flex:initial;}
+.story-shell .speech-settings label{white-space:nowrap;}
+.story-shell .speech-settings select{font-size:16px;}
+.story-shell .speech-settings .reset-voice{flex:0 0 auto;}
+.story-shell .audio-unavailable{margin:.8rem 0 1rem;color:#d3e4f7;font-size:.9rem;}
+.story-shell .fact-check{margin-top:1.8rem;}
+.story-shell .fact-check-toggle:focus-visible{outline:3px solid #ffe184;outline-offset:4px;border-radius:.35rem;}
+.story-shell .fact-check .fact-list[hidden]{display:none;}
+.story-shell .sticky-audio-player{position:fixed;z-index:14;top:calc(4.5rem + env(safe-area-inset-top));left:50%;display:flex;width:min(36rem,calc(100vw - 2rem));align-items:center;gap:.7rem;padding:.55rem .7rem;border:1px solid #75b9e977;border-radius:999px;background:#061326f2;color:#fff;box-shadow:0 .5rem 1.7rem #0009;transform:translateX(-50%);}
+.story-shell .sticky-audio-toggle{min-height:38px;padding:.4rem .75rem;border:1px solid #7899bc;border-radius:999px;background:#142a45;color:#fff;font-weight:800;cursor:pointer;}
+.story-shell .sticky-audio-progress{height:.38rem;flex:1;overflow:hidden;border-radius:999px;background:#293d59;}
+.story-shell .sticky-audio-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#69d0ff,#ffe06d);}
+.story-image-lightbox{position:fixed;z-index:1200;inset:0;display:grid;place-items:center;padding:1rem;background:#020610eF;backdrop-filter:blur(12px);animation:atm-lightbox-in .16s ease-out;}
+@keyframes atm-lightbox-in{from{opacity:0}to{opacity:1}}
+.lightbox-panel{position:relative;display:grid;width:min(92vw,52rem);max-height:92dvh;justify-items:center;gap:.75rem;padding:clamp(.7rem,3vw,1.4rem);border:1px solid #7fc9ff66;border-radius:1.15rem;background:#08172d;box-shadow:0 1rem 4rem #000b;}
+.lightbox-panel picture{display:grid;max-width:100%;max-height:calc(92dvh - 6rem);place-items:center;}
+.lightbox-panel img{display:block;width:auto;height:auto;max-width:min(100%,50rem);max-height:calc(92dvh - 7rem);object-fit:contain;border-radius:.65rem;background:#08172d;}
+.lightbox-panel h2{margin:0;color:#fff;font:700 1.15rem 'Space Grotesk',sans-serif;text-align:center;}
+.lightbox-close{position:absolute;z-index:1;top:.35rem;right:.35rem;display:grid;width:44px;height:44px;place-items:center;border:1px solid #9bc7e9;border-radius:50%;background:#08172df2;color:#fff;cursor:pointer;}
+.lightbox-close svg{width:20px;height:20px;}
+.story-shell .about-story{margin-top:1.8rem;}
+@media(max-width:760px){.story-shell .story-hero{grid-template-columns:minmax(0,1fr) 220px!important;}.story-shell .image-trigger,.story-shell .image-fallback{width:220px!important;height:220px!important;}}
+@media(max-width:640px){.story-shell .story-hero{display:flex!important;flex-direction:column;align-items:stretch;gap:.85rem;}.story-shell .hero-art.image-trigger,.story-shell .hero-art.image-fallback{width:240px!important;height:240px!important;min-height:0;align-self:center;order:-1;}.story-shell .story-audio{align-items:flex-start;flex-direction:column;}.story-shell .audio-primary-area{width:100%;}.story-shell .voice-settings-desktop{display:none;}.story-shell .voice-settings-mobile{display:block;width:100%;}.story-shell .story-audio>.voice-settings-mobile{align-self:stretch;}.story-shell .speech-settings select{max-width:100%;}.story-shell .sticky-audio-player{top:calc(4rem + env(safe-area-inset-top));}}
+@media(max-width:420px){.story-shell .hero-art.image-trigger,.story-shell .hero-art.image-fallback{width:min(240px,100%);height:auto;aspect-ratio:1;}.story-shell .sticky-audio-player{width:calc(100vw - 1rem);gap:.4rem;padding:.4rem;}.story-shell .sticky-audio-toggle{padding:.35rem .55rem;font-size:.78rem;}}
+@media(prefers-reduced-motion:reduce){.story-shell .listen-button.is-discoverable{animation:none;}.story-image-lightbox{animation:none;}}

@@ -20,18 +20,18 @@
 						<p class="message" [class.message--user]="message.role === 'user'">{{ message.text }}</p>
 					</div>
 				}
-				@if (isThinking()) { <p class="thinking">Checking your completed story files...</p> }
+				@if (isThinking()) { <p class="thinking" role="status">Apollo is thinking<span aria-hidden="true">...</span></p> }
 			</div>
-			@if (messages().length === 1) {
+			@if (!isThinking() && messages().at(-1)?.role === 'assistant') {
 				<div class="suggestions" aria-label="Suggested questions">
-					@for (suggestion of suggestions; track suggestion) {
+					@for (suggestion of suggestions(); track suggestion) {
 						<button type="button" (click)="send(suggestion)">{{ suggestion }}</button>
 					}
 				</div>
 			}
 			<form class="chat-form" (ngSubmit)="send()">
 				<label class="visually-hidden" for="chat-message">Your question</label>
-				<input #messageInput id="chat-message" name="message" [(ngModel)]="draft" placeholder="Ask a question..." autocomplete="off" />
+				<input #messageInput id="chat-message" name="message" [(ngModel)]="draft" maxlength="300" placeholder="Ask a question..." autocomplete="off" />
 				<button type="submit" [disabled]="!draft.trim() || isThinking()" aria-label="Send message">
 					<svg class="chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
 				</button>

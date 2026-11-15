@@ -2,8 +2,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { Overlay, OverlayContainer, OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { afterEveryRender, afterNextRender, Component, DestroyRef, ElementRef, HostBinding, HostListener, inject, PLATFORM_ID, signal, TemplateRef, ViewContainerRef, viewChild } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { MachineStory, WORLDS, WorldStory, WorldId } from './machines.data';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { CONNECT_THE_DOTS, MachineStory, WORLDS, WorldStory, WorldId } from './machines.data';
 import { SpaceDoodle } from './space-doodle/space-doodle';
 import { WorldCarousel } from './world-carousel/world-carousel';
 import { ProgressService } from '../services/progress.service';
@@ -60,6 +60,7 @@ export class Storyline {
   @HostBinding('class.has-active-preview')
   protected get hasActivePreview(): boolean { return this.activePeek() !== null; }
   protected readonly worlds = WORLDS;
+  protected readonly connectTheDots = CONNECT_THE_DOTS;
   protected readonly viewBoxWidth = 1000;
   protected readonly compactTrail = signal(false);
   protected readonly nodePositions = signal<PathPoint[]>([]);
@@ -90,6 +91,7 @@ export class Storyline {
   private readonly destroyRef = inject(DestroyRef);
   private readonly progress = inject(ProgressService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly navigationState = inject(StorylineNavigationService);
   private readonly overlay = inject(Overlay);
   private readonly overlayContainer = inject(OverlayContainer);
@@ -115,6 +117,7 @@ export class Storyline {
       afterNextRender(() => {
         this.initializeBrowserState();
         this.restoreTrailLocation();
+        this.openRequestedWorldTrail();
       });
       afterEveryRender(() => {
         this.observeScene();
@@ -133,6 +136,18 @@ export class Storyline {
       this.previewOverlay?.dispose();
       this.resizeObserver?.disconnect();
     });
+  }
+
+  private openRequestedWorldTrail(): void {
+    const worldId = this.route.snapshot.queryParamMap.get('world');
+    const worldIndex = this.worlds.findIndex((world) => world.id === worldId);
+    if (worldIndex < 0) return;
+    this.selectedWorldIndex.set(worldIndex);
+    if (this.route.snapshot.queryParamMap.get('trail') !== '1') return;
+    const world = this.worlds[worldIndex];
+    if (!isWorldUnlocked(this.worlds, this.completedIds(), worldIndex, this.completedGameIds())) return;
+    this.activeWorld.set(world);
+    this.activeStopIndex.set(this.firstAvailableMachineIndex(world));
   }
 
   protected openWorld(world: WorldStory, worldIndex: number): void {

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { AnimatedSprite } from '../animated-sprite/animated-sprite';
 import { ChatAvailabilityService } from '../../services/chat-availability.service';
 import { ChatService } from '../../services/chat.service';
@@ -25,11 +26,13 @@ class MockAnimatedSprite {
 
 describe('ChatWidget', () => {
   const chat = { ask: vi.fn() };
+  const router = { url: '/' };
   const profile = { avatarName: signal('Apollo') };
   let availability: ChatAvailabilityService;
 
   beforeEach(async () => {
     vi.clearAllMocks();
+    router.url = '/';
     chat.ask.mockResolvedValue({ reply: 'Hello!', succeeded: true });
     availability = new ChatAvailabilityService();
     TestBed.overrideComponent(ChatWidget, {
@@ -40,6 +43,7 @@ describe('ChatWidget', () => {
       imports: [ChatWidget],
       providers: [
         { provide: ChatService, useValue: chat },
+        { provide: Router, useValue: router },
         { provide: ChatAvailabilityService, useValue: availability },
         { provide: PlayerProfileService, useValue: profile },
       ],
@@ -98,6 +102,25 @@ describe('ChatWidget', () => {
 
     expect(fixture.nativeElement.querySelector('[role="dialog"]')).toBeTruthy();
     expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#chat-message'));
+  });
+
+  it('shows the current machine suggestions and sends that story context', async () => {
+    router.url = '/storylines/mars/opportunity';
+    const fixture = TestBed.createComponent(ChatWidget);
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('.apollo-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const chips = [...fixture.nativeElement.querySelectorAll('.suggestions button')] as HTMLButtonElement[];
+    expect(chips.map((chip) => chip.textContent.trim())).toEqual([
+      'What did Opportunity find?', 'Is Opportunity still working?', 'How did Opportunity work?',
+    ]);
+    chips[0].click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(chat.ask).toHaveBeenCalledWith('What did Opportunity find?', [], 'opportunity');
+    router.url = '/';
   });
 
   it('closes on Escape and returns focus to Apollo', async () => {
