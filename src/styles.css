@@ -16,7 +16,8 @@ button, a { font: inherit; }
 
 app-landing .site-header nav,
 app-storyline .site-header nav,
-app-mission-lab .site-header nav {
+app-mission-lab .site-header nav,
+app-about .site-header nav {
 	display: flex;
 	align-items: center;
 	gap: clamp(.15rem, 1vw, .75rem);
@@ -28,14 +29,16 @@ app-mission-lab .site-header nav {
 }
 app-landing .site-header .brand,
 app-storyline .site-header .brand,
-app-mission-lab .site-header .brand {
+app-mission-lab .site-header .brand,
+app-about .site-header .brand {
 	display: inline-flex;
 	align-items: center;
 	gap: .6rem;
 }
 app-landing .site-header .brand::before,
 app-storyline .site-header .brand::before,
-app-mission-lab .site-header .brand::before {
+app-mission-lab .site-header .brand::before,
+app-about .site-header .brand::before {
 	width: .5rem;
 	height: .5rem;
 	flex: 0 0 .5rem;
@@ -51,7 +54,8 @@ app-mission-lab .site-header .brand::before {
 }
 app-landing .site-header nav a,
 app-storyline .site-header nav a,
-app-mission-lab .site-header nav a {
+app-mission-lab .site-header nav a,
+app-about .site-header nav a {
 	position: relative;
 	padding: .6rem .9rem;
 	overflow: hidden;
@@ -68,20 +72,24 @@ app-landing .site-header nav a:focus-visible,
 app-storyline .site-header nav a:hover,
 app-storyline .site-header nav a:focus-visible,
 app-mission-lab .site-header nav a:hover,
-app-mission-lab .site-header nav a:focus-visible {
+app-about .site-header nav a:hover,
+app-mission-lab .site-header nav a:focus-visible,
+app-about .site-header nav a:focus-visible {
 	color: #fff;
 	background: rgba(124, 177, 241, .13);
 }
 app-landing .site-header nav a.is-active,
 app-storyline .site-header nav a.is-active,
-app-mission-lab .site-header nav a.is-active {
+app-mission-lab .site-header nav a.is-active,
+app-about .site-header nav a.is-active {
 	background: #f5c548;
 	color: #09142e;
 	font-weight: 700;
 }
 app-landing .site-header,
 app-storyline .site-header,
-app-mission-lab .site-header {
+app-mission-lab .site-header,
+app-about .site-header {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) auto;
 	align-items: center;
@@ -89,13 +97,15 @@ app-mission-lab .site-header {
 }
 app-landing .site-header nav,
 app-storyline .site-header nav,
-app-mission-lab .site-header nav {
+app-mission-lab .site-header nav,
+app-about .site-header nav {
 	justify-self: end;
 }
 @media (max-width: 760px) {
 	app-landing .site-header,
 	app-storyline .site-header,
-	app-mission-lab .site-header {
+	app-mission-lab .site-header,
+	app-about .site-header {
 		grid-template-columns: 1fr;
 		align-items: start;
 		gap: .7rem;
@@ -103,25 +113,30 @@ app-mission-lab .site-header nav {
 	}
 	app-landing .site-header nav,
 	app-storyline .site-header nav,
-	app-mission-lab .site-header nav {
+	app-mission-lab .site-header nav,
+	app-about .site-header nav {
 		justify-self: start;
 		gap: 0;
 		padding: .25rem;
 	}
 	app-landing .site-header .brand,
 	app-storyline .site-header .brand,
-	app-mission-lab .site-header .brand { font-size: .92rem; }
+	app-mission-lab .site-header .brand,
+	app-about .site-header .brand { font-size: .92rem; }
 	app-landing .site-header nav a,
 	app-storyline .site-header nav a,
-	app-mission-lab .site-header nav a { padding: .5rem .62rem; font-size: .76rem; }
+	app-mission-lab .site-header nav a,
+	app-about .site-header nav a { padding: .5rem .62rem; font-size: .76rem; }
 }
 @media (prefers-reduced-motion: reduce) {
 	app-landing .site-header nav a,
 	app-storyline .site-header nav a,
-	app-mission-lab .site-header nav a { transition: none; }
+	app-mission-lab .site-header nav a,
+	app-about .site-header nav a { transition: none; }
 	app-landing .site-header .brand::before,
 	app-storyline .site-header .brand::before,
-	app-mission-lab .site-header .brand::before { animation: none; }
+	app-mission-lab .site-header .brand::before,
+	app-about .site-header .brand::before { animation: none; }
 }
 
 /* Keep the shared stage planets out of the world-map controls and story trail. */

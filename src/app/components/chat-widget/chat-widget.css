@@ -174,3 +174,5 @@
 @media (prefers-reduced-motion: reduce) {
 	.speech-bubble, .apollo-button, .chat-panel { transition: none; animation: none; }
 }
+.ai-art-note { margin: .15rem 0 0; color: #8fa4c8; font-size: .68rem; letter-spacing: .04em; }
+.chat-panel--action-clearance .ai-art-note { display: none; }

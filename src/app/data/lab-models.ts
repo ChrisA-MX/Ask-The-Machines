@@ -22,6 +22,7 @@ export interface LabModel {
 export const LAB_MODELS: readonly LabModel[] = [
   {
     id: 'apollo-lunar-module',
+    credit: { title: 'Apollo Lunar Module', author: 'NASA / Michael D. Carbajal', sourceUrl: 'https://science.nasa.gov/3d-resources/apollo-lunar-module/', license: 'NASA media usage guidelines' },
     label: 'Apollo Lunar Module',
     file: 'apollo-lunar-module.glb',
     shortDescription: 'The lunar module was a two-part spacecraft. The bottom half landed on the Moon and stayed there, and the top half carried the astronauts back up to orbit.',
@@ -31,6 +32,7 @@ export const LAB_MODELS: readonly LabModel[] = [
   },
   {
     id: 'mars-rover',
+    credit: { title: 'Mars Rover', author: 'Rasmus.Eist on Sketchfab', sourceUrl: 'https://sketchfab.com/3d-models/mars-rover-c335b137a3564b33baf2dbac5502d1b9', license: 'CC BY 4.0 (file compressed for the web)' },
     label: 'Mars Rover',
     file: 'mars-rover.glb',
     shortDescription: 'Rovers are robot geologists on wheels. They drive across Mars, studying rocks, soil and weather with cameras and instruments on board.',
@@ -38,6 +40,7 @@ export const LAB_MODELS: readonly LabModel[] = [
   },
   {
     id: 'ingenuity-helicopter',
+    credit: { title: 'Mars Ingenuity Helicopter', author: 'Marco_Romero on Sketchfab', sourceUrl: 'https://sketchfab.com/3d-models/mars-ingenuity-helicopter-201020c6e7e04440a7a956abeda32040', license: 'CC BY 4.0 (file compressed for the web)' },
     label: 'Ingenuity',
     file: 'mars-ingenuity-helicopter.glb',
     shortDescription: 'Ingenuity was the first helicopter to fly on another planet. Its two blades spin in opposite directions to grip Mars’s very thin air.',
@@ -48,6 +51,7 @@ export const LAB_MODELS: readonly LabModel[] = [
   },
   {
     id: 'ingenuity-flight',
+    credit: { title: 'Ingenuity Flight', author: 'Sakado (HermanKruger) on Sketchfab', sourceUrl: 'https://sketchfab.com/3d-models/ingenuity-flight-2656b588baae44198e0d1b3125b77208', license: 'CC BY 4.0 (file compressed for the web)' },
     label: 'Ingenuity in Flight',
     file: 'ingenuity-flight.glb',
     shortDescription: 'Here’s Ingenuity in its flying pose. It flew 72 times, scouting safe routes and interesting rocks for the Perseverance rover.',
@@ -57,6 +61,7 @@ export const LAB_MODELS: readonly LabModel[] = [
   },
   {
     id: 'voyager-probe',
+    credit: { title: 'Voyager', author: 'NASA 3D Resources', sourceUrl: 'https://science.nasa.gov/3d-resources/voyager/', license: 'NASA media usage guidelines' },
     label: 'Voyager Probe',
     file: 'voyager-probe.glb',
     shortDescription: 'Voyager’s big dish antenna talks to Earth, and a golden record is mounted on its side. Voyager 1 and Voyager 2 share this design, and both are still sending signals home.',

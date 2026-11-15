@@ -1,0 +1,15 @@
+:host { position: relative; z-index: 2; display: block; min-height: 100dvh; color: #f7f8ff; }
+.lost-page { display: grid; min-height: 100dvh; grid-template-rows: auto 1fr; padding: 1.8rem 5.9% 3rem; }
+.brand { justify-self: start; color: #ffe13f; font-family: 'Space Grotesk', sans-serif; font-size: 1.12rem; font-weight: 700; letter-spacing: -.03em; text-decoration: none; }
+.lost-card { align-self: center; max-width: 40rem; padding: clamp(1.4rem, 4vw, 2.5rem); border: 1px solid rgba(161, 193, 239, .16); border-radius: 1.5rem; background: rgba(5, 12, 30, .72); backdrop-filter: blur(10px); }
+.eyebrow { margin: 0 0 1rem; color: #ff7ac3; font-size: .8rem; font-weight: 700; letter-spacing: .22em; }
+h1 { margin: 0 0 1rem; font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.2rem, 6vw, 3.8rem); letter-spacing: -.06em; line-height: 1; }
+h1 span { color: #ffdf3d; }
+p { margin: 0 0 1.5rem; color: #c9d7f3; font-size: 1.05rem; line-height: 1.55; }
+.lost-actions { display: flex; flex-wrap: wrap; gap: .7rem; }
+.lost-actions a { padding: .8rem 1.2rem; border: 1px solid rgba(171, 201, 239, .28); border-radius: 999px; background: rgba(11, 24, 50, .54); color: #d7e5fb; font-weight: 600; text-decoration: none; transition: border-color .2s ease, color .2s ease, transform .2s ease; }
+.lost-actions a:hover, .lost-actions a:focus-visible { border-color: rgba(255, 225, 63, .7); color: #ffe986; transform: translateY(-2px); }
+.lost-actions a.primary { border-color: #f5c548; background: #f5c548; color: #07102e; }
+a:focus-visible { outline: 2px solid #a9ddff; outline-offset: 4px; }
+@media (max-width: 760px) { .lost-page { padding: 1.3rem 1.25rem 2rem; } }
+@media (prefers-reduced-motion: reduce) { .lost-actions a { transition: none; } }

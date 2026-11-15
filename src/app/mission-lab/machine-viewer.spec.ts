@@ -2,13 +2,13 @@ import { fitCameraDistance, buildLabStoryUrl, buildLabWorldUrl, LAB_MODELS } fro
 import { nextLabTabIndex } from './machine-viewer';
 
 describe('Mission Lab model configuration and controls', () => {
-  it('contains exactly five uniquely identified model entries with no credit placeholders', () => {
+  it('contains exactly five uniquely identified model entries with complete credits', () => {
     expect(LAB_MODELS).toHaveLength(5);
     expect(new Set(LAB_MODELS.map((model) => model.id)).size).toBe(5);
     expect(LAB_MODELS.map((model) => model.file)).toEqual([
       'apollo-lunar-module.glb', 'mars-rover.glb', 'mars-ingenuity-helicopter.glb', 'ingenuity-flight.glb', 'voyager-probe.glb',
     ]);
-    expect(LAB_MODELS.every((model) => model.credit === undefined)).toBe(true);
+    expect(LAB_MODELS.every((model) => !!model.credit?.title && !!model.credit.author && /^https:\/\//.test(model.credit.sourceUrl) && !!model.credit.license)).toBe(true);
     expect(LAB_MODELS.find((model) => model.id === 'mars-rover')?.label).toBe('Mars Rover');
   });
 

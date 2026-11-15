@@ -37,26 +37,26 @@
       "facts": [
         {
           "text": "Surveyor 3 made a soft landing in Oceanus Procellarum (the Ocean of Storms) in April 1967.",
-          "source": "NASA Space Science Data Coordinated Archive (NSSDCA)",
-          "sourceUrl": ""
+          "source": "NASA Science: Surveyor 3",
+          "sourceUrl": "https://science.nasa.gov/mission/surveyor-3"
         },
         {
           "text": "It sent back more than 6,000 images and dug trenches with a soil scoop to test how strong the lunar ground was.",
-          "source": "NASA Space Science Data Coordinated Archive (NSSDCA)",
-          "sourceUrl": ""
+          "source": "NASA SP-146, Surveyor III: A Preliminary Report",
+          "sourceUrl": "https://ntrs.nasa.gov/citations/19670023253"
         },
         {
           "text": "Apollo 12 landed about 180 meters (600 feet) away in November 1969, and the crew brought back its camera and other parts.",
-          "source": "NASA Apollo 12 mission pages",
-          "sourceUrl": ""
+          "source": "NASA Science: Footpads and Footprints",
+          "sourceUrl": "https://solarsystem.nasa.gov/news/1111/footpads-and-footprints-humans-and-machine-meet-on-the-moon"
         },
         {
           "text": "It is the only spacecraft on another world that humans have visited so far.",
-          "source": "NASA Apollo 12 mission pages",
-          "sourceUrl": ""
+          "source": "NASA Science: Footpads and Footprints",
+          "sourceUrl": "https://solarsystem.nasa.gov/news/1111/footpads-and-footprints-humans-and-machine-meet-on-the-moon"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "surveyor-3"
     },
     {
@@ -80,36 +80,36 @@
       "facts": [
         {
           "text": "Apollo 11 landed at Tranquility Base on July 20, 1969.",
-          "source": "NASA Apollo 11 mission page",
-          "sourceUrl": ""
+          "source": "NASA: Apollo 11 mission",
+          "sourceUrl": "https://www.nasa.gov/mission/apollo-11/"
         },
         {
           "text": "The descent stage served as the launch platform for the ascent stage and remains on the Moon.",
-          "source": "NASA Apollo 11 mission page",
-          "sourceUrl": ""
+          "source": "NASA: Apollo 11 mission",
+          "sourceUrl": "https://www.nasa.gov/mission/apollo-11/"
         },
         {
           "text": "The Apollo 11 retroreflector has 100 corner-cube reflectors, and lasers from Earth still bounce off it.",
-          "source": "NASA Apollo 11 science pages",
-          "sourceUrl": ""
+          "source": "NASA JPL: Apollo 11 Experiment Continues to Return Valuable Data",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/apollo-11-experiment-continues-to-return-valuable-data/"
         },
         {
           "text": "Measurements from the retroreflectors show the Moon moving away from Earth by about 3.8 centimeters per year.",
-          "source": "NASA science pages",
-          "sourceUrl": ""
+          "source": "NASA JPL: Apollo 11 Experiment Continues to Return Valuable Data",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/apollo-11-experiment-continues-to-return-valuable-data/"
         },
         {
           "text": "Apollo 14 and Apollo 15 also left retroreflectors on the Moon.",
-          "source": "NASA Apollo science pages",
-          "sourceUrl": ""
+          "source": "NASA JPL: Apollo 11 Experiment Continues to Return Valuable Data",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/apollo-11-experiment-continues-to-return-valuable-data/"
         },
         {
           "text": "The One Small Step to Protect Human Heritage in Space Act became U.S. law in December 2020.",
-          "source": "U.S. Congress",
-          "sourceUrl": ""
+          "source": "U.S. Congress: Public Law 116-275",
+          "sourceUrl": "https://www.congress.gov/116/plaws/publ275/PLAW-116publ275.htm"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "apollo-11-eagle"
     },
     {
@@ -130,31 +130,31 @@
       "facts": [
         {
           "text": "Lunar Roving Vehicles were used on Apollo 15 (1971), Apollo 16 and Apollo 17 (1972).",
-          "source": "NASA Apollo program pages",
-          "sourceUrl": ""
+          "source": "NASA NSSDCA: The Apollo Lunar Roving Vehicle",
+          "sourceUrl": "https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_lrv.html"
         },
         {
           "text": "The rovers were battery powered and folded to fit inside the lunar module.",
-          "source": "NASA Apollo program pages",
-          "sourceUrl": ""
+          "source": "NASA NSSDCA: The Apollo Lunar Roving Vehicle",
+          "sourceUrl": "https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_lrv.html"
         },
         {
           "text": "Gene Cernan broke a rover fender on Apollo 17, and the crew repaired it with maps and duct tape.",
-          "source": "NASA Apollo 17 mission pages",
-          "sourceUrl": ""
+          "source": "NASA: Duct Tape Saves the Day!",
+          "sourceUrl": "https://www.nasa.gov/image-article/duct-tape-saves-day/"
         },
         {
           "text": "The rover’s TV camera could be steered from Earth to watch the lunar module lift off.",
-          "source": "NASA Apollo program pages",
-          "sourceUrl": ""
+          "source": "Smithsonian National Air and Space Museum",
+          "sourceUrl": "https://airandspace.si.edu/node/27575"
         },
         {
           "text": "All three rovers remain on the Moon.",
-          "source": "NASA Apollo program pages",
-          "sourceUrl": ""
+          "source": "NASA NSSDCA: The Apollo Lunar Roving Vehicle",
+          "sourceUrl": "https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_lrv.html"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "apollo-lrv"
     },
     {
@@ -175,26 +175,26 @@
       "facts": [
         {
           "text": "The Apollo 17 ALSEP was powered by a SNAP-27 radioisotope generator providing about 70 watts.",
-          "source": "NASA Apollo 17 science pages",
-          "sourceUrl": ""
+          "source": "NASA SP-4029: Lunar Surface Experiments",
+          "sourceUrl": "https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_18-33_Lunar_Surface_Experiments.htm"
         },
         {
           "text": "Apollo seismometers recorded moonquakes, including deep quakes linked to Earth’s tidal pull and impacts from meteorites.",
-          "source": "NASA Apollo science pages",
-          "sourceUrl": ""
+          "source": "NASA: ALSEP Termination Report",
+          "sourceUrl": "https://ntrs.nasa.gov/citations/19790014808"
         },
         {
           "text": "Seismic data from the Apollo network showed the Moon has a crust, mantle and core.",
-          "source": "NASA Apollo science pages",
-          "sourceUrl": ""
+          "source": "NASA: ALSEP Termination Report",
+          "sourceUrl": "https://ntrs.nasa.gov/citations/19790014808"
         },
         {
           "text": "NASA ended Apollo surface station operations on September 30, 1977.",
-          "source": "NASA Apollo science pages",
-          "sourceUrl": ""
+          "source": "NASA: ALSEP Termination Report",
+          "sourceUrl": "https://ntrs.nasa.gov/citations/19790014808"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "apollo-17-alsep"
     },
     {
@@ -218,26 +218,26 @@
       "facts": [
         {
           "text": "Mars Pathfinder landed in Ares Vallis on July 4, 1997, using parachutes, rockets and airbags.",
-          "source": "NASA JPL Mars Pathfinder mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Mars Pathfinder",
+          "sourceUrl": "https://science.nasa.gov/mission/mars-pathfinder/"
         },
         {
           "text": "Sojourner carried an alpha proton X-ray spectrometer to measure the chemistry of rocks such as Barnacle Bill and Yogi.",
-          "source": "NASA JPL Mars Pathfinder mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Mars Pathfinder",
+          "sourceUrl": "https://science.nasa.gov/mission/mars-pathfinder/"
         },
         {
           "text": "Sojourner was designed to operate for about 7 Mars days and worked for far longer.",
-          "source": "NASA JPL Mars Pathfinder mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Mars Pathfinder",
+          "sourceUrl": "https://science.nasa.gov/mission/mars-pathfinder/"
         },
         {
           "text": "The Pathfinder lander’s last transmission was on September 27, 1997.",
-          "source": "NASA JPL Mars Pathfinder mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Mars Pathfinder",
+          "sourceUrl": "https://science.nasa.gov/mission/mars-pathfinder/"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "sojourner"
     },
     {
@@ -261,36 +261,36 @@
       "facts": [
         {
           "text": "Opportunity landed on Meridiani Planum in January 2004, and its mission was planned for 90 Mars days.",
-          "source": "NASA JPL Mars Exploration Rover mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Opportunity",
+          "sourceUrl": "https://science.nasa.gov/mission/mer-opportunity/"
         },
         {
           "text": "It found hematite spherules, nicknamed blueberries, evidence that liquid water once soaked the area.",
-          "source": "NASA JPL Mars Exploration Rover mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Six Things to Know About Opportunity",
+          "sourceUrl": "https://science.nasa.gov/missions/mer/six-things-to-know-about-nasas-opportunity-rover/"
         },
         {
           "text": "Opportunity drove about 45.16 kilometers (28.06 miles).",
-          "source": "NASA JPL Mars Exploration Rover mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Opportunity",
+          "sourceUrl": "https://science.nasa.gov/mission/mer-opportunity/"
         },
         {
           "text": "Its last communication was on June 10, 2018, during a global dust storm.",
-          "source": "NASA JPL Mars Exploration Rover mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: Opportunity Rover Mission on Mars Comes to End",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/nasas-opportunity-rover-mission-on-mars-comes-to-end/"
         },
         {
           "text": "NASA declared the mission complete on February 13, 2019, after trying more than 1,000 recovery commands.",
-          "source": "NASA JPL Mars Exploration Rover mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: Opportunity Rover Mission on Mars Comes to End",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/nasas-opportunity-rover-mission-on-mars-comes-to-end/"
         },
         {
           "text": "Spirit’s last contact with Earth was on March 22, 2010.",
-          "source": "NASA JPL Mars Exploration Rover mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Spirit",
+          "sourceUrl": "https://science.nasa.gov/mission/mer-spirit/"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "opportunity"
     },
     {
@@ -311,31 +311,31 @@
       "facts": [
         {
           "text": "InSight landed on Elysium Planitia on November 26, 2018.",
-          "source": "NASA JPL InSight mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: InSight Lander",
+          "sourceUrl": "https://science.nasa.gov/mission/insight/"
         },
         {
           "text": "Its seismometer recorded more than 1,300 marsquakes, including a magnitude-5 quake in May 2022.",
-          "source": "NASA JPL InSight mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: How InSight Revealed the Heart of Mars",
+          "sourceUrl": "https://www.jpl.nasa.gov/edu/resources/teachable-moment/how-insight-revealed-the-heart-of-mars/"
         },
         {
           "text": "InSight’s data helped scientists measure the thickness of Mars’s crust and showed the planet has a liquid core.",
-          "source": "NASA JPL InSight mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: How InSight Revealed the Heart of Mars",
+          "sourceUrl": "https://www.jpl.nasa.gov/edu/resources/teachable-moment/how-insight-revealed-the-heart-of-mars/"
         },
         {
           "text": "The heat probe (mole) could not dig deep because the soil did not give it enough grip.",
-          "source": "NASA JPL InSight mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: NASA Retires InSight Mars Lander Mission",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/nasa-retires-insight-mars-lander-mission-after-years-of-science"
         },
         {
           "text": "NASA ended the mission in December 2022 because dust covered the solar panels.",
-          "source": "NASA JPL InSight mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: NASA Retires InSight Mars Lander Mission",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/nasa-retires-insight-mars-lander-mission-after-years-of-science"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "insight"
     },
     {
@@ -356,31 +356,31 @@
       "facts": [
         {
           "text": "Ingenuity arrived on Mars attached to the Perseverance rover in February 2021.",
-          "source": "NASA JPL Ingenuity mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: Ingenuity Helicopter Mission Ends",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/"
         },
         {
           "text": "Its first flight, on April 19, 2021, was the first powered, controlled flight on another planet.",
-          "source": "NASA JPL Ingenuity mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: Ingenuity Helicopter Mission Ends",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/"
         },
         {
           "text": "NASA planned for five flights, and Ingenuity completed 72.",
-          "source": "NASA JPL Ingenuity mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: Ingenuity Helicopter Mission Ends",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/"
         },
         {
           "text": "In January 2024, Ingenuity damaged its rotor blades on landing during Flight 72, ending the mission.",
-          "source": "NASA JPL Ingenuity mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: Ingenuity Helicopter Mission Ends",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/"
         },
         {
           "text": "It carried a small piece of fabric from the Wright brothers’ 1903 airplane.",
-          "source": "NASA JPL Ingenuity mission page",
-          "sourceUrl": ""
+          "source": "NASA JPL: Ingenuity Helicopter Mission Ends",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/after-three-years-on-mars-nasas-ingenuity-helicopter-mission-ends/"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "ingenuity"
     },
     {
@@ -404,31 +404,31 @@
       "facts": [
         {
           "text": "Pioneer 10 launched in March 1972 and was the first spacecraft to cross the asteroid belt.",
-          "source": "NASA Pioneer mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Pioneer 10",
+          "sourceUrl": "https://science.nasa.gov/mission/pioneer-10"
         },
         {
           "text": "It made the first flyby of Jupiter in December 1973.",
-          "source": "NASA Pioneer mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Pioneer 10",
+          "sourceUrl": "https://science.nasa.gov/mission/pioneer-10"
         },
         {
           "text": "NASA received its last signal on January 23, 2003.",
-          "source": "NASA Pioneer mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Pioneer 10",
+          "sourceUrl": "https://science.nasa.gov/mission/pioneer-10"
         },
         {
           "text": "It is heading toward the star Aldebaran, a journey of more than two million years.",
-          "source": "NASA Pioneer mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Pioneer 10 Sends Last Signal",
+          "sourceUrl": "https://science.nasa.gov/missions/pioneer/pioneer-10-sends-last-signal/"
         },
         {
           "text": "It carries the Pioneer plaque, designed by Carl Sagan and Frank Drake and drawn by Linda Salzman Sagan.",
-          "source": "NASA Pioneer plaque page",
-          "sourceUrl": ""
+          "source": "NASA Science: Pioneer 10",
+          "sourceUrl": "https://science.nasa.gov/mission/pioneer-10"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "pioneer-10"
     },
     {
@@ -449,31 +449,31 @@
       "facts": [
         {
           "text": "Voyager 1 launched on September 5, 1977, and flew past Jupiter (1979) and Saturn (1980).",
-          "source": "NASA Science Voyager mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Voyager 1",
+          "sourceUrl": "https://science.nasa.gov/mission/voyager/voyager-1/"
         },
         {
           "text": "It entered interstellar space in August 2012.",
-          "source": "NASA Science Voyager mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Voyager 1",
+          "sourceUrl": "https://science.nasa.gov/mission/voyager/voyager-1/"
         },
         {
           "text": "It carries a Golden Record with sounds and images of Earth.",
-          "source": "NASA Science Voyager mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Voyager 1",
+          "sourceUrl": "https://science.nasa.gov/mission/voyager/voyager-1/"
         },
         {
           "text": "A flight data system memory problem began in November 2023, and engineers restored science data in 2024 by relocating code.",
-          "source": "NASA JPL Voyager news",
-          "sourceUrl": ""
+          "source": "NASA JPL: Voyager 1 Resumes Sending Engineering Updates",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/nasas-voyager-1-resumes-sending-engineering-updates-to-earth/"
         },
         {
           "text": "NASA expects Voyager 1 to reach one light-day from Earth in November 2026.",
-          "source": "NASA JPL Voyager news",
-          "sourceUrl": ""
+          "source": "NASA Science: Where Are Voyager 1 and Voyager 2 Now?",
+          "sourceUrl": "https://science.nasa.gov/mission/voyager/where-are-voyager-1-and-voyager-2-now/"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "voyager-1"
     },
     {
@@ -494,31 +494,31 @@
       "facts": [
         {
           "text": "Voyager 2 launched on August 20, 1977, and is the only spacecraft to have visited Uranus (1986) and Neptune (1989).",
-          "source": "NASA Science Voyager mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Voyager 2",
+          "sourceUrl": "https://science.nasa.gov/mission/voyager/voyager-2"
         },
         {
           "text": "It discovered 10 new moons at Uranus and observed Neptune’s Great Dark Spot and Triton’s geysers.",
-          "source": "NASA Science Voyager mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Voyager 2",
+          "sourceUrl": "https://science.nasa.gov/mission/voyager/voyager-2"
         },
         {
           "text": "It entered interstellar space in November 2018.",
-          "source": "NASA Science Voyager mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: Voyager 2",
+          "sourceUrl": "https://science.nasa.gov/mission/voyager/voyager-2"
         },
         {
           "text": "Its power output declines by about 4 watts per year, so engineers turn off systems to conserve it.",
-          "source": "NASA JPL Voyager news",
-          "sourceUrl": ""
+          "source": "NASA JPL: NASA Turns Off Science Instrument to Save Voyager 2 Power",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/nasa-turns-off-science-instrument-to-save-voyager-2-power"
         },
         {
           "text": "In 2023, NASA used a powerful transmission to regain contact after a command pointed Voyager 2’s antenna away from Earth.",
-          "source": "NASA JPL Voyager news",
-          "sourceUrl": ""
+          "source": "NASA JPL: Voyager 2 Communications Pause",
+          "sourceUrl": "https://www.jpl.nasa.gov/news/nasa-mission-update-voyager-2-communications-pause/"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "voyager-2"
     },
     {
@@ -539,26 +539,26 @@
       "facts": [
         {
           "text": "New Horizons launched in January 2006 and was the fastest spacecraft launched from Earth.",
-          "source": "NASA New Horizons mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: New Horizons",
+          "sourceUrl": "https://science.nasa.gov/mission/new-horizons/"
         },
         {
           "text": "It flew past Pluto on July 14, 2015, revealing water-ice mountains and nitrogen-ice glaciers.",
-          "source": "NASA New Horizons mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: New Horizons",
+          "sourceUrl": "https://science.nasa.gov/mission/new-horizons/"
         },
         {
           "text": "It flew past the Kuiper Belt object Arrokoth on January 1, 2019, a snowman-shaped contact binary.",
-          "source": "NASA New Horizons mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: New Horizons",
+          "sourceUrl": "https://science.nasa.gov/mission/new-horizons/"
         },
         {
           "text": "It is continuing to operate in an extended mission in the Kuiper Belt.",
-          "source": "NASA New Horizons mission page",
-          "sourceUrl": ""
+          "source": "NASA Science: New Horizons",
+          "sourceUrl": "https://science.nasa.gov/mission/new-horizons/"
         }
       ],
-      "verified": false,
+      "verified": true,
       "imageKey": "new-horizons"
     }
   ],

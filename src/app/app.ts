@@ -3,11 +3,12 @@ import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Rout
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Stage } from './components/stage/stage';
 import { ChatWidget } from './components/chat-widget/chat-widget';
+import { SoundToggle } from './components/sound-toggle/sound-toggle';
 import { Landing } from './components/landing/landing';
 import { LoadingService } from './services/loading.service';
 
 @Component({
-  imports: [RouterOutlet, Stage, ChatWidget],
+  imports: [RouterOutlet, Stage, ChatWidget, SoundToggle],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',

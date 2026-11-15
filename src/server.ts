@@ -19,6 +19,8 @@ try {
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
+// Hosts such as Render and Railway sit behind one proxy; trust it so the chat rate limit is per visitor.
+app.set('trust proxy', 1);
 const angularApp = new AngularNodeAppEngine();
 
 const chatRateLimiter = new ChatRateLimiter(20, 60_000);

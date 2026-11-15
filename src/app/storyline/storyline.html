@@ -17,7 +17,7 @@
 	}
 	<header class="site-header">
 		<a class="brand" routerLink="/" aria-label="Ask the Machines home">ASK THE MACHINES</a>
-		<nav aria-label="Primary navigation"><a routerLink="/storylines" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Stories</a><a routerLink="/missions" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Mission lab</a><a href="#about">About</a></nav>
+		<nav aria-label="Primary navigation"><a routerLink="/storylines" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Stories</a><a routerLink="/missions" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Mission lab</a><a routerLink="/about" routerLinkActive="is-active" ariaCurrentWhenActive="page">About</a><app-profile-menu /></nav>
 	</header>
 	<section class="storyline-content" aria-label="Story worlds and machine trails">
 		@if (!activeWorld()) {

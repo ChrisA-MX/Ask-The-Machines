@@ -249,3 +249,15 @@ npm test
 ```
 
 The current suite covers the app shell, world-carousel behavior, world-service caching and teardown, story counts, unlock rules, mini-game progress, trail path points, preview-card placement, Mission Lab configuration, and chat retrieval/provider payload/fallback/rate-limit behavior. The Express endpoint's end-to-end HTTP behavior still lacks an integration test.
+
+## Added on 15 November 2026
+
+- **Fact sources.** Every fact in `src/app/data/machine-stories.json` now has a `sourceUrl`, and all twelve stories are marked `verified`. `npm run check:stories` reports no missing links.
+- **Live Voyager 1 counter.** `src/app/components/voyager-tracker/` shows Voyager 1's distance from Earth and the signal travel time. It is anchored to NASA's published one-light-day milestone (18 November 2026) and appears on the landing page, the Voyager 1 story and the About page.
+- **About and credits page** at `/about`, generated from the story data, `src/app/data/lab-models.ts` and `src/app/data/credits.ts`. Add artwork and 3D model credits there.
+- **Not-found page.** Unknown addresses render a 404 page and return HTTP 404.
+- **Chat that never goes dark.** If `POST /chat` fails or is rate limited, `ChatService` answers in the browser from the bundled story notes (`src/app/services/local-apollo.ts`).
+- **Deploy fix.** `angular.json` had an empty `security.allowedHosts`, so the production server answered every page with HTTP 400. Common hosting domains are now allowed; set `NG_ALLOWED_HOSTS` for a custom domain. The server also trusts one proxy so the chat rate limit is per visitor.
+- **Smaller 3D files.** The rover, both Ingenuity models and the Earth, Moon and Mars globes were recompressed with glTF-Transform (WebP textures, Meshopt geometry for Mission Lab models): about 65 MB down to about 9 MB. Originals are in Git history.
+- Draft submission text and deploy steps are in `SUBMISSION.md`.
+- **Sound.** `src/app/services/sound.service.ts` generates every sound with the Web Audio API (no audio files): a quiet ambient theme that starts on the first click or key press, plus sounds for taps, page changes, chat messages, finished stories and mini-game badges. The theme fades down during read-aloud and video, and pauses when the tab is hidden. `src/app/components/sound-toggle/` is the mute button (bottom left, choice saved on the device). Volume lives in `MUSIC_LEVEL` near the top of the service.

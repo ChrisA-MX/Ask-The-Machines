@@ -1,0 +1,76 @@
+<main class="about-page">
+	<header class="site-header">
+		<a class="brand" routerLink="/" aria-label="Ask the Machines home">ASK THE MACHINES</a>
+		<nav aria-label="Primary navigation">
+			<a routerLink="/storylines" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Stories</a>
+			<a routerLink="/missions" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Mission lab</a>
+			<a routerLink="/about" routerLinkActive="is-active" ariaCurrentWhenActive="page">About</a>
+			<app-profile-menu />
+		</nav>
+	</header>
+
+	<section class="about-hero">
+		<p class="eyebrow">ABOUT &amp; CREDITS</p>
+		<h1>Abandoned, <span>but not forgotten.</span></h1>
+		<p class="lead">Since the 1960s, NASA has left machines on the Moon, on Mars and far beyond the planets. Some went quiet decades ago. A few are still talking. Ask the Machines lets young explorers meet {{ machineCount }} of them, hear their stories and find out what each one taught us.</p>
+		<p class="lead">We built it for the 2026 NASA Space Apps Challenge, for the challenge <strong>Abandoned but not Forgotten: Storytelling about NASA's Discarded Equipment on the Moon and Mars</strong>.</p>
+	</section>
+
+	<section class="about-section" id="nasa-data" aria-labelledby="data-heading">
+		<h2 id="data-heading">Real data from NASA</h2>
+		<p>Every story is built on NASA records. The {{ machineCount }} stories carry {{ factCount }} checked facts, and each fact links to the page it came from. Open any story and tap <strong>Fact check</strong> to see them.</p>
+		<app-voyager-tracker />
+		<h3>Sources behind the stories</h3>
+		<ul class="source-list">
+			@for (source of sources; track source.url) {
+				<li><a [href]="source.url" target="_blank" rel="noopener noreferrer">{{ source.label }}</a><span>{{ source.machines.join(', ') }}</span></li>
+			}
+		</ul>
+	</section>
+
+	<section class="about-section" aria-labelledby="video-heading">
+		<h2 id="video-heading">Videos</h2>
+		<p>Each story ends with a video. They play from YouTube and are never copied into this site.</p>
+		<ul class="source-list">
+			@for (video of videos; track video.url) {
+				<li><a [href]="video.url" target="_blank" rel="noopener noreferrer">{{ video.title }}</a><span>{{ video.channel }} &middot; {{ video.machine }}</span></li>
+			}
+		</ul>
+	</section>
+
+	@if (models.length || assets.length) {
+		<section class="about-section" aria-labelledby="art-heading">
+			<h2 id="art-heading">3D models and artwork</h2>
+			<ul class="source-list">
+				@for (model of models; track model.id) {
+					<li><a [href]="model.credit!.sourceUrl" target="_blank" rel="noopener noreferrer">{{ model.credit!.title }}</a><span>{{ model.credit!.author }} &middot; {{ model.credit!.license }}</span></li>
+				}
+				@for (asset of assets; track asset.name) {
+					<li>@if (asset.url) { <a [href]="asset.url" target="_blank" rel="noopener noreferrer">{{ asset.name }}</a> } @else { <strong>{{ asset.name }}</strong> }<span>{{ asset.detail }}@if (asset.license) { &middot; {{ asset.license }} }</span></li>
+				}
+			</ul>
+		</section>
+	}
+
+	<section class="about-section" aria-labelledby="ai-heading">
+		<h2 id="ai-heading">How we used AI</h2>
+		<ul class="credit-list">
+			@for (item of ai; track item.name) {
+				<li><strong>{{ item.name }}</strong><span>{{ item.detail }}</span></li>
+			}
+		</ul>
+	</section>
+
+	<section class="about-section" aria-labelledby="code-heading">
+		<h2 id="code-heading">Built with</h2>
+		<ul class="source-list">
+			@for (library of libraries; track library.name) {
+				<li><a [href]="library.url" target="_blank" rel="noopener noreferrer">{{ library.name }}</a><span>{{ library.detail }} &middot; {{ library.license }}</span></li>
+			}
+		</ul>
+	</section>
+
+	<p class="disclaimer">NASA material is used under <a href="https://www.nasa.gov/nasa-brand-center/images-and-media/" target="_blank" rel="noopener noreferrer">NASA's media usage guidelines</a>. NASA does not endorse this project. The procedural Moon, Mars and outer-system worlds are illustrations, not maps.</p>
+
+	<footer class="about-footer"><a routerLink="/"><svg class="inline-back-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5m7 7-7-7 7-7" /></svg> Back to Earth</a><span>BUILT FOR CURIOUS SPACE EXPLORERS</span></footer>
+</main>

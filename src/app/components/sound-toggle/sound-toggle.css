@@ -1,0 +1,9 @@
+:host { position: fixed; z-index: 30; bottom: 1rem; left: 1rem; }
+.sound-button { display: inline-flex; height: 2.75rem; min-width: 2.75rem; align-items: center; justify-content: center; gap: 0; padding: 0 .7rem; border: 1px solid rgba(161, 193, 239, .28); border-radius: 999px; background: rgba(5, 12, 30, .72); color: #d7e5fb; cursor: pointer; font: inherit; font-size: .82rem; font-weight: 600; backdrop-filter: blur(12px); transition: border-color .2s ease, color .2s ease, background .2s ease; }
+.sound-button svg { width: 1.25rem; height: 1.25rem; flex: 0 0 1.25rem; }
+.sound-button:hover, .sound-button:focus-visible { border-color: rgba(255, 225, 63, .7); color: #ffe986; }
+.sound-button:focus-visible { outline: 2px solid #a9ddff; outline-offset: 3px; }
+.sound-button.is-muted { color: #8fa4c8; }
+.sound-label { max-width: 0; overflow: hidden; opacity: 0; white-space: nowrap; transition: max-width .3s ease, opacity .3s ease, margin .3s ease; }
+.sound-button.show-label .sound-label, .sound-button:hover .sound-label, .sound-button:focus-visible .sound-label { max-width: 6rem; margin-left: .45rem; opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .sound-button, .sound-label { transition: none; } }

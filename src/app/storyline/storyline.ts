@@ -10,6 +10,7 @@ import { ProgressService } from '../services/progress.service';
 import { MiniGameShell } from './mini-games/mini-game-shell';
 import { placePreviewCard, PreviewRect } from './preview-placement';
 import { StorylineNavigationService } from './storyline-navigation.service';
+import { ProfileMenu } from '../components/profile-menu/profile-menu';
 
 interface PreviewCardContext {
   machine: MachineStory | null;
@@ -53,7 +54,7 @@ export function isMiniGameUnlocked(worlds: WorldStory[], completed: ReadonlySet<
 }
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, OverlayModule, PortalModule, SpaceDoodle, WorldCarousel, MiniGameShell], selector: 'app-storyline',
+  imports: [RouterLink, RouterLinkActive, OverlayModule, PortalModule, SpaceDoodle, WorldCarousel, MiniGameShell, ProfileMenu], selector: 'app-storyline',
   styleUrl: './storyline.css', templateUrl: './storyline.html'
 })
 export class Storyline {

@@ -4,7 +4,8 @@
 		<nav aria-label="Primary navigation">
 			<a routerLink="/storylines" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Stories</a>
 			<a routerLink="/missions" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Mission lab</a>
-			<a href="#about">About</a>
+			<a routerLink="/about" routerLinkActive="is-active" ariaCurrentWhenActive="page">About</a>
+			<app-profile-menu />
 		</nav>
 	</header>
 

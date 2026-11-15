@@ -8,4 +8,6 @@ export const routes: Routes = [
 	{ path: 'storylines', component: Storyline },
 	{ path: 'storylines/:worldId/:machineId', loadComponent: () => import('./storyline/story-page/story-page').then((module) => module.StoryPage) },
 	{ path: 'missions', component: MissionLab },
+	{ path: 'about', title: 'About and credits | Ask the Machines', loadComponent: () => import('./components/about/about').then((module) => module.About) },
+	{ path: '**', title: 'Page not found | Ask the Machines', loadComponent: () => import('./components/not-found/not-found').then((module) => module.NotFound) },
 ];

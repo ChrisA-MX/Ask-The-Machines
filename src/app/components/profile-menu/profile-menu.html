@@ -1,0 +1,37 @@
+<button class="profile-button" type="button" (click)="openProfile(); $event.stopPropagation()" [attr.aria-expanded]="isOpen()" aria-label="Open your explorer profile">
+  <span class="profile-icon" aria-hidden="true">✦</span>
+  <span class="profile-label">{{ profile.avatarName() }}</span>
+</button>
+
+@if (isOpen()) {
+  <div class="profile-popover" role="dialog" aria-labelledby="profile-title" (click)="$event.stopPropagation()">
+    <div class="profile-heading">
+      <div>
+        <p class="profile-eyebrow">{{ isEditing() ? 'YOUR EXPLORER PROFILE' : 'WELCOME, EXPLORER' }}</p>
+        <h2 id="profile-title">{{ isEditing() ? 'Update your profile' : 'Make this journey yours' }}</h2>
+      </div>
+      <button class="close-button" type="button" (click)="dismiss()" aria-label="Close profile">×</button>
+    </div>
+    @if (!isEditing()) {
+      <p class="profile-copy">Tell the machines who is exploring with them. You can change this anytime.</p>
+    }
+    <label>
+      What should we call you?
+      <input type="text" [ngModel]="name()" (ngModelChange)="name.set($event)" maxlength="40" autocomplete="given-name" />
+    </label>
+    <label>
+      Your age range
+      <select [ngModel]="ageRange()" (ngModelChange)="ageRange.set($event)">
+        <option value="" disabled>Choose an age range</option>
+        @for (range of ageRanges; track range.value) {
+          <option [value]="range.value">{{ range.label }}</option>
+        }
+      </select>
+    </label>
+    @if (error()) { <p class="profile-error" role="alert">{{ error() }}</p> }
+    <div class="profile-actions">
+      <button class="save-button" type="button" (click)="save()">Save profile</button>
+      <button class="later-button" type="button" (click)="dismiss()">Maybe later</button>
+    </div>
+  </div>
+}

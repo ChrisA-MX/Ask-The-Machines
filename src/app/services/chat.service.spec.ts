@@ -42,4 +42,24 @@ describe('ChatService', () => {
       suggestions: ['What did Eagle find?'],
     });
   });
+
+  it('answers from the bundled story notes when the chat server cannot be reached', async () => {
+    const resultPromise = service.ask('What did Opportunity find?', [], 'opportunity');
+    http.expectOne('/chat').error(new ProgressEvent('error'), { status: 0, statusText: 'Unknown Error' });
+
+    const result = await resultPromise;
+    expect(result.succeeded).toBe(true);
+    expect(result.offline).toBe(true);
+    expect(result.reply).toContain('Opportunity');
+    expect(result.suggestions?.length).toBe(3);
+  });
+
+  it('gives a live Voyager 1 distance offline', async () => {
+    const resultPromise = service.ask('How far away is Voyager 1?');
+    http.expectOne('/chat').flush('Not found', { status: 404, statusText: 'Not Found' });
+
+    const result = await resultPromise;
+    expect(result.offline).toBe(true);
+    expect(result.reply).toMatch(/Voyager 1 is about [\d,]+ km from Earth/);
+  });
 });

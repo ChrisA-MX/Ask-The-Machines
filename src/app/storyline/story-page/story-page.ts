@@ -116,11 +116,12 @@ export function resolveStoryRoute(worldId: string | null, routeId: string | null
   if (!match) return { kind: 'not-found' };
   return isStoryUnlocked(match.world, match.index, completed) ? { kind: 'story', ...match } : { kind: 'locked', ...match };
 }
+import { VoyagerTracker } from '../../components/voyager-tracker/voyager-tracker';
 
 @Component({
   selector: 'app-story-page',
   standalone: true,
-  imports: [RouterLink, NgTemplateOutlet],
+  imports: [RouterLink, NgTemplateOutlet, VoyagerTracker],
   templateUrl: './story-page.html',
   styleUrl: './story-page.scss',
 })

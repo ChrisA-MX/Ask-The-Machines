@@ -6,6 +6,7 @@ import { AnimatedSprite, ApolloAnimation } from '../animated-sprite/animated-spr
 import { ChatAvailabilityService } from '../../services/chat-availability.service';
 import { ChatHistoryMessage, ChatService } from '../../services/chat.service';
 import { PlayerProfileService } from '../../services/player-profile.service';
+import { SoundService } from '../../services/sound.service';
 import { MACHINES, MachineStory } from '../../storyline/machines.data';
 
 interface ChatMessage {
@@ -32,6 +33,7 @@ export class ChatWidget {
   private readonly router = inject(Router);
   private readonly availability = inject(ChatAvailabilityService);
   private readonly profile = inject(PlayerProfileService);
+  private readonly sound = inject(SoundService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly injector = inject(Injector);
   protected readonly isOpen = signal(false);
@@ -127,6 +129,9 @@ export class ChatWidget {
   @HostListener('window:resize')
   private onWindowResize(): void { this.syncPanelViewport(); }
 
+  @HostListener('window:ask-apollo')
+  private onAskApollo(): void { this.openChat(); }
+
   protected onHover(): void {
     this.isHovered = true;
     this.showGreeting();
@@ -174,11 +179,13 @@ export class ChatWidget {
     this.messages.update((items) => [...items, { role: 'user', text: question }]);
     this.draft = '';
     this.isThinking.set(true);
+    this.sound.play('message');
     try {
       const result = await this.chat.ask(question, history, story?.routeId);
       this.messages.update((items) => [...items, { role: 'assistant', text: result.reply }]);
-      if (story && result.suggestions?.length) this.suggestions.set(result.suggestions.slice(0, 3));
+      if ((story || result.offline) && result.suggestions?.length) this.suggestions.set(result.suggestions.slice(0, 3));
       this.playAnimation(result.succeeded ? 'happy' : 'sad', 2000);
+      this.sound.play(result.succeeded ? 'reply' : 'error');
     } finally {
       this.isThinking.set(false);
     }
