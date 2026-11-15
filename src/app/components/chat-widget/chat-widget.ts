@@ -45,7 +45,10 @@ export class ChatWidget {
   protected readonly storyModalOpen = signal(false);
   protected readonly isBusy = computed(() => !this.availability.isAvailable());
   protected readonly greeting = computed(
-    () => `Hello Explorer, I'm ${this.profile.avatarName()}.`,
+    () => `Hello, ${this.profile.avatarName()}. I'm Apollo.`,
+  );
+  private readonly openingMessage = computed(
+    () => `${this.greeting()} Ask me what this project is about, or how the machine stories work.`,
   );
   protected readonly messages = signal<ChatMessage[]>([]);
   protected draft = '';
@@ -71,10 +74,6 @@ export class ChatWidget {
   protected get storyModalLayerIsOpen(): boolean { return this.storyModalOpen(); }
 
   constructor() {
-    this.messages.set([{
-      role: 'assistant',
-      text: `Hi, space explorer! I'm ${this.profile.avatarName()}. Ask me what this project is about, or how the machine stories work.`,
-    }]);
     this.destroyRef.onDestroy(() => {
       if (this.greetingTimer) clearTimeout(this.greetingTimer);
       if (this.touchHideTimer) clearTimeout(this.touchHideTimer);
@@ -107,6 +106,9 @@ export class ChatWidget {
 
   protected openChat(): void {
     if (!this.availability.isAvailable() || this.isOpen()) return;
+    if (!this.messages().length) {
+      this.messages.set([{ role: 'assistant', text: this.openingMessage() }]);
+    }
     this.updateStorySuggestions();
     this.isOpen.set(true);
     this.bubbleVisible.set(false);

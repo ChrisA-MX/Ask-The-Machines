@@ -27,7 +27,7 @@ class MockAnimatedSprite {
 describe('ChatWidget', () => {
   const chat = { ask: vi.fn() };
   const router = { url: '/' };
-  const profile = { avatarName: signal('Apollo') };
+  const profile = { avatarName: signal('Taylor') };
   let availability: ChatAvailabilityService;
 
   beforeEach(async () => {
@@ -59,7 +59,7 @@ describe('ChatWidget', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('.speech-bubble').textContent.trim())
-      .toBe("Hello Explorer, I'm Apollo.");
+      .toBe("Hello, Taylor. I'm Apollo.");
     expect(fixture.nativeElement.querySelector('.speech-bubble').classList.contains('is-visible')).toBe(true);
     expect(fixture.nativeElement.querySelector('.mock-sprite').getAttribute('data-animation')).toBe('wave');
   });
